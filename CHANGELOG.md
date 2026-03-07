@@ -20,9 +20,21 @@ Versioning follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 - `Callout` component — caption overlay with fadeInUp/fadeOutUp transitions
 - `ProgressBar` component — loop progress indicator at device bottom
 - `ChapterNav` component — 72px left sidebar with 12 chapter selector buttons
+- Chapter 01: Connect to Bluetooth
+- Chapter 02: Make & Save a Recording
+- Chapter 03: Selecting a Preset
+- Chapter 04: Preset Volume
+- Chapter 05: Playback Controls
+- Chapter 06: Quick Settings Menu
+- Chapter 07: Stereo Mode
+- Chapter 08: Wireless Control (Net Control / QR)
+- Chapter 09: Power Save / Standby Mode
+- Chapter 10: Managing Audio Files
+- Chapter 11: Settings (Admin Login)
+- Chapter 12: Help Menu (QR Code)
+- `App.jsx` — chapter navigation shell with key-based animation reset
 
 ### Planned
-- All 12 animated chapter shorts
 - GitHub Pages deployment at https://valkolimark.github.io/transcend-ui/
 
 ---
