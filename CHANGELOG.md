@@ -14,6 +14,12 @@ Versioning follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 - Project scaffold with Vite 4 and React 18
 - Global CSS design token system — all colors, spacing, typography as custom properties
 - Global CSS keyframe animation library — ripple, fadeInUp, fadeOutUp, recPulse, slideDownPanel, slideInRight, modalEnter, cursorTap
+- `useAnimationSequence` hook — declarative step-based animation timing with auto-loop
+- `TranscendUI` component — pixel-accurate Transcend TS1 UI replica
+- `CursorDot` component — animated finger tap ring with inner dot and ripple effect
+- `Callout` component — caption overlay with fadeInUp/fadeOutUp transitions
+- `ProgressBar` component — loop progress indicator at device bottom
+- `ChapterNav` component — 72px left sidebar with 12 chapter selector buttons
 
 ### Planned
 - All 12 animated chapter shorts
