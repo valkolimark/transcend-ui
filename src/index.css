@@ -1,0 +1,98 @@
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { background: #0a0a0f; overflow: hidden; }
+
+@font-face {
+  font-family: 'Avenir LT Pro';
+  src: local('Avenir LT Pro'), local('AvenirLTPro'), local('Avenir');
+  font-weight: normal;
+}
+
+:root {
+  /* Backgrounds */
+  --bg-app:           #0a0a0f;
+  --bg-device:        #111318;
+  --bg-panel:         #111318;
+  --bg-button-idle:   #1e2128;
+  --bg-button-hover:  #252830;
+  --bg-transport:     #0d0f13;
+  --bg-overlay:       rgba(10, 12, 18, 0.96);
+  --bg-tooltip:       rgba(13, 17, 40, 0.97);
+
+  /* Borders */
+  --border-button-idle:    rgba(255, 255, 255, 0.07);
+  --border-button-active:  rgba(100, 130, 255, 0.65);
+  --border-device:         rgba(255, 255, 255, 0.10);
+  --border-panel:          rgba(255, 255, 255, 0.06);
+  --border-tooltip:        rgba(75, 110, 230, 0.55);
+
+  /* Blue accent */
+  --blue-primary:     #4361EE;
+  --blue-light:       #5B7FFF;
+  --blue-dim:         rgba(67, 97, 238, 0.20);
+  --blue-glow:        rgba(67, 97, 238, 0.45);
+
+  /* Text */
+  --text-primary:     #FFFFFF;
+  --text-secondary:   rgba(255, 255, 255, 0.75);
+  --text-tertiary:    rgba(255, 255, 255, 0.40);
+  --text-disabled:    rgba(255, 255, 255, 0.20);
+  --text-blue:        #7C9EFF;
+
+  /* Status */
+  --red-rec:          #E03131;
+  --red-rec-bg:       rgba(224, 49, 49, 0.15);
+  --red-rec-border:   rgba(224, 49, 49, 0.55);
+
+  /* Volume slider */
+  --slider-track:     rgba(255, 255, 255, 0.12);
+  --slider-active:    #4361EE;
+  --slider-knob:      #4361EE;
+  --slider-knob-border: rgba(255, 255, 255, 0.35);
+  --blue-vert-line:   #4361EE;
+}
+
+@keyframes ripple {
+  0%   { transform: scale(0.4); opacity: 0.8; }
+  100% { transform: scale(2.8); opacity: 0; }
+}
+
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes fadeOutUp {
+  from { opacity: 1; transform: translateY(0); }
+  to   { opacity: 0; transform: translateY(-8px); }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+
+@keyframes recPulse {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.3; }
+}
+
+@keyframes slideDownPanel {
+  from { transform: translateY(-100%); }
+  to   { transform: translateY(0); }
+}
+
+@keyframes slideInRight {
+  from { transform: translateX(100%); }
+  to   { transform: translateX(0); }
+}
+
+@keyframes modalEnter {
+  from { opacity: 0; transform: scale(0.92); }
+  to   { opacity: 1; transform: scale(1); }
+}
+
+@keyframes cursorTap {
+  0%   { transform: scale(1.0); }
+  50%  { transform: scale(0.68); }
+  100% { transform: scale(1.0); }
+}

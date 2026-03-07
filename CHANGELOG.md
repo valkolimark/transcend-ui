@@ -11,6 +11,9 @@ Versioning follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Added
 - GitHub README and CHANGELOG
+- Project scaffold with Vite 4 and React 18
+- Global CSS design token system — all colors, spacing, typography as custom properties
+- Global CSS keyframe animation library — ripple, fadeInUp, fadeOutUp, recPulse, slideDownPanel, slideInRight, modalEnter, cursorTap
 
 ### Planned
 - All 12 animated chapter shorts
