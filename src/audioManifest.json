@@ -1,0 +1,215 @@
+{
+  "3098c1b478": {
+    "text": "First, open the Quick Settings menu by swiping down"
+  },
+  "4d0619863b": {
+    "text": "Now tap Bluetooth to begin pairing your device"
+  },
+  "742134214d": {
+    "text": "Your device will appear here once it is discovered"
+  },
+  "3189ca5f28": {
+    "text": "Your Bluetooth device is now connected"
+  },
+  "57205851f9": {
+    "text": "Both inputs are now active in Stereo Mode"
+  },
+  "e1bfb78d79": {
+    "text": "Bluetooth is connected and ready to use"
+  },
+  "e358791237": {
+    "text": "To begin recording, tap the REC button"
+  },
+  "b3c370969a": {
+    "text": "The red dot pulses to indicate recording is in progress"
+  },
+  "82d5913aab": {
+    "text": "Recording has stopped. You can now review it before saving"
+  },
+  "5026d16436": {
+    "text": "Tap play to preview your recording"
+  },
+  "a592146eac": {
+    "text": "Your track has been saved to the file manager"
+  },
+  "6fdad27a95": {
+    "text": "You can record, review, and save all from the home screen"
+  },
+  "1c0cb54b57": {
+    "text": "Tap any preset button to select a room acoustic"
+  },
+  "5f95939e0d": {
+    "text": "Studio B is now selected"
+  },
+  "b7752d2251": {
+    "text": "Tap the info icon to read the acoustic description"
+  },
+  "af33a4d7df": {
+    "text": "Great Hall is now selected"
+  },
+  "4a99b56de6": {
+    "text": "Here is the Grand Cathedral preset"
+  },
+  "671fba5714": {
+    "text": "There are 9 acoustic presets to transform your space with just one tap"
+  },
+  "84dc6adc09": {
+    "text": "Use the right sidebar to control the Active Acoustics volume"
+  },
+  "bc1ccec247": {
+    "text": "Drag the slider up to increase the volume"
+  },
+  "bd3b290709": {
+    "text": "The volume is now at maximum"
+  },
+  "f4e4eaf0fa": {
+    "text": "Drag the slider down to decrease the volume"
+  },
+  "adfb43088f": {
+    "text": "Tap here to mute or unmute Active Acoustics"
+  },
+  "e6237860c9": {
+    "text": "The volume control is independent of recording and playback levels"
+  },
+  "c2af14fc19": {
+    "text": "Select a track to begin playback"
+  },
+  "088e988777": {
+    "text": "You are now in playback mode. Use the scrubber to seek through the track"
+  },
+  "ad5c1ae284": {
+    "text": "You can scrub forward through the track like this"
+  },
+  "cf472d3a42": {
+    "text": "The progress bar moves in real time as the track plays"
+  },
+  "258b5984cf": {
+    "text": "Tap the skip button to jump to the next track"
+  },
+  "5d4817f3d2": {
+    "text": "You can adjust playback volume separately from the acoustics volume"
+  },
+  "ac0acdd511": {
+    "text": "Full transport controls are available on every screen"
+  },
+  "e91eafe76b": {
+    "text": "Swipe down from the top of the screen to open Quick Settings"
+  },
+  "08b20c8f7a": {
+    "text": "Quick Settings lets you access key controls quickly"
+  },
+  "042d2c2688": {
+    "text": "You can toggle Stereo Mode on or off here"
+  },
+  "a7f1a767ec": {
+    "text": "Or manage your Bluetooth connections here"
+  },
+  "71738bbe72": {
+    "text": "You also have quick access to Help, Net Control, Settings, and Standby"
+  },
+  "1e943e6235": {
+    "text": "Quick Settings is always just one swipe away"
+  },
+  "3daae67704": {
+    "text": "Stereo Mode processes the left and right channels independently"
+  },
+  "275ddf6f74": {
+    "text": "Stereo Mode is currently turned off"
+  },
+  "416a7ac552": {
+    "text": "Stereo Mode is now on with dual-channel processing active"
+  },
+  "248719e02d": {
+    "text": "Stereo Mode is now off, returning to mono processing"
+  },
+  "93107d15a2": {
+    "text": "Please note that Stereo Mode is not available on SoundLok units"
+  },
+  "e0cb04dc95": {
+    "text": "You can toggle Stereo Mode anytime from Quick Settings"
+  },
+  "d616ad34bf": {
+    "text": "You can control Transcend from any device on your Wi-Fi network"
+  },
+  "cdde22290b": {
+    "text": "Scan this QR code with your phone to open the web interface"
+  },
+  "aa00e1b5ae": {
+    "text": "Make sure your device is on the same Wi-Fi network as Transcend"
+  },
+  "734541a268": {
+    "text": "You get full control from any browser with no app needed"
+  },
+  "bb7fedb8c8": {
+    "text": "Even the standby screen can be accessed remotely"
+  },
+  "6a8215423a": {
+    "text": "With Net Control, you can manage your space from anywhere on the network"
+  },
+  "e667d3d337": {
+    "text": "You can put Transcend into standby mode to save power"
+  },
+  "12d6417e89": {
+    "text": "Tap confirm to turn off the screen and disable audio"
+  },
+  "8b522ee5e7": {
+    "text": "The screen is now off and the system is in standby"
+  },
+  "35e70c36e1": {
+    "text": "Tap the Wake Up button to resume operation"
+  },
+  "b9a1c33dcc": {
+    "text": "The system has been restored and is ready to use"
+  },
+  "e5c5295010": {
+    "text": "Standby mode saves energy without losing any of your settings"
+  },
+  "5f1ef80153": {
+    "text": "The file manager stores all of your recordings"
+  },
+  "9e980ee334": {
+    "text": "All of your saved recordings will appear here"
+  },
+  "3b6866e97d": {
+    "text": "Track 2 is now selected"
+  },
+  "361ad1d1bf": {
+    "text": "Track 2 is now playing"
+  },
+  "202fa29ae3": {
+    "text": "Long press on a track to access the delete option"
+  },
+  "3914fdf66f": {
+    "text": "The track has been deleted"
+  },
+  "b5972be768": {
+    "text": "You can organize all your recordings directly from the controller"
+  },
+  "e54416ae9e": {
+    "text": "To access system settings, you will need the admin passcode"
+  },
+  "0d6cbe7f5f": {
+    "text": "Enter the 6-digit admin passcode to continue"
+  },
+  "f903ca7f9d": {
+    "text": "Settings are now unlocked and accessible"
+  },
+  "2bd5f592c6": {
+    "text": "From here you can adjust network, audio, and device preferences"
+  },
+  "46330f95e6": {
+    "text": "The default admin passcode is 1 2 3 4 5"
+  },
+  "a67415fc19": {
+    "text": "You can access the full online user guide instantly"
+  },
+  "564044c02b": {
+    "text": "Scan this code with your phone to open the user guide"
+  },
+  "8761ef766c": {
+    "text": "Here you will find links to manuals, videos, and support resources"
+  },
+  "92bf44a0bd": {
+    "text": "Help is always just one tap away with no manual required"
+  }
+}

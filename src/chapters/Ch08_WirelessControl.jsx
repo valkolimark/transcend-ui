@@ -3,25 +3,28 @@ import { useAnimationSequence } from '../hooks/useAnimationSequence';
 import TranscendUI from '../components/TranscendUI';
 import CursorDot from '../components/CursorDot';
 import Callout from '../components/Callout';
-import ProgressBar from '../components/ProgressBar';
+
 
 const STEPS = [
-  { id: 'intro',               duration: 1500 },
+  { id: 'intro',               duration: 3500 },
   { id: 'open-quick-settings', duration: 600  },
   { id: 'panel-open',          duration: 1000 },
   { id: 'cursor-to-netcontrol',duration: 500  },
   { id: 'tap-net-control',     duration: 200  },
-  { id: 'qr-modal-open',       duration: 3000 },
-  { id: 'hold-qr',             duration: 1500 },
+  { id: 'qr-modal-open',       duration: 5000 },
+  { id: 'hold-qr',             duration: 3000 },
   { id: 'tap-close',           duration: 200  },
   { id: 'modal-closed',        duration: 500  },
-  { id: 'show-web-ui',         duration: 2500 },
-  { id: 'show-standby-state',  duration: 1500 },
-  { id: 'outro',               duration: 2200 },
+  { id: 'show-web-ui',         duration: 5000 },
+  { id: 'show-standby-state',  duration: 3000 },
+  { id: 'outro',               duration: 4000 },
 ];
 
-export default function Ch08_WirelessControl() {
-  const { currentStep, loopProgress } = useAnimationSequence(STEPS);
+export default function Ch08_WirelessControl({ voice, onControls }) {
+  const controls = useAnimationSequence(STEPS);
+  const { currentStep, loopProgress } = controls;
+
+  useEffect(() => { if (onControls) onControls(controls); }, [controls.stepIndex, controls.playing, controls.finished]);
 
   const [ui, setUi] = useState({
     activePreset: 'studio-a',
@@ -46,7 +49,7 @@ export default function Ch08_WirelessControl() {
           cursorVisible: true,
           cursorPos: { x: 240, y: 10 },
           cursorTapping: false,
-          calloutText: 'Control Transcend from any device on your Wi-Fi network',
+          calloutText: 'You can control Transcend from any device on your Wi-Fi network',
           calloutVisible: true,
         }));
         break;
@@ -75,14 +78,14 @@ export default function Ch08_WirelessControl() {
           cursorVisible: false,
           quickSettingsOpen: false,
           modalType: 'qr-web-ui',
-          calloutText: 'Scan the QR code to open the web interface',
+          calloutText: 'Scan this QR code with your phone to open the web interface',
           calloutVisible: true,
         }));
         break;
       case 'hold-qr':
         setUi(s => ({
           ...s,
-          calloutText: 'Must be on same Wi-Fi network as Transcend',
+          calloutText: 'Make sure your device is on the same Wi-Fi network as Transcend',
           calloutVisible: true,
         }));
         break;
@@ -107,7 +110,7 @@ export default function Ch08_WirelessControl() {
         setUi(s => ({
           ...s,
           browserChrome: true,
-          calloutText: 'Full control from any browser — no app needed',
+          calloutText: 'You get full control from any browser with no app needed',
           calloutVisible: true,
         }));
         break;
@@ -115,7 +118,7 @@ export default function Ch08_WirelessControl() {
         setUi(s => ({
           ...s,
           modalType: 'standby-screen',
-          calloutText: 'Even the standby screen is accessible remotely',
+          calloutText: 'Even the standby screen can be accessed remotely',
           calloutVisible: true,
         }));
         break;
@@ -124,7 +127,7 @@ export default function Ch08_WirelessControl() {
           ...s,
           browserChrome: false,
           modalType: null,
-          calloutText: 'Net Control — your space, from anywhere on the network',
+          calloutText: 'With Net Control, you can manage your space from anywhere on the network',
           calloutVisible: true,
         }));
         break;
@@ -133,7 +136,7 @@ export default function Ch08_WirelessControl() {
 
   return (
     <div style={{ position: 'relative', display: 'flex', alignItems: 'center', justifyContent: 'center', width: '100%', height: '100%' }}>
-      <div style={{ position: 'relative' }}>
+      <div style={{ position: 'relative', width: 480, height: 320 }}>
         <TranscendUI
           activePreset={ui.activePreset}
           quickSettingsOpen={ui.quickSettingsOpen}
@@ -146,9 +149,9 @@ export default function Ch08_WirelessControl() {
           tapping={ui.cursorTapping}
           visible={ui.cursorVisible}
         />
+        <Callout text={ui.calloutText} visible={ui.calloutVisible} voice={voice} />
+
       </div>
-      <Callout text={ui.calloutText} visible={ui.calloutVisible} />
-      <ProgressBar progress={loopProgress} />
     </div>
   );
 }

@@ -3,24 +3,24 @@ import { useAnimationSequence } from '../hooks/useAnimationSequence';
 import TranscendUI from '../components/TranscendUI';
 import CursorDot from '../components/CursorDot';
 import Callout from '../components/Callout';
-import ProgressBar from '../components/ProgressBar';
+
 
 const STEPS = [
-  { id: 'intro',               duration: 1500 },
+  { id: 'intro',               duration: 3500 },
   { id: 'open-quick-settings', duration: 600  },
   { id: 'panel-open',          duration: 1000 },
   { id: 'cursor-to-settings',  duration: 400  },
   { id: 'tap-settings',        duration: 200  },
-  { id: 'login-modal-open',    duration: 2000 },
+  { id: 'login-modal-open',    duration: 4000 },
   { id: 'type-1',              duration: 300  },
   { id: 'type-2',              duration: 300  },
   { id: 'type-3',              duration: 300  },
   { id: 'type-4',              duration: 300  },
   { id: 'type-5',              duration: 300  },
   { id: 'type-enter',          duration: 400  },
-  { id: 'settings-open',       duration: 2500 },
-  { id: 'browse-settings',     duration: 2000 },
-  { id: 'outro',               duration: 2200 },
+  { id: 'settings-open',       duration: 5000 },
+  { id: 'browse-settings',     duration: 4000 },
+  { id: 'outro',               duration: 4000 },
 ];
 
 const NUMPAD_POS = {
@@ -32,8 +32,11 @@ const NUMPAD_POS = {
   'Enter': { x: 305, y: 255 },
 };
 
-export default function Ch11_Settings() {
-  const { currentStep, loopProgress } = useAnimationSequence(STEPS);
+export default function Ch11_Settings({ voice, onControls }) {
+  const controls = useAnimationSequence(STEPS);
+  const { currentStep, loopProgress } = controls;
+
+  useEffect(() => { if (onControls) onControls(controls); }, [controls.stepIndex, controls.playing, controls.finished]);
 
   const [ui, setUi] = useState({
     activePreset: 'studio-a',
@@ -60,7 +63,7 @@ export default function Ch11_Settings() {
           cursorVisible: true,
           cursorPos: { x: 240, y: 10 },
           cursorTapping: false,
-          calloutText: 'Access system settings with the admin passcode',
+          calloutText: 'To access system settings, you will need the admin passcode',
           calloutVisible: true,
         }));
         break;
@@ -89,7 +92,7 @@ export default function Ch11_Settings() {
           quickSettingsOpen: false,
           modalType: 'admin-login',
           passcodeDisplay: '------',
-          calloutText: 'Enter the 6-digit admin passcode',
+          calloutText: 'Enter the 6-digit admin passcode to continue',
           calloutVisible: true,
         }));
         break;
@@ -148,7 +151,7 @@ export default function Ch11_Settings() {
           cursorVisible: false,
           modalType: null,
           settingsScreen: true,
-          calloutText: 'Settings unlocked \u2713',
+          calloutText: 'Settings are now unlocked and accessible',
           calloutVisible: true,
         }));
         break;
@@ -157,7 +160,7 @@ export default function Ch11_Settings() {
           ...s,
           cursorVisible: true,
           cursorPos: { x: 240, y: 180 },
-          calloutText: 'Adjust network, audio, and device preferences',
+          calloutText: 'From here you can adjust network, audio, and device preferences',
           calloutVisible: true,
         }));
         break;
@@ -166,7 +169,7 @@ export default function Ch11_Settings() {
           ...s,
           cursorVisible: false,
           settingsScreen: false,
-          calloutText: 'Default passcode: 12345',
+          calloutText: 'The default admin passcode is 1 2 3 4 5',
           calloutVisible: true,
         }));
         break;
@@ -175,7 +178,7 @@ export default function Ch11_Settings() {
 
   return (
     <div style={{ position: 'relative', display: 'flex', alignItems: 'center', justifyContent: 'center', width: '100%', height: '100%' }}>
-      <div style={{ position: 'relative' }}>
+      <div style={{ position: 'relative', width: 480, height: 320 }}>
         <TranscendUI
           activePreset={ui.activePreset}
           quickSettingsOpen={ui.quickSettingsOpen}
@@ -189,9 +192,9 @@ export default function Ch11_Settings() {
           tapping={ui.cursorTapping}
           visible={ui.cursorVisible}
         />
+        <Callout text={ui.calloutText} visible={ui.calloutVisible} voice={voice} />
+
       </div>
-      <Callout text={ui.calloutText} visible={ui.calloutVisible} />
-      <ProgressBar progress={loopProgress} />
     </div>
   );
 }

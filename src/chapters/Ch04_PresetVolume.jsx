@@ -3,28 +3,31 @@ import { useAnimationSequence } from '../hooks/useAnimationSequence';
 import TranscendUI from '../components/TranscendUI';
 import CursorDot from '../components/CursorDot';
 import Callout from '../components/Callout';
-import ProgressBar from '../components/ProgressBar';
+
 
 const STEPS = [
-  { id: 'intro',          duration: 1500 },
+  { id: 'intro',          duration: 3500 },
   { id: 'cursor-to-knob', duration: 500  },
   { id: 'drag-up-start',  duration: 300  },
-  { id: 'drag-up',        duration: 1200 },
-  { id: 'hold-high',      duration: 1500 },
-  { id: 'drag-down',      duration: 1200 },
+  { id: 'drag-up',        duration: 1500 },
+  { id: 'hold-high',      duration: 3000 },
+  { id: 'drag-down',      duration: 1500 },
   { id: 'hold-low',       duration: 1500 },
-  { id: 'drag-mid',       duration: 800  },
+  { id: 'drag-mid',       duration: 1500 },
   { id: 'release',        duration: 300  },
   { id: 'mute-cursor',    duration: 500  },
   { id: 'tap-mute',       duration: 200  },
-  { id: 'muted',          duration: 1800 },
+  { id: 'muted',          duration: 3600 },
   { id: 'tap-unmute',     duration: 200  },
-  { id: 'unmuted',        duration: 1200 },
-  { id: 'outro',          duration: 2200 },
+  { id: 'unmuted',        duration: 1500 },
+  { id: 'outro',          duration: 4000 },
 ];
 
-export default function Ch04_PresetVolume() {
-  const { currentStep, loopProgress } = useAnimationSequence(STEPS);
+export default function Ch04_PresetVolume({ voice, onControls }) {
+  const controls = useAnimationSequence(STEPS);
+  const { currentStep, loopProgress } = controls;
+
+  useEffect(() => { if (onControls) onControls(controls); }, [controls.stepIndex, controls.playing, controls.finished]);
 
   const [ui, setUi] = useState({
     activePreset: 'studio-a',
@@ -47,7 +50,7 @@ export default function Ch04_PresetVolume() {
           cursorVisible: true,
           cursorPos: { x: 455, y: 160 },
           cursorTapping: false,
-          calloutText: 'The right sidebar controls Active Acoustics volume',
+          calloutText: 'Use the right sidebar to control the Active Acoustics volume',
           calloutVisible: true,
         }));
         break;
@@ -62,14 +65,14 @@ export default function Ch04_PresetVolume() {
           ...s,
           cursorPos: { x: 455, y: 80 },
           volumeLevel: 1.0,
-          calloutText: 'Drag up to increase volume',
+          calloutText: 'Drag the slider up to increase the volume',
           calloutVisible: true,
         }));
         break;
       case 'hold-high':
         setUi(s => ({
           ...s,
-          calloutText: 'Volume at maximum',
+          calloutText: 'The volume is now at maximum',
           calloutVisible: true,
         }));
         break;
@@ -78,7 +81,7 @@ export default function Ch04_PresetVolume() {
           ...s,
           cursorPos: { x: 455, y: 200 },
           volumeLevel: 0.15,
-          calloutText: 'Drag down to decrease',
+          calloutText: 'Drag the slider down to decrease the volume',
           calloutVisible: true,
         }));
         break;
@@ -106,7 +109,7 @@ export default function Ch04_PresetVolume() {
           ...s,
           cursorTapping: false,
           muteActive: true,
-          calloutText: 'Mute/unmute Active Acoustics',
+          calloutText: 'Tap here to mute or unmute Active Acoustics',
           calloutVisible: true,
         }));
         break;
@@ -125,7 +128,7 @@ export default function Ch04_PresetVolume() {
         setUi(s => ({
           ...s,
           cursorVisible: false,
-          calloutText: 'Volume is independent of recording/playback levels',
+          calloutText: 'The volume control is independent of recording and playback levels',
           calloutVisible: true,
         }));
         break;
@@ -134,7 +137,7 @@ export default function Ch04_PresetVolume() {
 
   return (
     <div style={{ position: 'relative', display: 'flex', alignItems: 'center', justifyContent: 'center', width: '100%', height: '100%' }}>
-      <div style={{ position: 'relative' }}>
+      <div style={{ position: 'relative', width: 480, height: 320 }}>
         <TranscendUI
           activePreset={ui.activePreset}
           volumeLevel={ui.volumeLevel}
@@ -146,9 +149,9 @@ export default function Ch04_PresetVolume() {
           tapping={ui.cursorTapping}
           visible={ui.cursorVisible}
         />
+        <Callout text={ui.calloutText} visible={ui.calloutVisible} voice={voice} />
+
       </div>
-      <Callout text={ui.calloutText} visible={ui.calloutVisible} />
-      <ProgressBar progress={loopProgress} />
     </div>
   );
 }

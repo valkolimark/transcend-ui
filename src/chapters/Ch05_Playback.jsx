@@ -3,30 +3,33 @@ import { useAnimationSequence } from '../hooks/useAnimationSequence';
 import TranscendUI from '../components/TranscendUI';
 import CursorDot from '../components/CursorDot';
 import Callout from '../components/Callout';
-import ProgressBar from '../components/ProgressBar';
+
 
 const STEPS = [
-  { id: 'intro',               duration: 1500 },
+  { id: 'intro',               duration: 3500 },
   { id: 'cursor-to-hamburger', duration: 500  },
   { id: 'tap-hamburger',       duration: 200  },
-  { id: 'playback-mode',       duration: 2000 },
+  { id: 'playback-mode',       duration: 4000 },
   { id: 'cursor-to-scrubber',  duration: 500  },
   { id: 'scrub-right',         duration: 1200 },
-  { id: 'hold-scrubbed',       duration: 1000 },
+  { id: 'hold-scrubbed',       duration: 1500 },
   { id: 'cursor-to-play',      duration: 400  },
   { id: 'tap-play',            duration: 200  },
-  { id: 'playing',             duration: 2000 },
+  { id: 'playing',             duration: 4000 },
   { id: 'cursor-to-skip-fwd',  duration: 400  },
   { id: 'tap-skip',            duration: 200  },
-  { id: 'next-track',          duration: 1500 },
+  { id: 'next-track',          duration: 3000 },
   { id: 'cursor-to-volume',    duration: 400  },
   { id: 'tap-volume',          duration: 200  },
-  { id: 'volume-slider-appears', duration: 2000 },
-  { id: 'outro',               duration: 2200 },
+  { id: 'volume-slider-appears', duration: 4000 },
+  { id: 'outro',               duration: 4000 },
 ];
 
-export default function Ch05_Playback() {
-  const { currentStep, loopProgress } = useAnimationSequence(STEPS);
+export default function Ch05_Playback({ voice, onControls }) {
+  const controls = useAnimationSequence(STEPS);
+  const { currentStep, loopProgress } = controls;
+
+  useEffect(() => { if (onControls) onControls(controls); }, [controls.stepIndex, controls.playing, controls.finished]);
 
   const [ui, setUi] = useState({
     activePreset: 'studio-a',
@@ -69,7 +72,7 @@ export default function Ch05_Playback() {
           cursorTapping: false,
           transportState: 'playback',
           playbackProgress: 0.35,
-          calloutText: 'Playback mode — use the scrubber to seek',
+          calloutText: 'You are now in playback mode. Use the scrubber to seek through the track',
           calloutVisible: true,
         }));
         break;
@@ -83,7 +86,7 @@ export default function Ch05_Playback() {
           cursorPos: { x: 350, y: 325 },
           playbackProgress: 0.75,
           timestamp: '02:45.10',
-          calloutText: 'Scrub forward through the track',
+          calloutText: 'You can scrub forward through the track like this',
           calloutVisible: true,
         }));
         break;
@@ -101,7 +104,7 @@ export default function Ch05_Playback() {
           ...s,
           cursorTapping: false,
           playbackProgress: 0.85,
-          calloutText: 'Playing — progress bar moves in real time',
+          calloutText: 'The progress bar moves in real time as the track plays',
           calloutVisible: true,
         }));
         break;
@@ -118,7 +121,7 @@ export default function Ch05_Playback() {
           trackLabel: 'Track 2',
           playbackProgress: 0.0,
           timestamp: '00:00.00',
-          calloutText: 'Skip to next track',
+          calloutText: 'Tap the skip button to jump to the next track',
           calloutVisible: true,
         }));
         break;
@@ -132,7 +135,7 @@ export default function Ch05_Playback() {
         setUi(s => ({
           ...s,
           cursorTapping: false,
-          calloutText: 'Adjust playback volume separately from acoustics',
+          calloutText: 'You can adjust playback volume separately from the acoustics volume',
           calloutVisible: true,
         }));
         break;
@@ -141,7 +144,7 @@ export default function Ch05_Playback() {
           ...s,
           cursorVisible: false,
           transportState: 'default',
-          calloutText: 'Full transport controls on every screen',
+          calloutText: 'Full transport controls are available on every screen',
           calloutVisible: true,
         }));
         break;
@@ -150,7 +153,7 @@ export default function Ch05_Playback() {
 
   return (
     <div style={{ position: 'relative', display: 'flex', alignItems: 'center', justifyContent: 'center', width: '100%', height: '100%' }}>
-      <div style={{ position: 'relative' }}>
+      <div style={{ position: 'relative', width: 480, height: 320 }}>
         <TranscendUI
           activePreset={ui.activePreset}
           transportState={ui.transportState}
@@ -164,9 +167,9 @@ export default function Ch05_Playback() {
           tapping={ui.cursorTapping}
           visible={ui.cursorVisible}
         />
+        <Callout text={ui.calloutText} visible={ui.calloutVisible} voice={voice} />
+
       </div>
-      <Callout text={ui.calloutText} visible={ui.calloutVisible} />
-      <ProgressBar progress={loopProgress} />
     </div>
   );
 }

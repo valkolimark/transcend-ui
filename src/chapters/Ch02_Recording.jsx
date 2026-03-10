@@ -3,29 +3,32 @@ import { useAnimationSequence } from '../hooks/useAnimationSequence';
 import TranscendUI from '../components/TranscendUI';
 import CursorDot from '../components/CursorDot';
 import Callout from '../components/Callout';
-import ProgressBar from '../components/ProgressBar';
+
 
 const STEPS = [
-  { id: 'intro',             duration: 1500 },
+  { id: 'intro',             duration: 3500 },
   { id: 'cursor-to-rec',     duration: 500  },
   { id: 'tap-rec',           duration: 200  },
-  { id: 'recording-active',  duration: 3500 },
+  { id: 'recording-active',  duration: 7000 },
   { id: 'cursor-away',       duration: 400  },
   { id: 'dwell-recording',   duration: 1500 },
   { id: 'cursor-to-stop',    duration: 400  },
   { id: 'tap-stop',          duration: 200  },
-  { id: 'recorded-pause',    duration: 2500 },
+  { id: 'recorded-pause',    duration: 5000 },
   { id: 'cursor-to-play',    duration: 400  },
   { id: 'tap-play-review',   duration: 200  },
-  { id: 'recorded-playing',  duration: 2000 },
+  { id: 'recorded-playing',  duration: 4000 },
   { id: 'cursor-to-save',    duration: 500  },
   { id: 'tap-save',          duration: 200  },
-  { id: 'saved-confirm',     duration: 2000 },
-  { id: 'outro',             duration: 2200 },
+  { id: 'saved-confirm',     duration: 4000 },
+  { id: 'outro',             duration: 4000 },
 ];
 
-export default function Ch02_Recording() {
-  const { currentStep, loopProgress } = useAnimationSequence(STEPS);
+export default function Ch02_Recording({ voice, onControls }) {
+  const controls = useAnimationSequence(STEPS);
+  const { currentStep, loopProgress } = controls;
+
+  useEffect(() => { if (onControls) onControls(controls); }, [controls.stepIndex, controls.playing, controls.finished]);
 
   const [ui, setUi] = useState({
     activePreset: 'studio-a',
@@ -52,7 +55,7 @@ export default function Ch02_Recording() {
           cursorVisible: true,
           cursorPos: { x: 100, y: 260 },
           cursorTapping: false,
-          calloutText: 'Tap REC to start recording',
+          calloutText: 'To begin recording, tap the REC button',
           calloutVisible: true,
         }));
         break;
@@ -69,7 +72,7 @@ export default function Ch02_Recording() {
           transportState: 'recording',
           recordingActive: true,
           recordingHeader: 'Recording...',
-          calloutText: 'Recording in progress — red dot pulses',
+          calloutText: 'The red dot pulses to indicate recording is in progress',
           calloutVisible: true,
         }));
         break;
@@ -91,7 +94,7 @@ export default function Ch02_Recording() {
           transportState: 'recorded-paused',
           recordingActive: false,
           recordingHeader: 'Playing recorded track',
-          calloutText: 'Recording stopped — review before saving',
+          calloutText: 'Recording has stopped. You can now review it before saving',
           calloutVisible: true,
         }));
         break;
@@ -107,7 +110,7 @@ export default function Ch02_Recording() {
           cursorTapping: false,
           transportState: 'recorded-playing',
           playbackProgress: 0.45,
-          calloutText: 'Preview your recording',
+          calloutText: 'Tap play to preview your recording',
           calloutVisible: true,
         }));
         break;
@@ -124,7 +127,7 @@ export default function Ch02_Recording() {
           transportState: 'default',
           recordingHeader: null,
           playbackProgress: 0.22,
-          calloutText: 'Track saved to file manager \u2713',
+          calloutText: 'Your track has been saved to the file manager',
           calloutVisible: true,
         }));
         break;
@@ -132,7 +135,7 @@ export default function Ch02_Recording() {
         setUi(s => ({
           ...s,
           cursorVisible: false,
-          calloutText: 'Record, review, and save — all from the home screen',
+          calloutText: 'You can record, review, and save all from the home screen',
           calloutVisible: true,
         }));
         break;
@@ -141,7 +144,7 @@ export default function Ch02_Recording() {
 
   return (
     <div style={{ position: 'relative', display: 'flex', alignItems: 'center', justifyContent: 'center', width: '100%', height: '100%' }}>
-      <div style={{ position: 'relative' }}>
+      <div style={{ position: 'relative', width: 480, height: 320 }}>
         <TranscendUI
           activePreset={ui.activePreset}
           transportState={ui.transportState}
@@ -155,9 +158,9 @@ export default function Ch02_Recording() {
           tapping={ui.cursorTapping}
           visible={ui.cursorVisible}
         />
+        <Callout text={ui.calloutText} visible={ui.calloutVisible} voice={voice} />
+
       </div>
-      <Callout text={ui.calloutText} visible={ui.calloutVisible} />
-      <ProgressBar progress={loopProgress} />
     </div>
   );
 }

@@ -10,6 +10,30 @@ Versioning follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 ## [Unreleased]
 
 ### Added
+- Playback controls bar (play, pause, skip forward/back, replay) below voice selector
+- Step counter display showing current step position (e.g. "3 / 11")
+- Production PNG image assets for all UI icons, buttons, QR codes, and modals
+- `onControls` callback prop on all 12 chapters to expose animation state to App shell
+
+### Changed
+- All SVG icon components in `TranscendUI.jsx` replaced with actual Transcend PNG assets
+- Quick Settings toggle pills and action buttons now render full button images (no double-framing)
+- Modal buttons (Cancel, Yes, Close, Wake Up) now use pre-rendered button images with baked-in text
+- Transport bar speaker icon corrected from `volume_btn.png` (knob graphic) to `sound_on_btn.png`
+- Mute button uses `unmuted_icon.png` / `muted_icon.png` Transcend logo assets
+- QR code placeholders replaced with actual `web_ui_qr_code.png` and `online_user_guide_QR_code.png`
+- `useAnimationSequence` hook now plays once and stops (no longer loops)
+- `useAnimationSequence` hook exposes play/pause/skip/restart controls
+- Progress bar moved from inside chapters to App-level `PlaybackControls` component
+
+### Fixed
+- End-of-chapter bug where intro callout would flash again due to loop restart re-triggering step 0
+
+---
+
+## [0.1.0] — 2026-03-06
+
+### Added
 - GitHub README and CHANGELOG
 - Project scaffold with Vite 4 and React 18
 - Global CSS design token system — all colors, spacing, typography as custom properties

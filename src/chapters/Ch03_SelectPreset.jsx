@@ -3,30 +3,33 @@ import { useAnimationSequence } from '../hooks/useAnimationSequence';
 import TranscendUI from '../components/TranscendUI';
 import CursorDot from '../components/CursorDot';
 import Callout from '../components/Callout';
-import ProgressBar from '../components/ProgressBar';
+
 
 const STEPS = [
-  { id: 'intro',              duration: 1500 },
+  { id: 'intro',              duration: 3500 },
   { id: 'cursor-to-b',        duration: 500  },
   { id: 'tap-studio-b',       duration: 200  },
-  { id: 'active-studio-b',    duration: 1800 },
+  { id: 'active-studio-b',    duration: 3600 },
   { id: 'cursor-to-info',     duration: 400  },
   { id: 'tap-info',           duration: 200  },
-  { id: 'show-info-b',        duration: 2500 },
+  { id: 'show-info-b',        duration: 5000 },
   { id: 'dismiss-info',       duration: 300  },
   { id: 'cursor-to-great',    duration: 500  },
   { id: 'tap-great',          duration: 200  },
-  { id: 'active-great',       duration: 1800 },
-  { id: 'show-info-great',    duration: 2200 },
+  { id: 'active-great',       duration: 3600 },
+  { id: 'show-info-great',    duration: 4400 },
   { id: 'dismiss-info-2',     duration: 300  },
   { id: 'cursor-to-cathedral',duration: 500  },
   { id: 'tap-cathedral',      duration: 200  },
-  { id: 'active-cathedral',   duration: 1500 },
-  { id: 'outro',              duration: 2200 },
+  { id: 'active-cathedral',   duration: 3000 },
+  { id: 'outro',              duration: 4000 },
 ];
 
-export default function Ch03_SelectPreset() {
-  const { currentStep, loopProgress } = useAnimationSequence(STEPS);
+export default function Ch03_SelectPreset({ voice, onControls }) {
+  const controls = useAnimationSequence(STEPS);
+  const { currentStep, loopProgress } = controls;
+
+  useEffect(() => { if (onControls) onControls(controls); }, [controls.stepIndex, controls.playing, controls.finished]);
 
   const [ui, setUi] = useState({
     activePreset: 'studio-a',
@@ -50,7 +53,7 @@ export default function Ch03_SelectPreset() {
           cursorVisible: true,
           cursorPos: { x: 80, y: 65 },
           cursorTapping: false,
-          calloutText: 'Tap any preset to select a room acoustic',
+          calloutText: 'Tap any preset button to select a room acoustic',
           calloutVisible: true,
         }));
         break;
@@ -65,7 +68,7 @@ export default function Ch03_SelectPreset() {
           ...s,
           cursorTapping: false,
           activePreset: 'studio-b',
-          calloutText: 'Studio B selected',
+          calloutText: 'Studio B is now selected',
           calloutVisible: true,
         }));
         break;
@@ -81,7 +84,7 @@ export default function Ch03_SelectPreset() {
           cursorTapping: false,
           showInfoTooltip: true,
           infoPresetId: 'studio-b',
-          calloutText: '\u24d8 — read the acoustic description',
+          calloutText: 'Tap the info icon to read the acoustic description',
           calloutVisible: true,
         }));
         break;
@@ -99,7 +102,7 @@ export default function Ch03_SelectPreset() {
           ...s,
           cursorTapping: false,
           activePreset: 'great-hall',
-          calloutText: 'Great Hall selected',
+          calloutText: 'Great Hall is now selected',
           calloutVisible: true,
         }));
         break;
@@ -125,7 +128,7 @@ export default function Ch03_SelectPreset() {
           ...s,
           cursorTapping: false,
           activePreset: 'grand-cathedral',
-          calloutText: 'Grand Cathedral',
+          calloutText: 'Here is the Grand Cathedral preset',
           calloutVisible: true,
         }));
         break;
@@ -133,7 +136,7 @@ export default function Ch03_SelectPreset() {
         setUi(s => ({
           ...s,
           cursorVisible: false,
-          calloutText: '9 acoustic presets — one tap to transform your space',
+          calloutText: 'There are 9 acoustic presets to transform your space with just one tap',
           calloutVisible: true,
         }));
         break;
@@ -142,7 +145,7 @@ export default function Ch03_SelectPreset() {
 
   return (
     <div style={{ position: 'relative', display: 'flex', alignItems: 'center', justifyContent: 'center', width: '100%', height: '100%' }}>
-      <div style={{ position: 'relative' }}>
+      <div style={{ position: 'relative', width: 480, height: 320 }}>
         <TranscendUI
           activePreset={ui.activePreset}
           showInfoTooltip={ui.showInfoTooltip}
@@ -154,9 +157,9 @@ export default function Ch03_SelectPreset() {
           tapping={ui.cursorTapping}
           visible={ui.cursorVisible}
         />
+        <Callout text={ui.calloutText} visible={ui.calloutVisible} voice={voice} />
+
       </div>
-      <Callout text={ui.calloutText} visible={ui.calloutVisible} />
-      <ProgressBar progress={loopProgress} />
     </div>
   );
 }

@@ -3,25 +3,28 @@ import { useAnimationSequence } from '../hooks/useAnimationSequence';
 import TranscendUI from '../components/TranscendUI';
 import CursorDot from '../components/CursorDot';
 import Callout from '../components/Callout';
-import ProgressBar from '../components/ProgressBar';
+
 
 const STEPS = [
-  { id: 'intro',                duration: 1500 },
+  { id: 'intro',                duration: 3500 },
   { id: 'swipe-gesture',        duration: 700  },
-  { id: 'panel-open',           duration: 2200 },
-  { id: 'highlight-stereo',     duration: 1200 },
-  { id: 'highlight-bt',         duration: 1200 },
-  { id: 'highlight-help',       duration: 800  },
-  { id: 'highlight-netcontrol', duration: 800  },
-  { id: 'highlight-settings',   duration: 800  },
-  { id: 'highlight-standby',    duration: 800  },
-  { id: 'callout-summary',      duration: 1500 },
+  { id: 'panel-open',           duration: 4400 },
+  { id: 'highlight-stereo',     duration: 1500 },
+  { id: 'highlight-bt',         duration: 1500 },
+  { id: 'highlight-help',       duration: 1500 },
+  { id: 'highlight-netcontrol', duration: 1500 },
+  { id: 'highlight-settings',   duration: 1500 },
+  { id: 'highlight-standby',    duration: 1500 },
+  { id: 'callout-summary',      duration: 3000 },
   { id: 'swipe-close',          duration: 600  },
-  { id: 'outro',                duration: 2200 },
+  { id: 'outro',                duration: 4000 },
 ];
 
-export default function Ch06_QuickSettings() {
-  const { currentStep, loopProgress } = useAnimationSequence(STEPS);
+export default function Ch06_QuickSettings({ voice, onControls }) {
+  const controls = useAnimationSequence(STEPS);
+  const { currentStep, loopProgress } = controls;
+
+  useEffect(() => { if (onControls) onControls(controls); }, [controls.stepIndex, controls.playing, controls.finished]);
 
   const [ui, setUi] = useState({
     activePreset: 'studio-a',
@@ -44,7 +47,7 @@ export default function Ch06_QuickSettings() {
           cursorVisible: true,
           cursorPos: { x: 240, y: 5 },
           cursorTapping: false,
-          calloutText: 'Swipe down from the top to open Quick Settings',
+          calloutText: 'Swipe down from the top of the screen to open Quick Settings',
           calloutVisible: true,
         }));
         break;
@@ -61,7 +64,7 @@ export default function Ch06_QuickSettings() {
         setUi(s => ({
           ...s,
           cursorTapping: false,
-          calloutText: 'Quick Settings — access key controls fast',
+          calloutText: 'Quick Settings lets you access key controls quickly',
           calloutVisible: true,
         }));
         break;
@@ -69,7 +72,7 @@ export default function Ch06_QuickSettings() {
         setUi(s => ({
           ...s,
           cursorPos: { x: 115, y: 55 },
-          calloutText: 'Toggle Stereo Mode here',
+          calloutText: 'You can toggle Stereo Mode on or off here',
           calloutVisible: true,
         }));
         break;
@@ -77,7 +80,7 @@ export default function Ch06_QuickSettings() {
         setUi(s => ({
           ...s,
           cursorPos: { x: 295, y: 55 },
-          calloutText: 'Or manage Bluetooth',
+          calloutText: 'Or manage your Bluetooth connections here',
           calloutVisible: true,
         }));
         break;
@@ -100,7 +103,7 @@ export default function Ch06_QuickSettings() {
       case 'callout-summary':
         setUi(s => ({
           ...s,
-          calloutText: 'Help \u00b7 Net Control \u00b7 Settings \u00b7 Standby',
+          calloutText: 'You also have quick access to Help, Net Control, Settings, and Standby',
           calloutVisible: true,
         }));
         break;
@@ -118,7 +121,7 @@ export default function Ch06_QuickSettings() {
           ...s,
           cursorTapping: false,
           cursorVisible: false,
-          calloutText: 'Quick Settings: always one swipe away',
+          calloutText: 'Quick Settings is always just one swipe away',
           calloutVisible: true,
         }));
         break;
@@ -127,7 +130,7 @@ export default function Ch06_QuickSettings() {
 
   return (
     <div style={{ position: 'relative', display: 'flex', alignItems: 'center', justifyContent: 'center', width: '100%', height: '100%' }}>
-      <div style={{ position: 'relative' }}>
+      <div style={{ position: 'relative', width: 480, height: 320 }}>
         <TranscendUI
           activePreset={ui.activePreset}
           quickSettingsOpen={ui.quickSettingsOpen}
@@ -140,9 +143,9 @@ export default function Ch06_QuickSettings() {
           tapping={ui.cursorTapping}
           visible={ui.cursorVisible}
         />
+        <Callout text={ui.calloutText} visible={ui.calloutVisible} voice={voice} />
+
       </div>
-      <Callout text={ui.calloutText} visible={ui.calloutVisible} />
-      <ProgressBar progress={loopProgress} />
     </div>
   );
 }

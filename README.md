@@ -13,11 +13,12 @@
 ## Overview
 
 This application is an animated UI reference tool built for the **Wenger Transcend TS1**
-Active Acoustics controller. Each of the 12 chapters auto-plays a looping tutorial
-demonstrating one feature of the device — no interaction required.
+Active Acoustics controller. Each of the 12 chapters plays a single-run tutorial
+demonstrating one feature of the device with full playback controls.
 
 The interface is a pixel-accurate recreation of the real Transcend TS1 touchscreen,
-built entirely in React with no external animation libraries.
+built entirely in React with no external animation libraries. All icons and buttons
+use production PNG assets from the Transcend design system.
 
 ---
 
@@ -96,17 +97,18 @@ transcend-ui/
 ├── src/
 │   ├── App.jsx                    # Chapter navigation shell
 │   ├── components/
-│   │   ├── TranscendUI.jsx        # Pixel-accurate device UI replica
+│   │   ├── TranscendUI.jsx        # Pixel-accurate device UI replica (PNG assets)
 │   │   ├── CursorDot.jsx          # Animated tap cursor with ripple
 │   │   ├── Callout.jsx            # Caption overlay
 │   │   ├── ProgressBar.jsx        # Loop progress indicator
-│   │   └── ChapterNav.jsx         # Left sidebar navigation
+│   │   ├── ChapterNav.jsx         # Left sidebar navigation
+│   │   └── VoiceSelector.jsx      # TTS voice picker
 │   ├── chapters/
 │   │   ├── Ch01_Bluetooth.jsx
 │   │   ├── Ch02_Recording.jsx
 │   │   └── ... (12 total)
 │   └── hooks/
-│       └── useAnimationSequence.js
+│       └── useAnimationSequence.js # Play-once sequencer with pause/skip
 ├── README.md
 ├── CHANGELOG.md
 └── package.json

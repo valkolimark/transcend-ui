@@ -3,27 +3,30 @@ import { useAnimationSequence } from '../hooks/useAnimationSequence';
 import TranscendUI from '../components/TranscendUI';
 import CursorDot from '../components/CursorDot';
 import Callout from '../components/Callout';
-import ProgressBar from '../components/ProgressBar';
+
 
 const STEPS = [
-  { id: 'intro',               duration: 1500 },
+  { id: 'intro',               duration: 3500 },
   { id: 'open-quick-settings', duration: 600  },
   { id: 'panel-open',          duration: 1000 },
   { id: 'cursor-to-standby',   duration: 400  },
   { id: 'tap-standby',         duration: 200  },
-  { id: 'confirm-modal',       duration: 2500 },
+  { id: 'confirm-modal',       duration: 5000 },
   { id: 'cursor-to-yes',       duration: 400  },
   { id: 'tap-yes',             duration: 200  },
-  { id: 'standby-screen',      duration: 3000 },
+  { id: 'standby-screen',      duration: 5000 },
   { id: 'cursor-to-wakeup',    duration: 600  },
   { id: 'tap-wakeup',          duration: 200  },
   { id: 'wake-transition',     duration: 800  },
-  { id: 'home-restored',       duration: 1200 },
-  { id: 'outro',               duration: 2200 },
+  { id: 'home-restored',       duration: 1500 },
+  { id: 'outro',               duration: 4000 },
 ];
 
-export default function Ch09_PowerSave() {
-  const { currentStep, loopProgress } = useAnimationSequence(STEPS);
+export default function Ch09_PowerSave({ voice, onControls }) {
+  const controls = useAnimationSequence(STEPS);
+  const { currentStep, loopProgress } = controls;
+
+  useEffect(() => { if (onControls) onControls(controls); }, [controls.stepIndex, controls.playing, controls.finished]);
 
   const [ui, setUi] = useState({
     activePreset: 'studio-a',
@@ -46,7 +49,7 @@ export default function Ch09_PowerSave() {
           cursorVisible: true,
           cursorPos: { x: 240, y: 10 },
           cursorTapping: false,
-          calloutText: 'Put Transcend into standby to save power',
+          calloutText: 'You can put Transcend into standby mode to save power',
           calloutVisible: true,
         }));
         break;
@@ -75,7 +78,7 @@ export default function Ch09_PowerSave() {
           cursorVisible: false,
           quickSettingsOpen: false,
           modalType: 'enter-standby',
-          calloutText: 'Confirm to turn off screen and disable audio',
+          calloutText: 'Tap confirm to turn off the screen and disable audio',
           calloutVisible: true,
         }));
         break;
@@ -96,7 +99,7 @@ export default function Ch09_PowerSave() {
           cursorTapping: false,
           cursorVisible: false,
           modalType: 'standby-screen',
-          calloutText: 'Screen off — system in standby',
+          calloutText: 'The screen is now off and the system is in standby',
           calloutVisible: true,
         }));
         break;
@@ -105,7 +108,7 @@ export default function Ch09_PowerSave() {
           ...s,
           cursorVisible: true,
           cursorPos: { x: 240, y: 200 },
-          calloutText: 'Tap Wake Up to resume',
+          calloutText: 'Tap the Wake Up button to resume operation',
           calloutVisible: true,
         }));
         break;
@@ -124,14 +127,14 @@ export default function Ch09_PowerSave() {
       case 'home-restored':
         setUi(s => ({
           ...s,
-          calloutText: 'System restored \u2713',
+          calloutText: 'The system has been restored and is ready to use',
           calloutVisible: true,
         }));
         break;
       case 'outro':
         setUi(s => ({
           ...s,
-          calloutText: 'Standby saves energy without losing your settings',
+          calloutText: 'Standby mode saves energy without losing any of your settings',
           calloutVisible: true,
         }));
         break;
@@ -140,7 +143,7 @@ export default function Ch09_PowerSave() {
 
   return (
     <div style={{ position: 'relative', display: 'flex', alignItems: 'center', justifyContent: 'center', width: '100%', height: '100%' }}>
-      <div style={{ position: 'relative' }}>
+      <div style={{ position: 'relative', width: 480, height: 320 }}>
         <TranscendUI
           activePreset={ui.activePreset}
           quickSettingsOpen={ui.quickSettingsOpen}
@@ -152,9 +155,9 @@ export default function Ch09_PowerSave() {
           tapping={ui.cursorTapping}
           visible={ui.cursorVisible}
         />
+        <Callout text={ui.calloutText} visible={ui.calloutVisible} voice={voice} />
+
       </div>
-      <Callout text={ui.calloutText} visible={ui.calloutVisible} />
-      <ProgressBar progress={loopProgress} />
     </div>
   );
 }

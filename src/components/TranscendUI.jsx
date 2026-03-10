@@ -10,48 +10,91 @@ const PRESETS = [
   { id: 'grand-cathedral', label: 'Grand Cathedral', desc: 'Majestic cathedral acoustics with soaring reverb and ethereal decay.' },
 ];
 
-function PresetButton({ preset, isActive, onInfoBadge }) {
-  const active = isActive;
+const basePath = import.meta.env.BASE_URL || '/';
+
+/* ─── IMAGE ICON HELPER ─── */
+
+function ImgIcon({ src, alt = '', size = 20, style = {} }) {
+  return (
+    <img
+      src={`${basePath}images/${src}`}
+      alt={alt}
+      style={{
+        width: size,
+        height: size,
+        objectFit: 'contain',
+        ...style,
+      }}
+    />
+  );
+}
+
+/* ─── MUTE BUTTON ─── */
+
+function MuteButton({ muted = false }) {
   return (
     <div style={{
-      position: 'relative',
-      height: 62,
-      borderRadius: 10,
-      fontSize: 13,
-      fontWeight: active ? 600 : 400,
-      letterSpacing: '0.005em',
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'center',
-      transition: 'all 0.30s cubic-bezier(0.34, 1.56, 0.64, 1)',
-      background: active
-        ? 'linear-gradient(145deg, #4361EE 0%, #3b55d8 100%)'
+      position: 'relative',
+    }}>
+      <ImgIcon
+        src={muted ? 'muted_icon.png' : 'unmuted_icon.png'}
+        alt={muted ? 'Muted' : 'Unmuted'}
+        size={32}
+      />
+    </div>
+  );
+}
+
+/* ─── PRESET BUTTON ─── */
+
+function PresetButton({ preset, isActive }) {
+  return (
+    <div style={{
+      position: 'relative',
+      height: '100%',
+      minHeight: 62,
+      borderRadius: 10,
+      fontSize: 13,
+      lineHeight: 1.3,
+      fontWeight: isActive ? 600 : 400,
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      textAlign: 'center',
+      padding: '0 8px',
+      transition: 'all 0.28s cubic-bezier(0.34, 1.45, 0.64, 1)',
+      background: isActive
+        ? 'var(--blue-primary)'
         : 'var(--bg-button-idle)',
-      border: active
+      border: isActive
         ? '1.5px solid var(--border-button-active)'
         : '1.5px solid var(--border-button-idle)',
-      color: active ? '#FFFFFF' : 'var(--text-secondary)',
-      boxShadow: active
-        ? '0 0 22px rgba(67, 97, 238, 0.50), 0 4px 14px rgba(0, 0, 0, 0.40)'
-        : '0 2px 6px rgba(0,0,0,0.30)',
-      transform: active ? 'scale(1.02)' : 'scale(1)',
+      color: isActive ? 'var(--text-primary)' : 'var(--text-secondary)',
+      boxShadow: isActive
+        ? '0 0 18px var(--blue-glow), 0 4px 12px rgba(0,0,0,0.40)'
+        : '0 2px 8px rgba(0,0,0,0.35)',
+      transform: isActive ? 'scale(1.02)' : 'scale(1)',
       cursor: 'default',
     }}>
       {preset.label}
-      {active && (
+      {isActive && (
         <div style={{
           position: 'absolute',
-          top: 6,
-          right: 7,
-          width: 15,
-          height: 15,
+          top: 5,
+          right: 6,
+          width: 16,
+          height: 16,
           borderRadius: '50%',
-          background: 'rgba(255,255,255,0.15)',
+          background: 'rgba(255,255,255,0.18)',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
-          fontSize: 9,
-          color: 'rgba(255,255,255,0.80)',
+          fontSize: 10,
+          color: 'rgba(255,255,255,0.85)',
+          fontStyle: 'italic',
         }}>
           i
         </div>
@@ -60,26 +103,28 @@ function PresetButton({ preset, isActive, onInfoBadge }) {
   );
 }
 
+/* ─── INFO TOOLTIP ─── */
+
 function InfoTooltip({ preset }) {
   if (!preset) return null;
   return (
     <div style={{
       position: 'absolute',
       zIndex: 50,
-      width: 220,
+      width: 215,
       background: 'var(--bg-tooltip)',
       border: '1px solid var(--border-tooltip)',
       borderRadius: 10,
-      padding: '11px 15px',
-      boxShadow: '0 8px 32px rgba(0, 0, 0, 0.65), 0 0 0 1px rgba(75, 110, 230, 0.15)',
-      animation: 'fadeInUp 350ms cubic-bezier(0.34, 1.2, 0.64, 1) forwards',
+      padding: '10px 13px',
+      boxShadow: '0 8px 28px rgba(0,0,0,0.65)',
+      animation: 'fadeInUp 320ms cubic-bezier(0.34, 1.2, 0.64, 1) forwards',
       left: '50%',
       transform: 'translateX(-50%)',
       bottom: '100%',
       marginBottom: 8,
     }}>
       <div style={{
-        fontSize: 10,
+        fontSize: 9,
         fontWeight: 700,
         letterSpacing: '0.14em',
         textTransform: 'uppercase',
@@ -89,19 +134,19 @@ function InfoTooltip({ preset }) {
         {preset.label}
       </div>
       <div style={{
-        fontSize: 12,
+        fontSize: 11.5,
         lineHeight: 1.55,
-        color: 'rgba(255,255,255,0.65)',
+        color: 'rgba(255,255,255,0.60)',
       }}>
         {preset.desc}
       </div>
       <div style={{
         position: 'absolute',
-        bottom: -6,
+        bottom: -5,
         left: '50%',
         transform: 'translateX(-50%) rotate(45deg)',
-        width: 10,
-        height: 10,
+        width: 9,
+        height: 9,
         background: 'var(--bg-tooltip)',
         borderRight: '1px solid var(--border-tooltip)',
         borderBottom: '1px solid var(--border-tooltip)',
@@ -110,103 +155,103 @@ function InfoTooltip({ preset }) {
   );
 }
 
+/* ─── QUICK SETTINGS PANEL ─── */
+
 function QuickSettingsPanel({ stereoModeActive, bluetoothActive }) {
   return (
     <div style={{
       position: 'absolute',
       top: 0,
       left: 0,
-      right: 0,
-      height: 160,
-      background: 'rgba(10, 12, 20, 0.97)',
+      width: 432,
+      height: 180,
+      background: 'var(--qs-bg)',
       borderBottom: '1px solid rgba(255,255,255,0.08)',
-      borderRadius: '0 0 14px 14px',
-      padding: '16px 14px',
+      borderRadius: '0 0 12px 12px',
+      padding: '12px 10px 10px',
       boxShadow: '0 8px 32px rgba(0,0,0,0.70)',
-      animation: 'slideDownPanel 400ms cubic-bezier(0.34, 1.1, 0.64, 1) forwards',
+      animation: 'slideDownPanel 380ms cubic-bezier(0.34, 1.1, 0.64, 1) forwards',
       zIndex: 40,
     }}>
-      {/* Row 1 — Toggle pills */}
-      <div style={{ display: 'flex', gap: 8, marginBottom: 10 }}>
+      {/* Row 1 — Two large toggle pills (images ARE the full pill buttons) */}
+      <div style={{ display: 'flex', gap: 8, marginBottom: 4 }}>
         {[
-          { label: 'Stereo Mode', icon: '🎛', active: stereoModeActive },
-          { label: 'Bluetooth', icon: '📶', active: bluetoothActive },
+          { key: 'stereo', label: 'Stereo Mode', active: stereoModeActive,
+            imgOn: 'stero_mode_connected.png', imgOff: 'steromode_btn_drk.png' },
+          { key: 'bt', label: bluetoothActive ? 'Connected' : 'Bluetooth', active: bluetoothActive,
+            imgOn: 'bluetooth_connected.png', imgOff: 'bluetooth_dark.png' },
         ].map(btn => (
-          <div key={btn.label} style={{
-            flex: 1,
-            height: 40,
-            borderRadius: 10,
-            fontSize: 13,
-            fontWeight: 600,
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            gap: 6,
-            background: btn.active
-              ? 'linear-gradient(135deg, #4361EE, #3b55d8)'
-              : 'rgba(255,255,255,0.06)',
-            border: btn.active
-              ? '1.5px solid rgba(100,130,255,0.60)'
-              : '1.5px solid rgba(255,255,255,0.08)',
-            color: btn.active ? '#FFFFFF' : 'rgba(255,255,255,0.45)',
-          }}>
-            <span style={{ fontSize: 14 }}>{btn.icon}</span>
-            {btn.label}
-          </div>
-        ))}
-      </div>
-
-      {/* Row 2 — Action buttons */}
-      <div style={{
-        display: 'grid',
-        gridTemplateColumns: 'repeat(4, 1fr)',
-        gap: 8,
-      }}>
-        {[
-          { label: 'Help', icon: '?' },
-          { label: 'Net Control', icon: '⊕' },
-          { label: 'Settings', icon: '⚙' },
-          { label: 'Standby', icon: '⏻' },
-        ].map(btn => (
-          <div key={btn.label} style={{
-            height: 48,
-            borderRadius: 10,
-            background: 'rgba(255,255,255,0.05)',
-            border: '1px solid rgba(255,255,255,0.07)',
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            justifyContent: 'center',
-            gap: 4,
-          }}>
-            <span style={{ fontSize: 20, color: 'rgba(255,255,255,0.55)' }}>{btn.icon}</span>
+          <div key={btn.key} style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 4 }}>
+            <img
+              src={`${basePath}images/${btn.active ? btn.imgOn : btn.imgOff}`}
+              alt={btn.label}
+              style={{
+                width: '100%',
+                height: 44,
+                objectFit: 'contain',
+                borderRadius: 10,
+              }}
+            />
             <span style={{
               fontSize: 10,
               fontWeight: 600,
-              letterSpacing: '0.04em',
-              color: 'rgba(255,255,255,0.40)',
-              textTransform: 'uppercase',
+              color: btn.active ? 'rgba(255,255,255,0.75)' : 'rgba(255,255,255,0.38)',
+              letterSpacing: '0.02em',
             }}>{btn.label}</span>
           </div>
         ))}
       </div>
 
-      {/* Scroll indicator */}
+      {/* Row 2 — Four action buttons */}
       <div style={{
-        width: 40,
+        display: 'grid',
+        gridTemplateColumns: 'repeat(4, 1fr)',
+        gap: 6,
+      }}>
+        {[
+          { key: 'help', label: 'Help', img: 'helo_btn_drk.png' },
+          { key: 'net', label: 'Net Control', img: 'net_control_btn_drk.png' },
+          { key: 'settings', label: 'Settings', img: 'settings_btn_drk.png' },
+          { key: 'standby', label: 'Standby', img: 'standby_btn_drk.png' },
+        ].map(btn => (
+          <div key={btn.key} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 4 }}>
+            <img
+              src={`${basePath}images/${btn.img}`}
+              alt={btn.label}
+              style={{
+                width: '100%',
+                height: 48,
+                objectFit: 'contain',
+                borderRadius: 10,
+              }}
+            />
+            <span style={{
+              fontSize: 10,
+              fontWeight: 600,
+              letterSpacing: '0.04em',
+              color: 'rgba(255,255,255,0.38)',
+            }}>{btn.label}</span>
+          </div>
+        ))}
+      </div>
+
+      <div style={{
+        width: 36,
         height: 3,
-        background: 'rgba(255,255,255,0.20)',
+        background: 'rgba(255,255,255,0.18)',
         borderRadius: 2,
-        margin: '10px auto 0',
+        margin: '6px auto 0',
       }} />
     </div>
   );
 }
 
+/* ─── AUX INPUTS PANEL ─── */
+
 function AuxInputsPanel() {
   const channels = [
     { label: 'Bluetooth: Connected', connected: true, level: 0.65 },
-    { label: 'RCA', connected: false, level: 0.3 },
+    { label: 'RCA', connected: false, level: 0.3, disabled: true },
     { label: 'Balanced 1', connected: false, level: 0.5 },
     { label: 'Balanced 2', connected: false, level: 0.4 },
   ];
@@ -214,86 +259,92 @@ function AuxInputsPanel() {
   return (
     <div style={{
       position: 'absolute',
-      top: 0,
-      left: 0,
-      right: 0,
-      bottom: 0,
+      top: 0, left: 0, width: 432, bottom: 0,
       background: 'var(--bg-panel)',
-      padding: '16px 14px',
       animation: 'slideInRight 400ms cubic-bezier(0.34, 1.1, 0.64, 1) forwards',
       zIndex: 40,
     }}>
       <div style={{
+        height: 36,
+        padding: '0 10px',
         display: 'flex',
         justifyContent: 'space-between',
         alignItems: 'center',
-        marginBottom: 16,
       }}>
         <span style={{ fontSize: 14, fontWeight: 600, color: '#FFFFFF' }}>Aux Inputs</span>
-        <div style={{ display: 'flex', gap: 6 }}>
-          {['Stereo', 'BT Pair'].map(lbl => (
-            <div key={lbl} style={{
-              padding: '4px 10px',
-              borderRadius: 8,
-              fontSize: 11,
-              fontWeight: 600,
-              background: 'rgba(255,255,255,0.06)',
-              border: '1px solid rgba(255,255,255,0.08)',
-              color: 'rgba(255,255,255,0.45)',
-            }}>{lbl}</div>
-          ))}
+        <div style={{
+          width: 32, height: 28, borderRadius: 6,
+          border: '1.5px solid var(--border-sidebar-box)',
+          display: 'flex', alignItems: 'center', justifyContent: 'center',
+        }}>
+          <ImgIcon src="aux_menu_icon.png" alt="Aux" size={13} />
         </div>
       </div>
 
       {channels.map(ch => (
-        <div key={ch.label} style={{ marginBottom: 14 }}>
+        <div key={ch.label} style={{
+          height: 52,
+          padding: '0 10px',
+          display: 'flex',
+          alignItems: 'center',
+          gap: 10,
+          ...(ch.disabled ? {
+            background: 'var(--aux-row-disabled)',
+            border: '1px solid rgba(255,255,255,0.06)',
+            borderRadius: 8,
+            margin: '0 6px',
+            opacity: 0.35,
+          } : {}),
+        }}>
+          <span style={{ fontSize: 11, color: 'rgba(255,255,255,0.45)', whiteSpace: 'nowrap' }}>{ch.label}</span>
           <div style={{
-            display: 'flex',
-            alignItems: 'center',
-            gap: 6,
-            marginBottom: 6,
+            width: 8, height: 8, borderRadius: '50%', flexShrink: 0,
+            background: ch.connected ? 'var(--aux-signal-on)' : 'var(--aux-signal-off)',
+          }} />
+          <div style={{
+            flex: 1, height: 3, background: 'rgba(255,255,255,0.12)',
+            borderRadius: 2, position: 'relative',
           }}>
-            <span style={{ fontSize: 11, color: 'rgba(255,255,255,0.45)' }}>{ch.label}</span>
             <div style={{
-              width: 8,
-              height: 8,
-              borderRadius: '50%',
-              background: ch.connected ? '#2DD4BF' : 'rgba(255,255,255,0.20)',
+              width: `${ch.level * 100}%`, height: '100%',
+              background: 'var(--blue-primary)', borderRadius: 2,
+            }} />
+            <div style={{
+              position: 'absolute', top: -5.5,
+              left: `${ch.level * 100}%`, transform: 'translateX(-50%)',
+              width: 14, height: 14, borderRadius: '50%', background: '#FFFFFF',
             }} />
           </div>
-          <div style={{
-            display: 'flex',
-            alignItems: 'center',
-            gap: 8,
-          }}>
-            <div style={{
-              flex: 1,
-              height: 3,
-              background: 'rgba(255,255,255,0.12)',
-              borderRadius: 2,
-              position: 'relative',
-            }}>
-              <div style={{
-                width: `${ch.level * 100}%`,
-                height: '100%',
-                background: 'var(--blue-primary)',
-                borderRadius: 2,
-              }} />
-              <div style={{
-                position: 'absolute',
-                top: -5.5,
-                left: `${ch.level * 100}%`,
-                transform: 'translateX(-50%)',
-                width: 14,
-                height: 14,
-                borderRadius: '50%',
-                background: '#FFFFFF',
-              }} />
-            </div>
-            <span style={{ fontSize: 20, color: 'rgba(255,255,255,0.50)' }}>🔊</span>
-          </div>
+          <ImgIcon src="sound_on_btn.png" alt="Speaker" size={18} />
         </div>
       ))}
+    </div>
+  );
+}
+
+/* ─── MODAL COMPONENTS ─── */
+
+function ModalBase({ children, width = 260 }) {
+  return (
+    <div style={{
+      position: 'absolute',
+      top: 0, left: 0, right: 0, bottom: 0,
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      zIndex: 50,
+    }}>
+      <div style={{
+        width,
+        borderRadius: 14,
+        background: 'var(--modal-bg)',
+        border: '1px solid var(--modal-border)',
+        boxShadow: '0 16px 48px rgba(0,0,0,0.75)',
+        padding: '22px 18px',
+        animation: 'modalEnter 280ms cubic-bezier(0.34, 1.4, 0.64, 1) forwards',
+      }}>
+        {children}
+      </div>
     </div>
   );
 }
@@ -301,58 +352,69 @@ function AuxInputsPanel() {
 function ModalBluetooth() {
   return (
     <ModalBase>
-      <div style={{ fontSize: 16, fontWeight: 700, color: '#FFFFFF', textAlign: 'center', marginBottom: 8 }}>
+      <div style={{ fontSize: 15, fontWeight: 700, color: '#FFFFFF', textAlign: 'center', marginBottom: 8 }}>
         Bluetooth Pairing...
       </div>
-      <div style={{ fontSize: 12, color: 'rgba(255,255,255,0.55)', textAlign: 'center', lineHeight: 1.6, marginBottom: 8 }}>
+      <div style={{ fontSize: 12, color: 'rgba(255,255,255,0.50)', textAlign: 'center', lineHeight: 1.6, marginBottom: 8 }}>
         Look for the Device ID:
       </div>
-      <div style={{ fontSize: 18, fontWeight: 700, color: 'var(--text-blue)', textAlign: 'center', marginBottom: 16 }}>
-        Transcend-01M6
+      <div style={{ fontSize: 14, fontWeight: 600, color: 'var(--text-blue)', textAlign: 'center', marginBottom: 16 }}>
+        Transcend-0186
       </div>
-      <button style={{
-        width: '100%',
-        height: 40,
-        background: 'rgba(255,255,255,0.06)',
-        border: '1px solid rgba(255,255,255,0.10)',
-        borderRadius: 10,
-        color: 'rgba(255,255,255,0.65)',
-        fontSize: 13,
-        cursor: 'default',
-      }}>Cancel</button>
+      <img
+        src={`${basePath}images/cancel_btn_drk.png`}
+        alt="Cancel"
+        style={{ width: '100%', height: 42, objectFit: 'contain', cursor: 'default', borderRadius: 9 }}
+      />
     </ModalBase>
   );
 }
 
 function ModalQRWebUI() {
   return (
-    <ModalBase>
-      <div style={{ fontSize: 16, fontWeight: 700, color: '#FFFFFF', textAlign: 'center', marginBottom: 8 }}>
+    <ModalBase width={380}>
+      <div style={{ fontSize: 15, fontWeight: 700, color: '#FFFFFF', textAlign: 'center', marginBottom: 12 }}>
         Control Over Local Network
       </div>
-      <QRPlaceholder />
-      <div style={{ fontSize: 12, color: 'rgba(255,255,255,0.55)', textAlign: 'center', lineHeight: 1.6, marginBottom: 4 }}>
-        Scan to open Web Browser
+      <div style={{ display: 'flex', gap: 14, alignItems: 'flex-start', marginBottom: 14 }}>
+        <ImgIcon src="web_ui_qr_code.png" alt="QR Code" size={110} style={{ width: 110, height: 110, borderRadius: 6, flexShrink: 0 }} />
+        <div style={{ flex: 1 }}>
+          <div style={{ fontSize: 12, color: 'rgba(255,255,255,0.55)', lineHeight: 1.6, marginBottom: 6 }}>
+            Scan to open Web Browser
+          </div>
+          <div style={{ fontSize: 12, color: 'rgba(255,255,255,0.45)', lineHeight: 1.6 }}>
+            You must be connected to the same Wi-Fi Network as Transcend.
+          </div>
+        </div>
       </div>
-      <div style={{ fontSize: 10, color: 'rgba(255,255,255,0.40)', textAlign: 'center', lineHeight: 1.5, marginBottom: 16 }}>
-        You must be connected to the same Wi-Fi Network as Transcend.
-      </div>
-      <PrimaryButton label="Close" />
+      <img
+        src={`${basePath}images/close_btn_active.png`}
+        alt="Close"
+        style={{ width: '100%', height: 42, objectFit: 'contain', cursor: 'default', borderRadius: 9 }}
+      />
     </ModalBase>
   );
 }
 
 function ModalQRHelp() {
   return (
-    <ModalBase>
-      <div style={{ fontSize: 16, fontWeight: 700, color: '#FFFFFF', textAlign: 'center', marginBottom: 8 }}>
+    <ModalBase width={380}>
+      <div style={{ fontSize: 15, fontWeight: 700, color: '#FFFFFF', textAlign: 'center', marginBottom: 12 }}>
         Online User Guide
       </div>
-      <QRPlaceholder />
-      <div style={{ fontSize: 12, color: 'rgba(255,255,255,0.55)', textAlign: 'center', lineHeight: 1.6, marginBottom: 16 }}>
-        Scan to access online Product Manuals, How-To Videos, and more information.
+      <div style={{ display: 'flex', gap: 14, alignItems: 'flex-start', marginBottom: 14 }}>
+        <ImgIcon src="online_user_guide_QR_code.png" alt="QR Code" size={110} style={{ width: 110, height: 110, borderRadius: 6, flexShrink: 0 }} />
+        <div style={{ flex: 1 }}>
+          <div style={{ fontSize: 12, color: 'rgba(255,255,255,0.45)', lineHeight: 1.6 }}>
+            Scan to access online Product Manuals, How-To Videos, and more information.
+          </div>
+        </div>
       </div>
-      <PrimaryButton label="Close" />
+      <img
+        src={`${basePath}images/close_btn_active.png`}
+        alt="Close"
+        style={{ width: '100%', height: 42, objectFit: 'contain', cursor: 'default', borderRadius: 9 }}
+      />
     </ModalBase>
   );
 }
@@ -360,34 +422,23 @@ function ModalQRHelp() {
 function ModalEnterStandby() {
   return (
     <ModalBase>
-      <div style={{ fontSize: 16, fontWeight: 700, color: '#FFFFFF', textAlign: 'center', marginBottom: 8 }}>
+      <div style={{ fontSize: 15, fontWeight: 700, color: '#FFFFFF', textAlign: 'center', marginBottom: 8 }}>
         Enter Standby Mode...
       </div>
-      <div style={{ fontSize: 12, color: 'rgba(255,255,255,0.55)', textAlign: 'center', lineHeight: 1.6, marginBottom: 16 }}>
+      <div style={{ fontSize: 12, color: 'rgba(255,255,255,0.50)', textAlign: 'center', lineHeight: 1.6, marginBottom: 16 }}>
         Turn off the screen and disable audio?
       </div>
       <div style={{ display: 'flex', gap: 8 }}>
-        <button style={{
-          flex: 1,
-          height: 40,
-          background: 'rgba(255,255,255,0.06)',
-          border: '1px solid rgba(255,255,255,0.10)',
-          borderRadius: 10,
-          color: 'rgba(255,255,255,0.65)',
-          fontSize: 13,
-          cursor: 'default',
-        }}>Cancel</button>
-        <button style={{
-          flex: 1,
-          height: 40,
-          background: 'linear-gradient(135deg, #4361EE, #3b55d8)',
-          border: 'none',
-          borderRadius: 10,
-          color: '#FFFFFF',
-          fontSize: 13,
-          fontWeight: 600,
-          cursor: 'default',
-        }}>Yes</button>
+        <img
+          src={`${basePath}images/cancel_btn_drk.png`}
+          alt="Cancel"
+          style={{ flex: '0 0 48%', height: 42, objectFit: 'contain', cursor: 'default', borderRadius: 9 }}
+        />
+        <img
+          src={`${basePath}images/yes_btn_active.png`}
+          alt="Yes"
+          style={{ flex: '0 0 48%', height: 42, objectFit: 'contain', cursor: 'default', borderRadius: 9 }}
+        />
       </div>
     </ModalBase>
   );
@@ -399,47 +450,31 @@ function ModalStandbyScreen() {
       position: 'absolute',
       top: 0, left: 0, right: 0, bottom: 0,
       background: '#000000',
-      display: 'flex',
-      flexDirection: 'column',
-      alignItems: 'center',
-      justifyContent: 'center',
+      display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
       zIndex: 60,
       animation: 'fadeIn 400ms ease forwards',
     }}>
       <div style={{
-        position: 'absolute',
-        top: 12,
-        left: 0,
-        right: 0,
-        display: 'flex',
-        justifyContent: 'center',
-        gap: 24,
+        position: 'absolute', top: 12, left: 0, right: 0,
+        display: 'flex', justifyContent: 'center', gap: 24,
       }}>
-        {['⚙', '?', '📋', '✕'].map((icon, i) => (
-          <span key={i} style={{ fontSize: 18, color: 'rgba(255,255,255,0.15)' }}>{icon}</span>
+        {['⚙', '?', '☰', '✕'].map((icon, i) => (
+          <span key={i} style={{ fontSize: 18, color: 'rgba(255,255,255,0.12)' }}>{icon}</span>
         ))}
       </div>
       <div style={{
-        background: 'rgba(20, 22, 32, 1.0)',
-        borderRadius: 16,
-        padding: '32px 24px',
-        width: 280,
-        textAlign: 'center',
+        background: 'rgba(18, 20, 30, 1.0)',
+        border: '1px solid rgba(255,255,255,0.08)',
+        borderRadius: 16, padding: '28px 22px', width: 260, textAlign: 'center',
       }}>
-        <div style={{ fontSize: 18, fontWeight: 700, color: '#FFFFFF', marginBottom: 16 }}>
+        <div style={{ fontSize: 17, fontWeight: 700, color: '#FFFFFF', marginBottom: 16 }}>
           System in Standby
         </div>
-        <button style={{
-          width: '100%',
-          height: 52,
-          background: 'linear-gradient(135deg, #4361EE, #3b55d8)',
-          border: 'none',
-          borderRadius: 12,
-          fontSize: 15,
-          fontWeight: 700,
-          color: '#FFFFFF',
-          cursor: 'default',
-        }}>Wake Up</button>
+        <img
+          src={`${basePath}images/wakeup_btn_active.png`}
+          alt="Wake Up"
+          style={{ width: '100%', height: 50, objectFit: 'contain', cursor: 'default', borderRadius: 11 }}
+        />
       </div>
     </div>
   );
@@ -454,47 +489,38 @@ function ModalAdminLogin({ passcodeDisplay = '------' }) {
   ];
 
   return (
-    <ModalBase width={300}>
+    <ModalBase width={260}>
       <div style={{
-        position: 'absolute',
-        top: 10,
-        right: 10,
-        width: 28,
-        height: 28,
-        borderRadius: '50%',
+        position: 'absolute', top: 10, right: 10,
+        width: 26, height: 26, borderRadius: '50%',
         background: 'rgba(255,255,255,0.08)',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        color: 'rgba(255,255,255,0.45)',
-        fontSize: 14,
-      }}>✕</div>
-
-      <div style={{
-        display: 'flex',
-        justifyContent: 'space-between',
-        alignItems: 'center',
-        marginBottom: 16,
+        display: 'flex', alignItems: 'center', justifyContent: 'center',
       }}>
-        <div style={{ fontSize: 28, fontWeight: 700, color: '#FFFFFF', letterSpacing: '0.1em' }}>
-          {passcodeDisplay}
-        </div>
-        <span style={{ fontSize: 18, color: 'rgba(255,255,255,0.40)', cursor: 'default' }}>👁</span>
+        <ImgIcon src="discard_btn.png" alt="Close" size={14} />
       </div>
 
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 6 }}>
+      <div style={{
+        display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16,
+      }}>
+        <div style={{ fontSize: 24, fontWeight: 700, color: '#FFFFFF', letterSpacing: '6px' }}>
+          {passcodeDisplay}
+        </div>
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+          <ellipse cx="10" cy="10" rx="8" ry="5" stroke="rgba(255,255,255,0.40)" strokeWidth="1.5" fill="none" />
+          <circle cx="10" cy="10" r="3" fill="rgba(255,255,255,0.40)" />
+        </svg>
+      </div>
+
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 5 }}>
         {keys.flat().map(key => (
           <div key={key} style={{
-            height: 50,
-            borderRadius: 8,
+            height: 46, borderRadius: 7,
             background: 'rgba(255,255,255,0.06)',
             border: '1px solid rgba(255,255,255,0.07)',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            fontSize: key === 'Delete' || key === 'Enter' ? 13 : 18,
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+            fontSize: key === 'Delete' || key === 'Enter' ? 12 : 17,
             fontWeight: key === 'Delete' || key === 'Enter' ? 600 : 400,
-            color: key === 'Delete' || key === 'Enter' ? 'rgba(255,255,255,0.55)' : '#FFFFFF',
+            color: key === 'Delete' || key === 'Enter' ? 'rgba(255,255,255,0.50)' : '#FFFFFF',
           }}>{key}</div>
         ))}
       </div>
@@ -502,66 +528,7 @@ function ModalAdminLogin({ passcodeDisplay = '------' }) {
   );
 }
 
-function ModalBase({ children, width = 300 }) {
-  return (
-    <div style={{
-      position: 'absolute',
-      top: '50%',
-      left: '50%',
-      transform: 'translate(-50%, -50%)',
-      width,
-      borderRadius: 14,
-      background: 'rgba(18, 20, 30, 0.98)',
-      border: '1px solid rgba(255,255,255,0.10)',
-      boxShadow: '0 16px 56px rgba(0,0,0,0.75)',
-      padding: '24px 20px',
-      zIndex: 50,
-      animation: 'modalEnter 300ms cubic-bezier(0.34, 1.4, 0.64, 1) forwards',
-    }}>
-      {children}
-    </div>
-  );
-}
-
-function QRPlaceholder() {
-  return (
-    <div style={{
-      width: 160,
-      height: 160,
-      margin: '8px auto 12px',
-      background: '#FFFFFF',
-      borderRadius: 8,
-      display: 'grid',
-      gridTemplateColumns: 'repeat(8, 1fr)',
-      gridTemplateRows: 'repeat(8, 1fr)',
-      gap: 2,
-      padding: 8,
-    }}>
-      {Array.from({ length: 64 }).map((_, i) => (
-        <div key={i} style={{
-          background: (i + Math.floor(i / 8)) % 3 === 0 ? '#111' : (i % 5 === 0 ? '#333' : 'transparent'),
-          borderRadius: 1,
-        }} />
-      ))}
-    </div>
-  );
-}
-
-function PrimaryButton({ label }) {
-  return (
-    <button style={{
-      width: '100%',
-      height: 44,
-      background: 'linear-gradient(135deg, #4361EE, #3b55d8)',
-      border: 'none',
-      borderRadius: 10,
-      color: '#FFFFFF',
-      fontSize: 14,
-      fontWeight: 600,
-      cursor: 'default',
-    }}>{label}</button>
-  );
-}
+/* ─── TRANSPORT BAR VARIANTS ─── */
 
 function TransportDefault({ recordingActive }) {
   return (
@@ -569,52 +536,40 @@ function TransportDefault({ recordingActive }) {
       display: 'flex',
       alignItems: 'center',
       width: '100%',
-      gap: 12,
+      height: '100%',
+      padding: '0 10px',
     }}>
-      {/* Hamburger/Files */}
-      <span style={{ fontSize: 20, color: 'rgba(255,255,255,0.50)' }}>☰</span>
-
-      {/* REC button */}
-      <div style={{ display: 'flex', alignItems: 'center', gap: 5 }}>
-        <div style={{
-          width: 26,
-          height: 26,
-          borderRadius: '50%',
-          background: 'var(--red-rec-bg)',
-          border: '2px solid var(--red-rec-border)',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-        }}>
-          <div style={{
-            width: 9,
-            height: 9,
-            borderRadius: '50%',
-            background: 'var(--red-rec)',
-            animation: recordingActive ? 'recPulse 1.2s ease-in-out infinite' : 'none',
-          }} />
-        </div>
-        <span style={{
-          fontSize: 11,
-          fontWeight: 600,
-          color: 'rgba(255,255,255,0.55)',
-          letterSpacing: '0.08em',
-        }}>REC</span>
+      <div style={{ width: 36, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+        <ImgIcon src="playback_menu_icon.png" alt="Files" size={20} />
       </div>
 
-      <div style={{ flex: 1 }} />
+      <div style={{
+        flex: 1,
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        gap: 16,
+      }}>
+        {/* REC button */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+          <ImgIcon src="rec_btn.png" alt="REC" size={28} />
+          <span style={{
+            fontSize: 11, fontWeight: 600,
+            color: 'rgba(255,255,255,0.55)',
+            letterSpacing: '0.08em',
+          }}>REC</span>
+        </div>
 
-      {/* Skip back */}
-      <span style={{ fontSize: 18, color: 'rgba(255,255,255,0.45)' }}>⏮</span>
-      {/* Play */}
-      <span style={{ fontSize: 20, color: 'rgba(255,255,255,0.75)' }}>▶</span>
-      {/* Skip forward */}
-      <span style={{ fontSize: 18, color: 'rgba(255,255,255,0.45)' }}>⏭</span>
+        <div style={{ width: 8 }} />
 
-      <div style={{ flex: 1 }} />
+        <ImgIcon src="back_drk_btn.png" alt="Skip Back" size={18} />
+        <ImgIcon src="play_btn.png" alt="Play" size={20} />
+        <ImgIcon src="forward_btn.png" alt="Skip Forward" size={18} />
 
-      {/* Volume */}
-      <span style={{ fontSize: 20, color: 'rgba(255,255,255,0.50)' }}>🔊</span>
+        <div style={{ width: 8 }} />
+
+        <ImgIcon src="sound_on_btn.png" alt="Volume" size={20} />
+      </div>
     </div>
   );
 }
@@ -625,35 +580,28 @@ function TransportRecording() {
       display: 'flex',
       alignItems: 'center',
       width: '100%',
-      gap: 12,
+      height: '100%',
+      padding: '0 10px',
     }}>
-      <span style={{ fontSize: 20, color: 'rgba(255,255,255,0.50)' }}>☰</span>
+      <div style={{ width: 36, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+        <ImgIcon src="playback_menu_icon.png" alt="Files" size={20} />
+      </div>
 
-      {/* Stop button */}
-      <div style={{ display: 'flex', alignItems: 'center', gap: 5 }}>
-        <div style={{
-          width: 26,
-          height: 26,
-          borderRadius: '50%',
-          background: 'var(--red-rec-bg)',
-          border: '2px solid var(--red-rec-border)',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-        }}>
-          <div style={{ width: 10, height: 10, background: 'var(--red-rec)', borderRadius: 2 }} />
+      <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 16 }}>
+        {/* Stop button */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+          <ImgIcon src="stop_btn.png" alt="Stop" size={28} />
+          <span style={{ fontSize: 12, color: 'rgba(255,255,255,0.70)', fontWeight: 500 }}>Stop</span>
         </div>
-        <span style={{ fontSize: 12, color: 'rgba(255,255,255,0.75)' }}>Stop</span>
-      </div>
 
-      {/* Discard */}
-      <div style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
-        <span style={{ fontSize: 16, color: 'rgba(255,255,255,0.50)' }}>✕</span>
-        <span style={{ fontSize: 12, color: 'rgba(255,255,255,0.50)' }}>Discard</span>
-      </div>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 5 }}>
+          <ImgIcon src="discard_btn.png" alt="Discard" size={14} />
+          <span style={{ fontSize: 12, color: 'rgba(255,255,255,0.50)' }}>Discard</span>
+        </div>
 
-      <div style={{ flex: 1 }} />
-      <span style={{ fontSize: 20, color: 'rgba(255,255,255,0.50)' }}>🔊</span>
+        <div style={{ flex: 1 }} />
+        <ImgIcon src="sound_on_btn.png" alt="Volume" size={20} />
+      </div>
     </div>
   );
 }
@@ -664,24 +612,32 @@ function TransportRecordedPaused() {
       display: 'flex',
       alignItems: 'center',
       width: '100%',
-      gap: 12,
+      height: '100%',
+      padding: '0 10px',
     }}>
-      <span style={{ fontSize: 20, color: 'rgba(255,255,255,0.50)' }}>☰</span>
-
-      <div style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
-        <span style={{ fontSize: 18, color: 'rgba(255,255,255,0.75)' }}>💾</span>
-        <span style={{ fontSize: 12, color: 'rgba(255,255,255,0.75)' }}>Save</span>
+      <div style={{ width: 36, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+        <ImgIcon src="playback_menu_icon.png" alt="Files" size={20} />
       </div>
 
-      <span style={{ fontSize: 20, color: 'rgba(255,255,255,0.75)' }}>▶</span>
-
-      <div style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
-        <span style={{ fontSize: 16, color: 'rgba(255,255,255,0.50)' }}>✕</span>
-        <span style={{ fontSize: 12, color: 'rgba(255,255,255,0.50)' }}>Discard</span>
+      <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 14 }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 5 }}>
+          <ImgIcon src="save_btn.png" alt="Save" size={18} />
+          <span style={{ fontSize: 12, color: 'rgba(255,255,255,0.70)', fontWeight: 500 }}>Save</span>
+        </div>
+        <ImgIcon src="play_btn.png" alt="Play" size={20} />
+        <div style={{ display: 'flex', alignItems: 'center', gap: 5 }}>
+          <ImgIcon src="discard_btn.png" alt="Discard" size={14} />
+          <span style={{ fontSize: 12, color: 'rgba(255,255,255,0.50)' }}>Discard</span>
+        </div>
+        <div style={{ flex: 1 }} />
+        <div style={{
+          border: '1.5px solid var(--blue-primary)',
+          borderRadius: 6, padding: '4px 6px',
+          display: 'flex', alignItems: 'center', justifyContent: 'center',
+        }}>
+          <ImgIcon src="sound_on_btn.png" alt="Volume" size={20} />
+        </div>
       </div>
-
-      <div style={{ flex: 1 }} />
-      <span style={{ fontSize: 20, color: 'rgba(255,255,255,0.50)' }}>🔊</span>
     </div>
   );
 }
@@ -692,24 +648,32 @@ function TransportRecordedPlaying() {
       display: 'flex',
       alignItems: 'center',
       width: '100%',
-      gap: 12,
+      height: '100%',
+      padding: '0 10px',
     }}>
-      <span style={{ fontSize: 20, color: 'rgba(255,255,255,0.50)' }}>☰</span>
-
-      <div style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
-        <span style={{ fontSize: 18, color: 'rgba(255,255,255,0.75)' }}>💾</span>
-        <span style={{ fontSize: 12, color: 'rgba(255,255,255,0.75)' }}>Save</span>
+      <div style={{ width: 36, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+        <ImgIcon src="playback_menu_icon.png" alt="Files" size={20} />
       </div>
 
-      <span style={{ fontSize: 20, color: 'rgba(255,255,255,0.75)' }}>⏸</span>
-
-      <div style={{ display: 'flex', alignItems: 'center', gap: 4 }}>
-        <span style={{ fontSize: 16, color: 'rgba(255,255,255,0.50)' }}>✕</span>
-        <span style={{ fontSize: 12, color: 'rgba(255,255,255,0.50)' }}>Discard</span>
+      <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 14 }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 5 }}>
+          <ImgIcon src="save_btn.png" alt="Save" size={18} />
+          <span style={{ fontSize: 12, color: 'rgba(255,255,255,0.70)', fontWeight: 500 }}>Save</span>
+        </div>
+        <ImgIcon src="pause_btn.png" alt="Pause" size={20} />
+        <div style={{ display: 'flex', alignItems: 'center', gap: 5 }}>
+          <ImgIcon src="discard_btn.png" alt="Discard" size={14} />
+          <span style={{ fontSize: 12, color: 'rgba(255,255,255,0.50)' }}>Discard</span>
+        </div>
+        <div style={{ flex: 1 }} />
+        <div style={{
+          border: '1.5px solid var(--blue-primary)',
+          borderRadius: 6, padding: '4px 6px',
+          display: 'flex', alignItems: 'center', justifyContent: 'center',
+        }}>
+          <ImgIcon src="sound_on_btn.png" alt="Volume" size={20} />
+        </div>
       </div>
-
-      <div style={{ flex: 1 }} />
-      <span style={{ fontSize: 20, color: 'rgba(255,255,255,0.50)' }}>🔊</span>
     </div>
   );
 }
@@ -720,42 +684,41 @@ function TransportPlayback({ playbackProgress = 0.65 }) {
       display: 'flex',
       alignItems: 'center',
       width: '100%',
-      gap: 10,
+      height: '100%',
+      padding: '0 10px',
+      gap: 8,
     }}>
-      <span style={{ fontSize: 20, color: 'rgba(255,255,255,0.50)' }}>☰</span>
+      <div style={{ width: 36, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
+        <ImgIcon src="playback_menu_icon.png" alt="Files" size={20} />
+      </div>
 
-      <span style={{ fontSize: 11, color: 'rgba(255,255,255,0.45)', whiteSpace: 'nowrap' }}>Playback</span>
+      <span style={{ fontSize: 11, color: 'rgba(255,255,255,0.45)', whiteSpace: 'nowrap', marginRight: 8 }}>Playback</span>
 
-      {/* Scrubber */}
       <div style={{
-        flex: 1,
-        height: 3,
+        flex: 1, height: 3,
         background: 'rgba(255,255,255,0.12)',
-        borderRadius: 2,
-        position: 'relative',
+        borderRadius: 2, position: 'relative',
       }}>
         <div style={{
-          width: `${playbackProgress * 100}%`,
-          height: '100%',
-          background: 'var(--blue-primary)',
-          borderRadius: 2,
+          width: `${playbackProgress * 100}%`, height: '100%',
+          background: 'var(--progress-fill)', borderRadius: 2,
         }} />
         <div style={{
-          position: 'absolute',
-          top: -5.5,
-          left: `${playbackProgress * 100}%`,
-          transform: 'translateX(-50%)',
-          width: 14,
-          height: 14,
-          borderRadius: '50%',
+          position: 'absolute', top: -5.5,
+          left: `${playbackProgress * 100}%`, transform: 'translateX(-50%)',
+          width: 14, height: 14, borderRadius: '50%',
           background: '#FFFFFF',
         }} />
       </div>
 
-      <span style={{ fontSize: 18, color: 'rgba(255,255,255,0.40)', cursor: 'default' }}>✕</span>
+      <div style={{ flexShrink: 0 }}>
+        <ImgIcon src="discard_btn.png" alt="Close" size={18} />
+      </div>
     </div>
   );
 }
+
+/* ─── MAIN COMPONENT ─── */
 
 export default function TranscendUI({
   activePreset = 'studio-a',
@@ -781,8 +744,24 @@ export default function TranscendUI({
   browserChrome = false,
   passcodeDisplay = '------',
 }) {
-  const knobTop = (1 - volumeLevel) * 130;
-  const fillHeight = volumeLevel * 130;
+  /* Layout constants */
+  const MAIN_W = 432;
+  const SEP_W = 1.5;
+  const SIDEBAR_W = 480 - MAIN_W - SEP_W; /* ~46.5 */
+  const TRANSPORT_H = 48;
+  const SCRUB_H = 20;
+  const PROGRESS_H = 3;
+  const HEADER_H = 32;
+  const GRID_TOP = HEADER_H;
+  const SCRUB_TOP = 320 - TRANSPORT_H - PROGRESS_H - SCRUB_H; /* 249 */
+  const PROGRESS_TOP = SCRUB_TOP + SCRUB_H; /* 269 */
+  const TRANSPORT_TOP = PROGRESS_TOP + PROGRESS_H; /* 272 */
+
+  /* Volume slider */
+  const sliderTrackH = 150;
+  const knobSize = 22;
+  const knobTop = (1 - volumeLevel) * sliderTrackH;
+  const stemHeight = sliderTrackH - knobTop - knobSize / 2;
 
   const infoPreset = infoPresetId ? PRESETS.find(p => p.id === infoPresetId) : null;
 
@@ -792,40 +771,37 @@ export default function TranscendUI({
       width: 480,
       height: 320,
       background: 'var(--bg-device)',
-      borderRadius: 16,
       border: '2px solid var(--border-device)',
-      overflow: 'hidden',
       boxShadow: '0 32px 96px rgba(0, 0, 0, 0.75), 0 0 0 1px rgba(255, 255, 255, 0.05), inset 0 1px 0 rgba(255, 255, 255, 0.07)',
       fontFamily: "'Avenir LT Pro', 'Avenir', 'Nunito', sans-serif",
     }}>
-      {/* ─── MAIN PANEL ─── */}
-      <div style={{ position: 'absolute', top: 0, left: 0, width: 430, height: 280 }}>
+      {/* ─── CONTENT CLIP WRAPPER ─── */}
+      <div style={{
+        position: 'absolute',
+        top: 0, left: 0, right: 0, bottom: 0,
+        overflow: 'hidden',
+      }}>
+
+      {/* ─── MAIN PANEL (left area) ─── */}
+      <div style={{
+        position: 'absolute', top: 0, left: 0,
+        width: MAIN_W, height: SCRUB_TOP,
+        background: 'var(--bg-panel)',
+      }}>
         {/* Header row */}
         <div style={{
-          height: 36,
-          padding: '0 14px',
+          height: HEADER_H,
+          padding: '0 12px',
           display: 'flex',
           justifyContent: 'space-between',
           alignItems: 'center',
         }}>
           <span style={{
-            fontSize: 12,
+            fontSize: 11,
             fontWeight: 300,
             color: 'var(--text-tertiary)',
-            letterSpacing: '0.03em',
+            letterSpacing: '0.04em',
           }}>Active Acoustics</span>
-          <div style={{
-            width: 32,
-            height: 28,
-            borderRadius: 7,
-            background: 'rgba(255,255,255,0.06)',
-            border: '1px solid rgba(255,255,255,0.07)',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            fontSize: 13,
-            color: 'rgba(255,255,255,0.45)',
-          }}>≡‹</div>
         </div>
 
         {/* Preset grid */}
@@ -833,8 +809,9 @@ export default function TranscendUI({
           display: 'grid',
           gridTemplateColumns: 'repeat(3, 1fr)',
           gridTemplateRows: 'repeat(3, 1fr)',
-          gap: 7,
-          padding: '10px 14px',
+          gap: 6,
+          padding: '0 10px 8px',
+          height: `calc(100% - ${HEADER_H}px)`,
         }}>
           {PRESETS.map(preset => (
             <div key={preset.id} style={{ position: 'relative' }}>
@@ -850,77 +827,105 @@ export default function TranscendUI({
         </div>
       </div>
 
-      {/* ─── BLUE VERTICAL LINE ─── */}
+      {/* ─── BLUE SEPARATOR LINE (full height) ─── */}
       <div style={{
         position: 'absolute',
-        left: 430,
+        left: MAIN_W,
         top: 0,
-        width: 2,
-        height: 220,
-        background: 'var(--blue-vert-line)',
-        opacity: 0.7,
+        width: SEP_W,
+        height: 320,
+        background: 'var(--separator-color)',
       }} />
 
-      {/* ─── VOLUME SIDEBAR ─── */}
+      {/* ─── RIGHT SIDEBAR ─── */}
       <div style={{
         position: 'absolute',
-        left: 432,
+        left: MAIN_W + SEP_W,
         top: 0,
-        width: 48,
-        height: 280,
+        width: SIDEBAR_W,
+        height: 320,
+        background: 'var(--bg-sidebar)',
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
-        justifyContent: 'center',
       }}>
+        {/* Aux button (top) */}
         <div style={{
-          position: 'relative',
-          width: 4,
-          height: 130,
-          background: 'var(--slider-track)',
-          borderRadius: 4,
+          width: SIDEBAR_W,
+          height: 48,
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
         }}>
-          {/* Active fill (from bottom) */}
+          <ImgIcon src="aux_menu_icon.png" alt="Aux" size={24} />
+        </div>
+
+        {/* Volume slider (center) */}
+        <div style={{
+          flex: 1,
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          justifyContent: 'center',
+        }}>
           <div style={{
-            position: 'absolute',
-            bottom: 0,
-            left: 0,
-            width: 4,
-            height: fillHeight,
-            background: 'var(--slider-active)',
-            borderRadius: '0 0 4px 4px',
-            transition: 'height 300ms ease',
-          }} />
-          {/* Knob */}
-          <div style={{
-            position: 'absolute',
-            top: knobTop - 9,
-            left: -7,
-            width: 18,
-            height: 18,
-            borderRadius: '50%',
-            background: muteActive ? 'rgba(255,255,255,0.25)' : 'var(--slider-knob)',
-            border: '2.5px solid var(--slider-knob-border)',
-            boxShadow: muteActive ? 'none' : '0 0 10px rgba(67, 97, 238, 0.65)',
-            transition: 'top 300ms ease, background 300ms ease',
-          }} />
+            position: 'relative',
+            width: 6,
+            height: sliderTrackH,
+            background: 'var(--slider-track)',
+            borderRadius: 4,
+          }}>
+            {/* Stem below knob */}
+            <div style={{
+              position: 'absolute',
+              bottom: 0,
+              left: '50%',
+              transform: 'translateX(-50%)',
+              width: 3,
+              height: Math.max(0, stemHeight),
+              background: 'var(--slider-stem)',
+              borderRadius: '0 0 2px 2px',
+              transition: 'height 300ms ease',
+            }} />
+            {/* Knob */}
+            <div style={{
+              position: 'absolute',
+              top: knobTop - knobSize / 2,
+              left: '50%',
+              transform: 'translateX(-50%)',
+              width: knobSize,
+              height: knobSize,
+              borderRadius: '50%',
+              background: muteActive ? 'rgba(255,255,255,0.25)' : 'var(--slider-knob)',
+              boxShadow: muteActive ? 'none' : '0 0 10px var(--slider-knob-glow)',
+              transition: 'top 300ms ease, background 300ms ease',
+            }} />
+          </div>
+        </div>
+
+        {/* Mute button (bottom) */}
+        <div style={{
+          marginBottom: 4,
+        }}>
+          <MuteButton muted={muteActive} />
         </div>
       </div>
 
-      {/* ─── TRACK / PROGRESS ROW ─── */}
+      {/* ─── SCRUB ROW ─── */}
       <div style={{
         position: 'absolute',
-        top: 280,
+        top: SCRUB_TOP,
         left: 0,
-        width: 430,
-        height: 18,
-        padding: '0 14px',
+        width: MAIN_W,
+        height: SCRUB_H,
+        padding: '0 12px',
         display: 'flex',
         justifyContent: 'space-between',
         alignItems: 'center',
+        background: 'var(--bg-panel)',
       }}>
         <span style={{ fontSize: 10, fontWeight: 300 }}>
-          <span style={{ color: 'var(--text-disabled)' }}>Selected: </span>
+          <span style={{ color: 'var(--text-muted)' }}>Selected: </span>
           <span style={{ color: 'var(--text-tertiary)' }}>{trackLabel}</span>
         </span>
         <span style={{ fontSize: 10, fontWeight: 300, color: 'var(--text-tertiary)' }}>
@@ -928,28 +933,26 @@ export default function TranscendUI({
         </span>
       </div>
 
-      {/* Recording header (between progress and transport) */}
+      {/* Recording header (replaces scrub row when recording/previewing) */}
       {recordingHeader && (
         <div style={{
           position: 'absolute',
-          top: 280,
+          top: SCRUB_TOP,
           left: 0,
-          width: 430,
-          height: 18,
-          padding: '0 14px',
+          width: MAIN_W,
+          height: SCRUB_H,
+          background: 'var(--bg-transport-header)',
+          borderTop: '2px solid var(--blue-primary)',
+          padding: '0 12px',
           display: 'flex',
+          justifyContent: 'space-between',
           alignItems: 'center',
-          gap: 6,
         }}>
-          <div style={{
-            width: 8,
-            height: 8,
-            borderRadius: '50%',
-            background: 'var(--red-rec)',
-            animation: recordingActive ? 'recPulse 1.2s ease-in-out infinite' : 'none',
-          }} />
-          <span style={{ fontSize: 11, fontWeight: 600, color: 'rgba(255,255,255,0.65)' }}>
+          <span style={{ fontSize: 10, fontWeight: 300, color: 'var(--text-status)' }}>
             {recordingHeader}
+          </span>
+          <span style={{ fontSize: 10, fontWeight: 300, color: 'var(--text-status)' }}>
+            {timestamp}
           </span>
         </div>
       )}
@@ -957,28 +960,27 @@ export default function TranscendUI({
       {/* ─── PROGRESS BAR ─── */}
       <div style={{
         position: 'absolute',
-        top: 300,
+        top: PROGRESS_TOP,
         left: 0,
-        width: 480,
-        height: 3,
-        background: 'rgba(255,255,255,0.08)',
+        width: MAIN_W,
+        height: PROGRESS_H,
+        background: 'var(--progress-track)',
       }}>
         <div style={{
           width: `${playbackProgress * 100}%`,
           height: '100%',
-          background: 'linear-gradient(90deg, #4361EE, #7C9EFF)',
-          boxShadow: '0 0 6px rgba(124, 158, 255, 0.50)',
+          background: 'var(--progress-fill)',
           transition: 'width 300ms linear',
         }} />
         <div style={{
           position: 'absolute',
-          top: -3,
+          top: -2.5,
           left: `${playbackProgress * 100}%`,
           transform: 'translateX(-50%)',
-          width: 9,
-          height: 9,
+          width: 8,
+          height: 8,
           borderRadius: '50%',
-          background: '#FFFFFF',
+          background: 'var(--progress-dot)',
           boxShadow: '0 0 4px rgba(255,255,255,0.60)',
           transition: 'left 300ms linear',
         }} />
@@ -987,13 +989,12 @@ export default function TranscendUI({
       {/* ─── TRANSPORT BAR ─── */}
       <div style={{
         position: 'absolute',
-        top: 303,
+        top: TRANSPORT_TOP,
         left: 0,
-        width: 430,
-        height: 50,
+        width: MAIN_W,
+        height: TRANSPORT_H,
         background: 'var(--bg-transport)',
-        borderTop: '1px solid rgba(255,255,255,0.05)',
-        padding: '0 14px',
+        borderTop: '1px solid var(--border-transport)',
         display: 'flex',
         alignItems: 'center',
       }}>
@@ -1004,80 +1005,46 @@ export default function TranscendUI({
         {transportState === 'playback' && <TransportPlayback playbackProgress={playbackProgress} />}
       </div>
 
-      {/* ─── MUTE / AUX BUTTON ─── */}
-      <div style={{
-        position: 'absolute',
-        left: 432,
-        top: 285,
-        width: 48,
-        height: 68,
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-      }}>
-        <div style={{
-          width: 44,
-          height: 44,
-          borderRadius: '50%',
-          background: muteActive ? 'rgba(224, 49, 49, 0.15)' : 'var(--blue-dim)',
-          border: muteActive
-            ? '1.5px solid rgba(224, 49, 49, 0.45)'
-            : '1.5px solid rgba(67, 97, 238, 0.45)',
-          boxShadow: muteActive ? 'none' : '0 0 12px rgba(67, 97, 238, 0.35)',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          fontSize: 18,
-          color: muteActive ? '#FF6B6B' : 'var(--text-blue)',
-          position: 'relative',
-        }}>
-          ⊕
-          {muteActive && (
-            <div style={{
-              position: 'absolute',
-              top: '50%',
-              left: '15%',
-              width: '70%',
-              height: 2,
-              background: '#FF6B6B',
-              transform: 'rotate(-45deg)',
-              transformOrigin: 'center',
-            }} />
-          )}
-        </div>
-      </div>
-
       {/* ─── FILE LIST PANEL ─── */}
       {fileListOpen && (
         <div style={{
           position: 'absolute',
-          bottom: 0,
-          left: 0,
-          right: 0,
-          background: 'rgba(10, 12, 20, 0.98)',
-          borderTop: '1px solid rgba(255,255,255,0.08)',
-          borderRadius: '14px 14px 0 0',
-          padding: '12px 14px',
+          top: 0, left: 0, width: MAIN_W, bottom: TRANSPORT_H + PROGRESS_H + SCRUB_H,
+          background: 'var(--bg-panel)',
           zIndex: 35,
           animation: 'fadeInUp 300ms ease forwards',
         }}>
-          {(fileListTracks || ['Track 1', 'Track 2', 'Track 3']).map((track, i) => (
-            <div key={i} style={{
-              height: 40,
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'space-between',
-              borderBottom: '1px solid rgba(255,255,255,0.05)',
-              padding: '0 8px',
-              position: 'relative',
-            }}>
-              <span style={{ fontSize: 13, color: 'rgba(255,255,255,0.75)' }}>{track}</span>
-              <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
-                <span style={{ fontSize: 10, color: 'rgba(255,255,255,0.35)' }}>01:10</span>
-                <span style={{ fontSize: 14, color: 'rgba(255,255,255,0.45)' }}>▶</span>
+          <div style={{
+            height: 36,
+            background: 'var(--bg-transport)',
+            display: 'flex', gap: 6, padding: '6px 10px',
+          }}>
+            {['Local (120 min. left)', 'USB'].map((tab, i) => (
+              <div key={tab} style={{
+                flex: 1, height: 24, borderRadius: 7,
+                display: 'flex', alignItems: 'center', justifyContent: 'center',
+                fontSize: 12,
+                background: i === 0 ? 'var(--file-tab-active)' : 'var(--bg-button-idle)',
+                border: i === 0 ? '1.5px solid var(--file-tab-border)' : '1.5px solid var(--border-button-idle)',
+                color: i === 0 ? 'var(--text-primary)' : 'var(--text-tertiary)',
+              }}>{tab}</div>
+            ))}
+          </div>
+          <div style={{ overflow: 'auto' }}>
+            {(fileListTracks || ['Track 1', 'Track 2', 'Track 3']).map((track, i) => (
+              <div key={i} style={{
+                height: 40,
+                display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+                borderBottom: '1px solid rgba(255,255,255,0.04)',
+                padding: '0 12px',
+              }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+                  <span style={{ fontSize: 14, color: i === 0 ? 'var(--blue-primary)' : 'rgba(255,255,255,0.35)' }}>&#9834;</span>
+                  <span style={{ fontSize: 13, color: 'var(--text-secondary)' }}>{track}</span>
+                </div>
               </div>
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
       )}
 
@@ -1085,22 +1052,18 @@ export default function TranscendUI({
       {fileContextMenu && (
         <div style={{
           position: 'absolute',
-          left: fileContextMenu.x || 100,
-          top: fileContextMenu.y || 200,
+          left: fileContextMenu.x || 100, top: fileContextMenu.y || 200,
           width: 120,
-          background: 'rgba(18, 20, 30, 0.98)',
-          border: '1px solid rgba(255,255,255,0.10)',
-          borderRadius: 8,
-          padding: '6px 0',
+          background: 'var(--modal-bg)',
+          border: '1px solid var(--modal-border)',
+          borderRadius: 8, padding: '6px 0',
           zIndex: 55,
           animation: 'fadeIn 200ms ease forwards',
         }}>
-          <div style={{
-            padding: '8px 14px',
-            fontSize: 13,
-            color: '#E03131',
-            cursor: 'default',
-          }}>Delete</div>
+          <div style={{ padding: '8px 14px', fontSize: 13, color: '#E03131', cursor: 'default', display: 'flex', alignItems: 'center', gap: 6 }}>
+            <ImgIcon src="delete_btn_trash.png" alt="Delete" size={14} />
+            Delete
+          </div>
         </div>
       )}
 
@@ -1108,7 +1071,7 @@ export default function TranscendUI({
       {settingsScreen && (
         <div style={{
           position: 'absolute',
-          top: 0, left: 0, right: 0, bottom: 0,
+          top: 0, left: 0, width: MAIN_W, bottom: 0,
           background: 'var(--bg-device)',
           zIndex: 45,
           animation: 'slideInRight 300ms ease forwards',
@@ -1118,30 +1081,26 @@ export default function TranscendUI({
           {['Network', 'Audio', 'Display', 'Device Info', 'Factory Reset'].map(item => (
             <div key={item} style={{
               height: 44,
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'space-between',
+              display: 'flex', alignItems: 'center', justifyContent: 'space-between',
               borderBottom: '1px solid rgba(255,255,255,0.06)',
               padding: '0 8px',
             }}>
               <span style={{ fontSize: 14, color: 'rgba(255,255,255,0.75)' }}>{item}</span>
-              <span style={{ fontSize: 14, color: 'rgba(255,255,255,0.30)' }}>›</span>
+              <span style={{ fontSize: 14, color: 'rgba(255,255,255,0.30)' }}>&#8250;</span>
             </div>
           ))}
         </div>
       )}
 
-      {/* ─── OVERLAYS ─── */}
+      {/* ─── OVERLAYS (inside clip wrapper) ─── */}
       {quickSettingsOpen && (
-        <QuickSettingsPanel
-          stereoModeActive={stereoModeActive}
-          bluetoothActive={bluetoothActive}
-        />
+        <QuickSettingsPanel stereoModeActive={stereoModeActive} bluetoothActive={bluetoothActive} />
       )}
-
       {auxPanelOpen && <AuxInputsPanel />}
 
-      {/* ─── MODALS ─── */}
+      </div>{/* ─── END CONTENT CLIP WRAPPER ─── */}
+
+      {/* ─── MODALS (outside clip wrapper so they aren't clipped) ─── */}
       {modalType === 'bluetooth-pairing' && <ModalBluetooth />}
       {modalType === 'qr-web-ui' && <ModalQRWebUI />}
       {modalType === 'qr-help' && <ModalQRHelp />}
@@ -1153,26 +1112,16 @@ export default function TranscendUI({
       {browserChrome && (
         <div style={{
           position: 'absolute',
-          top: -32,
-          left: -2,
-          right: -2,
-          height: 32,
+          top: -32, left: -2, right: -2, height: 32,
           background: '#1a1a1a',
           borderRadius: '8px 8px 0 0',
-          display: 'flex',
-          alignItems: 'center',
-          padding: '0 12px',
-          gap: 8,
+          display: 'flex', alignItems: 'center', padding: '0 12px', gap: 8,
         }}>
-          <span style={{ fontSize: 12, color: 'rgba(255,255,255,0.35)' }}>‹ ›</span>
+          <span style={{ fontSize: 12, color: 'rgba(255,255,255,0.35)' }}>&#8249; &#8250;</span>
           <div style={{
-            flex: 1,
-            height: 20,
-            borderRadius: 10,
+            flex: 1, height: 20, borderRadius: 10,
             background: 'rgba(255,255,255,0.08)',
-            display: 'flex',
-            alignItems: 'center',
-            padding: '0 10px',
+            display: 'flex', alignItems: 'center', padding: '0 10px',
           }}>
             <span style={{ fontSize: 10, color: 'rgba(255,255,255,0.40)' }}>
               https://transcend.local/webui

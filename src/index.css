@@ -8,52 +8,108 @@ body { background: #0a0a0f; overflow: hidden; }
 }
 
 :root {
-  /* Backgrounds */
-  --bg-app:           #0a0a0f;
-  --bg-device:        #111318;
-  --bg-panel:         #111318;
-  --bg-button-idle:   #1e2128;
-  --bg-button-hover:  #252830;
-  --bg-transport:     #0d0f13;
-  --bg-overlay:       rgba(10, 12, 18, 0.96);
-  --bg-tooltip:       rgba(13, 17, 40, 0.97);
+  /* ── App backgrounds ─────────────────────────────── */
+  --bg-app:               #0a0a0f;
+  --bg-device:            #0f1116;
+  --bg-panel:             #111318;
+  --bg-button-idle:       #252830;
+  --bg-button-hover:      #2e3240;
+  --bg-transport:         #14161e;
+  --bg-transport-header:  #1a1c25;
+  --bg-sidebar:           #0d0f14;
+  --bg-overlay:           rgba(10, 12, 18, 0.97);
+  --bg-tooltip:           rgba(12, 15, 35, 0.97);
 
-  /* Borders */
-  --border-button-idle:    rgba(255, 255, 255, 0.07);
-  --border-button-active:  rgba(100, 130, 255, 0.65);
-  --border-device:         rgba(255, 255, 255, 0.10);
-  --border-panel:          rgba(255, 255, 255, 0.06);
-  --border-tooltip:        rgba(75, 110, 230, 0.55);
+  /* ── Borders ─────────────────────────────────────── */
+  --border-button-idle:     rgba(255, 255, 255, 0.07);
+  --border-button-active:   rgba(70, 110, 255, 0.75);
+  --border-sidebar-box:     #4169E1;
+  --border-device:          rgba(255, 255, 255, 0.10);
+  --border-tooltip:         rgba(65, 105, 225, 0.50);
+  --border-transport:       rgba(255, 255, 255, 0.05);
 
-  /* Blue accent */
-  --blue-primary:     #4361EE;
-  --blue-light:       #5B7FFF;
-  --blue-dim:         rgba(67, 97, 238, 0.20);
-  --blue-glow:        rgba(67, 97, 238, 0.45);
+  /* ── Brand blue ──────────────────────────────────── */
+  --blue-primary:     #4169E1;
+  --blue-light:       #5B82FF;
+  --blue-glow:        rgba(65, 105, 225, 0.55);
+  --blue-dim:         rgba(65, 105, 225, 0.15);
 
-  /* Text */
+  /* ── THE BLUE SEPARATOR LINE ─────────────────────── */
+  --separator-color:  #4169E1;
+  --separator-width:  1.5px;
+
+  /* ── Text ────────────────────────────────────────── */
   --text-primary:     #FFFFFF;
-  --text-secondary:   rgba(255, 255, 255, 0.75);
+  --text-secondary:   rgba(255, 255, 255, 0.78);
   --text-tertiary:    rgba(255, 255, 255, 0.40);
-  --text-disabled:    rgba(255, 255, 255, 0.20);
-  --text-blue:        #7C9EFF;
+  --text-muted:       rgba(255, 255, 255, 0.22);
+  --text-transport:   rgba(255, 255, 255, 0.55);
+  --text-blue:        #7CA8FF;
+  --text-status:      rgba(255, 255, 255, 0.38);
 
-  /* Status */
-  --red-rec:          #E03131;
-  --red-rec-bg:       rgba(224, 49, 49, 0.15);
-  --red-rec-border:   rgba(224, 49, 49, 0.55);
+  /* ── REC button — IDLE state ─────────────────────── */
+  --rec-ring-idle:    #FFFFFF;
+  --rec-ring-idle-bg: rgba(255,255,255,0.08);
+  --rec-dot-idle:     #4169E1;
 
-  /* Volume slider */
-  --slider-track:     rgba(255, 255, 255, 0.12);
-  --slider-active:    #4361EE;
-  --slider-knob:      #4361EE;
-  --slider-knob-border: rgba(255, 255, 255, 0.35);
-  --blue-vert-line:   #4361EE;
+  /* ── REC button — ACTIVE/RECORDING state ─────────── */
+  --rec-ring-active:  rgba(224, 49, 49, 0.18);
+  --rec-dot-active:   #E03131;
+  --rec-border-active:rgba(224, 49, 49, 0.65);
+
+  /* ── Volume slider ───────────────────────────────── */
+  --slider-track:     rgba(255, 255, 255, 0.10);
+  --slider-knob:      #4169E1;
+  --slider-knob-glow: rgba(65, 105, 225, 0.65);
+  --slider-stem:      #4169E1;
+
+  /* ── Mute button — NORMAL state ─────────────────── */
+  --mute-icon-normal: #38B2C8;
+  --mute-bg-normal:   transparent;
+
+  /* ── Mute button — MUTED state ───────────────────── */
+  --mute-icon-muted:  #E03131;
+  --mute-bg-muted:    rgba(224, 49, 49, 0.15);
+  --mute-border-muted:rgba(224, 49, 49, 0.55);
+
+  /* ── Progress/scrub bar ──────────────────────────── */
+  --progress-track:   rgba(255, 255, 255, 0.08);
+  --progress-fill:    #4169E1;
+  --progress-dot:     #FFFFFF;
+
+  /* ── Quick Settings ──────────────────────────────── */
+  --qs-bg:            rgba(12, 14, 22, 0.98);
+  --qs-toggle-on:     #4169E1;
+  --qs-toggle-off:    rgba(255, 255, 255, 0.06);
+  --qs-btn-bg:        rgba(255, 255, 255, 0.05);
+
+  /* ── Modals ──────────────────────────────────────── */
+  --modal-bg:         rgba(16, 18, 28, 0.99);
+  --modal-border:     rgba(255, 255, 255, 0.09);
+  --modal-btn:        #4169E1;
+
+  /* ── File Manager ────────────────────────────────── */
+  --file-tab-active:  rgba(65, 105, 225, 0.20);
+  --file-tab-border:  #4169E1;
+  --file-row-selected:#4169E1;
+  --file-row-bg:      transparent;
+  --file-row-hover:   rgba(255, 255, 255, 0.04);
+
+  /* ── Aux Inputs ──────────────────────────────────── */
+  --aux-signal-on:    #22C55E;
+  --aux-signal-off:   rgba(255,255,255,0.18);
+  --aux-mute-red:     #E03131;
+  --aux-row-disabled: rgba(255, 255, 255, 0.08);
 }
 
 @keyframes ripple {
-  0%   { transform: scale(0.4); opacity: 0.8; }
-  100% { transform: scale(2.8); opacity: 0; }
+  0%   { transform: scale(0.35); opacity: 0.85; }
+  100% { transform: scale(3.0);  opacity: 0; }
+}
+
+@keyframes fadeInDown {
+  from { opacity: 0; transform: translateY(-12px); }
+  to   { opacity: 1; transform: translateY(0); }
 }
 
 @keyframes fadeInUp {
@@ -73,7 +129,7 @@ body { background: #0a0a0f; overflow: hidden; }
 
 @keyframes recPulse {
   0%, 100% { opacity: 1; }
-  50%       { opacity: 0.3; }
+  50%       { opacity: 0.20; }
 }
 
 @keyframes slideDownPanel {
@@ -88,7 +144,7 @@ body { background: #0a0a0f; overflow: hidden; }
 
 @keyframes modalEnter {
   from { opacity: 0; transform: scale(0.92); }
-  to   { opacity: 1; transform: scale(1); }
+  to   { opacity: 1; transform: scale(1.0); }
 }
 
 @keyframes cursorTap {
