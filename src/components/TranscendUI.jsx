@@ -574,7 +574,7 @@ function TransportDefault() {
         <img src={`${basePath}images/forward_btn.png`} className="tbar-ctrl-icon" alt="Skip forward" />
       </div>
       <div className="tbar-vol-cell">
-        <img src={`${basePath}images/audio_on.png`} className="tbar-vol-icon" alt="Volume" />
+        <img src={`${basePath}images/sound_on_btn.png`} className="tbar-vol-icon" alt="Volume" />
       </div>
     </div>
   );
@@ -598,7 +598,7 @@ function TransportRecording() {
         </div>
       </div>
       <div className="tbar-vol-cell">
-        <img src={`${basePath}images/audio_on.png`} className="tbar-vol-icon" alt="Volume" />
+        <img src={`${basePath}images/sound_on_btn.png`} className="tbar-vol-icon" alt="Volume" />
       </div>
     </div>
   );
@@ -628,7 +628,7 @@ function TransportRecordedPaused() {
         </div>
       </div>
       <div className="tbar-vol-cell">
-        <img src={`${basePath}images/audio_on.png`} className="tbar-vol-icon" alt="Volume" />
+        <img src={`${basePath}images/sound_on_btn.png`} className="tbar-vol-icon" alt="Volume" />
       </div>
     </div>
   );
@@ -658,7 +658,7 @@ function TransportRecordedPlaying() {
         </div>
       </div>
       <div className="tbar-vol-cell">
-        <img src={`${basePath}images/audio_on.png`} className="tbar-vol-icon" alt="Volume" />
+        <img src={`${basePath}images/sound_on_btn.png`} className="tbar-vol-icon" alt="Volume" />
       </div>
     </div>
   );
@@ -683,7 +683,7 @@ function TransportPlayback({ playbackProgress = 0.65 }) {
         </div>
       </div>
       <div className="tbar-vol-cell">
-        <img src={`${basePath}images/audio_on.png`} className="tbar-vol-icon" alt="Volume" />
+        <img src={`${basePath}images/sound_on_btn.png`} className="tbar-vol-icon" alt="Volume" />
       </div>
     </div>
   );
