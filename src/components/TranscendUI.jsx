@@ -627,7 +627,7 @@ function TransportRecordedPaused() {
           </div>
         </div>
       </div>
-      <div className="tbar-vol-cell tbar-vol-highlighted">
+      <div className="tbar-vol-cell">
         <img src={`${basePath}images/audio_on.png`} className="tbar-vol-icon" alt="Volume" />
       </div>
     </div>
@@ -657,7 +657,7 @@ function TransportRecordedPlaying() {
           </div>
         </div>
       </div>
-      <div className="tbar-vol-cell tbar-vol-highlighted">
+      <div className="tbar-vol-cell">
         <img src={`${basePath}images/audio_on.png`} className="tbar-vol-icon" alt="Volume" />
       </div>
     </div>

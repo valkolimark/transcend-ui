@@ -335,11 +335,7 @@
 
 .tbar-vol-icon { width: 36px; height: 36px; object-fit: contain; }
 
-.tbar-vol-highlighted {
-  border: 1.5px solid #4169E1;
-  border-radius: 6px;
-  box-sizing: border-box;
-}
+/* tbar-vol-highlighted removed per user request */
 
 /* -- STATE 2: Recording middle (Stop | Discard) ------------ */
 .tbar-mid-recording {
