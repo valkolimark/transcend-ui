@@ -571,7 +571,7 @@ function ModalAdminLogin({ passcodeDisplay = '------' }) {
 
 /* ─── TRANSPORT BAR VARIANTS ─── */
 
-function TransportDefault({ recordingActive }) {
+function TransportDefault() {
   return (
     <div style={{
       display: 'flex',
@@ -609,7 +609,7 @@ function TransportDefault({ recordingActive }) {
 
         <div style={{ width: 8 }} />
 
-        <ImgIcon src="sound_on_btn.png" alt="Volume" size={20} />
+        <ImgIcon src="audio_on.png" alt="Volume" size={20} />
       </div>
     </div>
   );
@@ -629,9 +629,9 @@ function TransportRecording() {
       </div>
 
       <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 16 }}>
-        {/* Stop button */}
+        {/* Stop button with recPulse on icon */}
         <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-          <ImgIcon src="stop_btn.png" alt="Stop" size={28} />
+          <ImgIcon src="stop_btn.png" alt="Stop" size={28} style={{ animation: 'recPulse 1.2s ease-in-out infinite' }} />
           <span style={{ fontSize: 12, color: 'rgba(255,255,255,0.70)', fontWeight: 500 }}>Stop</span>
         </div>
 
@@ -641,7 +641,7 @@ function TransportRecording() {
         </div>
 
         <div style={{ flex: 1 }} />
-        <ImgIcon src="sound_on_btn.png" alt="Volume" size={20} />
+        <ImgIcon src="audio_on.png" alt="Volume" size={20} />
       </div>
     </div>
   );
@@ -676,7 +676,7 @@ function TransportRecordedPaused() {
           borderRadius: 6, padding: '4px 6px',
           display: 'flex', alignItems: 'center', justifyContent: 'center',
         }}>
-          <ImgIcon src="sound_on_btn.png" alt="Volume" size={20} />
+          <ImgIcon src="audio_on.png" alt="Volume" size={20} />
         </div>
       </div>
     </div>
@@ -712,7 +712,7 @@ function TransportRecordedPlaying() {
           borderRadius: 6, padding: '4px 6px',
           display: 'flex', alignItems: 'center', justifyContent: 'center',
         }}>
-          <ImgIcon src="sound_on_btn.png" alt="Volume" size={20} />
+          <ImgIcon src="audio_on.png" alt="Volume" size={20} />
         </div>
       </div>
     </div>
@@ -744,12 +744,17 @@ function TransportPlayback({ playbackProgress = 0.65 }) {
           width: `${playbackProgress * 100}%`, height: '100%',
           background: 'var(--progress-fill)', borderRadius: 2,
         }} />
-        <div style={{
-          position: 'absolute', top: -5.5,
-          left: `${playbackProgress * 100}%`, transform: 'translateX(-50%)',
-          width: 14, height: 14, borderRadius: '50%',
-          background: '#FFFFFF',
-        }} />
+        <ImgIcon
+          src="playback_slider_dot.png"
+          alt="scrubber knob"
+          size={14}
+          style={{
+            position: 'absolute',
+            top: '50%',
+            left: `${playbackProgress * 100}%`,
+            transform: 'translate(-50%, -50%)',
+          }}
+        />
       </div>
 
       <div style={{ flexShrink: 0 }}>
@@ -1039,7 +1044,7 @@ export default function TranscendUI({
         display: 'flex',
         alignItems: 'center',
       }}>
-        {transportState === 'default' && <TransportDefault recordingActive={recordingActive} />}
+        {transportState === 'default' && <TransportDefault />}
         {transportState === 'recording' && <TransportRecording />}
         {transportState === 'recorded-paused' && <TransportRecordedPaused />}
         {transportState === 'recorded-playing' && <TransportRecordedPlaying />}
