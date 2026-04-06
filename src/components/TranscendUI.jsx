@@ -682,7 +682,7 @@ function TransportPlayback({ playbackProgress = 0.65 }) {
           />
         </div>
       </div>
-      <div className="tbar-vol-cell" style={{ borderLeft: '1px solid #454950' }}>
+      <div className="tbar-vol-cell">
         <img src={`${basePath}images/audio_on.png`} className="tbar-vol-icon" alt="Volume" />
       </div>
     </div>
