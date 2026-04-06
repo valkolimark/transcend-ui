@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useAnimationSequence } from '../hooks/useAnimationSequence';
 import TranscendUI from '../components/TranscendUI';
 import CursorDot from '../components/CursorDot';
@@ -6,25 +6,32 @@ import Callout from '../components/Callout';
 
 
 const STEPS = [
-  { id: 'intro',                duration: 3500 },
+  { id: 'intro',                duration: 1500 },
   { id: 'swipe-gesture',        duration: 700  },
-  { id: 'panel-open',           duration: 4400 },
-  { id: 'highlight-stereo',     duration: 1500 },
-  { id: 'highlight-bt',         duration: 1500 },
-  { id: 'highlight-help',       duration: 1500 },
-  { id: 'highlight-netcontrol', duration: 1500 },
-  { id: 'highlight-settings',   duration: 1500 },
-  { id: 'highlight-standby',    duration: 1500 },
-  { id: 'callout-summary',      duration: 3000 },
+  { id: 'panel-open',           duration: 2200 },
+  { id: 'highlight-stereo',     duration: 1200 },
+  { id: 'highlight-bt',         duration: 1200 },
+  { id: 'highlight-help',       duration: 800  },
+  { id: 'highlight-netcontrol', duration: 800  },
+  { id: 'highlight-settings',   duration: 800  },
+  { id: 'highlight-standby',    duration: 800  },
+  { id: 'callout-summary',      duration: 1500 },
   { id: 'swipe-close',          duration: 600  },
-  { id: 'outro',                duration: 4000 },
+  { id: 'outro',                duration: 2200 },
 ];
 
-export default function Ch06_QuickSettings({ voice, onControls }) {
-  const controls = useAnimationSequence(STEPS);
-  const { currentStep, loopProgress } = controls;
+const CALLOUT_MAP = {
+  'intro': 'Swipe down from the top to open Quick Settings',
+  'panel-open': 'Quick Settings \u2014 access key controls fast',
+  'highlight-stereo': 'Toggle Stereo Mode here',
+  'highlight-bt': 'Or manage Bluetooth',
+  'callout-summary': 'Help \u00b7 Net Control \u00b7 Settings \u00b7 Standby',
+  'outro': 'Quick Settings: always one swipe away',
+};
 
-  useEffect(() => { if (onControls) onControls(controls); }, [controls.stepIndex, controls.playing, controls.finished]);
+export default function Ch06_QuickSettings({ started, uiRef }) {
+  const getCalloutText = useCallback((stepId) => CALLOUT_MAP[stepId] || null, []);
+  const { currentStep } = useAnimationSequence(STEPS, { started, getCalloutText });
 
   const [ui, setUi] = useState({
     activePreset: 'studio-a',
@@ -47,7 +54,7 @@ export default function Ch06_QuickSettings({ voice, onControls }) {
           cursorVisible: true,
           cursorPos: { x: 240, y: 5 },
           cursorTapping: false,
-          calloutText: 'Swipe down from the top of the screen to open Quick Settings',
+          calloutText: CALLOUT_MAP['intro'],
           calloutVisible: true,
         }));
         break;
@@ -64,7 +71,7 @@ export default function Ch06_QuickSettings({ voice, onControls }) {
         setUi(s => ({
           ...s,
           cursorTapping: false,
-          calloutText: 'Quick Settings lets you access key controls quickly',
+          calloutText: CALLOUT_MAP['panel-open'],
           calloutVisible: true,
         }));
         break;
@@ -72,7 +79,7 @@ export default function Ch06_QuickSettings({ voice, onControls }) {
         setUi(s => ({
           ...s,
           cursorPos: { x: 115, y: 55 },
-          calloutText: 'You can toggle Stereo Mode on or off here',
+          calloutText: CALLOUT_MAP['highlight-stereo'],
           calloutVisible: true,
         }));
         break;
@@ -80,7 +87,7 @@ export default function Ch06_QuickSettings({ voice, onControls }) {
         setUi(s => ({
           ...s,
           cursorPos: { x: 295, y: 55 },
-          calloutText: 'Or manage your Bluetooth connections here',
+          calloutText: CALLOUT_MAP['highlight-bt'],
           calloutVisible: true,
         }));
         break;
@@ -103,7 +110,7 @@ export default function Ch06_QuickSettings({ voice, onControls }) {
       case 'callout-summary':
         setUi(s => ({
           ...s,
-          calloutText: 'You also have quick access to Help, Net Control, Settings, and Standby',
+          calloutText: CALLOUT_MAP['callout-summary'],
           calloutVisible: true,
         }));
         break;
@@ -121,7 +128,7 @@ export default function Ch06_QuickSettings({ voice, onControls }) {
           ...s,
           cursorTapping: false,
           cursorVisible: false,
-          calloutText: 'Quick Settings is always just one swipe away',
+          calloutText: CALLOUT_MAP['outro'],
           calloutVisible: true,
         }));
         break;
@@ -130,7 +137,7 @@ export default function Ch06_QuickSettings({ voice, onControls }) {
 
   return (
     <div style={{ position: 'relative', display: 'flex', alignItems: 'center', justifyContent: 'center', width: '100%', height: '100%' }}>
-      <div style={{ position: 'relative', width: 480, height: 320 }}>
+      <div ref={uiRef} style={{ position: 'relative', width: 480, height: 320 }}>
         <TranscendUI
           activePreset={ui.activePreset}
           quickSettingsOpen={ui.quickSettingsOpen}
@@ -142,9 +149,9 @@ export default function Ch06_QuickSettings({ voice, onControls }) {
           y={ui.cursorPos.y}
           tapping={ui.cursorTapping}
           visible={ui.cursorVisible}
+          uiRef={uiRef}
         />
-        <Callout text={ui.calloutText} visible={ui.calloutVisible} voice={voice} />
-
+        <Callout text={ui.calloutText} visible={ui.calloutVisible} />
       </div>
     </div>
   );

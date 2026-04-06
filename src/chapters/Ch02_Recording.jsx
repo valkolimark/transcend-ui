@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useAnimationSequence } from '../hooks/useAnimationSequence';
 import TranscendUI from '../components/TranscendUI';
 import CursorDot from '../components/CursorDot';
@@ -6,29 +6,36 @@ import Callout from '../components/Callout';
 
 
 const STEPS = [
-  { id: 'intro',             duration: 3500 },
+  { id: 'intro',             duration: 1500 },
   { id: 'cursor-to-rec',     duration: 500  },
   { id: 'tap-rec',           duration: 200  },
-  { id: 'recording-active',  duration: 7000 },
+  { id: 'recording-active',  duration: 3500 },
   { id: 'cursor-away',       duration: 400  },
   { id: 'dwell-recording',   duration: 1500 },
   { id: 'cursor-to-stop',    duration: 400  },
   { id: 'tap-stop',          duration: 200  },
-  { id: 'recorded-pause',    duration: 5000 },
+  { id: 'recorded-pause',    duration: 2500 },
   { id: 'cursor-to-play',    duration: 400  },
   { id: 'tap-play-review',   duration: 200  },
-  { id: 'recorded-playing',  duration: 4000 },
+  { id: 'recorded-playing',  duration: 2000 },
   { id: 'cursor-to-save',    duration: 500  },
   { id: 'tap-save',          duration: 200  },
-  { id: 'saved-confirm',     duration: 4000 },
-  { id: 'outro',             duration: 4000 },
+  { id: 'saved-confirm',     duration: 2000 },
+  { id: 'outro',             duration: 2200 },
 ];
 
-export default function Ch02_Recording({ voice, onControls }) {
-  const controls = useAnimationSequence(STEPS);
-  const { currentStep, loopProgress } = controls;
+const CALLOUT_MAP = {
+  'intro': 'Tap REC to start recording',
+  'recording-active': 'Recording in progress \u2014 red dot pulses',
+  'recorded-pause': 'Recording stopped \u2014 review before saving',
+  'recorded-playing': 'Preview your recording',
+  'saved-confirm': 'Track saved to file manager \u2713',
+  'outro': 'Record, review, and save \u2014 all from the home screen',
+};
 
-  useEffect(() => { if (onControls) onControls(controls); }, [controls.stepIndex, controls.playing, controls.finished]);
+export default function Ch02_Recording({ started, uiRef }) {
+  const getCalloutText = useCallback((stepId) => CALLOUT_MAP[stepId] || null, []);
+  const { currentStep } = useAnimationSequence(STEPS, { started, getCalloutText });
 
   const [ui, setUi] = useState({
     activePreset: 'studio-a',
@@ -55,7 +62,7 @@ export default function Ch02_Recording({ voice, onControls }) {
           cursorVisible: true,
           cursorPos: { x: 100, y: 260 },
           cursorTapping: false,
-          calloutText: 'To begin recording, tap the REC button',
+          calloutText: CALLOUT_MAP['intro'],
           calloutVisible: true,
         }));
         break;
@@ -72,7 +79,7 @@ export default function Ch02_Recording({ voice, onControls }) {
           transportState: 'recording',
           recordingActive: true,
           recordingHeader: 'Recording...',
-          calloutText: 'The red dot pulses to indicate recording is in progress',
+          calloutText: CALLOUT_MAP['recording-active'],
           calloutVisible: true,
         }));
         break;
@@ -94,7 +101,7 @@ export default function Ch02_Recording({ voice, onControls }) {
           transportState: 'recorded-paused',
           recordingActive: false,
           recordingHeader: 'Playing recorded track',
-          calloutText: 'Recording has stopped. You can now review it before saving',
+          calloutText: CALLOUT_MAP['recorded-pause'],
           calloutVisible: true,
         }));
         break;
@@ -110,7 +117,7 @@ export default function Ch02_Recording({ voice, onControls }) {
           cursorTapping: false,
           transportState: 'recorded-playing',
           playbackProgress: 0.45,
-          calloutText: 'Tap play to preview your recording',
+          calloutText: CALLOUT_MAP['recorded-playing'],
           calloutVisible: true,
         }));
         break;
@@ -127,7 +134,7 @@ export default function Ch02_Recording({ voice, onControls }) {
           transportState: 'default',
           recordingHeader: null,
           playbackProgress: 0.22,
-          calloutText: 'Your track has been saved to the file manager',
+          calloutText: CALLOUT_MAP['saved-confirm'],
           calloutVisible: true,
         }));
         break;
@@ -135,7 +142,7 @@ export default function Ch02_Recording({ voice, onControls }) {
         setUi(s => ({
           ...s,
           cursorVisible: false,
-          calloutText: 'You can record, review, and save all from the home screen',
+          calloutText: CALLOUT_MAP['outro'],
           calloutVisible: true,
         }));
         break;
@@ -144,7 +151,7 @@ export default function Ch02_Recording({ voice, onControls }) {
 
   return (
     <div style={{ position: 'relative', display: 'flex', alignItems: 'center', justifyContent: 'center', width: '100%', height: '100%' }}>
-      <div style={{ position: 'relative', width: 480, height: 320 }}>
+      <div ref={uiRef} style={{ position: 'relative', width: 480, height: 320 }}>
         <TranscendUI
           activePreset={ui.activePreset}
           transportState={ui.transportState}
@@ -157,9 +164,9 @@ export default function Ch02_Recording({ voice, onControls }) {
           y={ui.cursorPos.y}
           tapping={ui.cursorTapping}
           visible={ui.cursorVisible}
+          uiRef={uiRef}
         />
-        <Callout text={ui.calloutText} visible={ui.calloutVisible} voice={voice} />
-
+        <Callout text={ui.calloutText} visible={ui.calloutVisible} />
       </div>
     </div>
   );

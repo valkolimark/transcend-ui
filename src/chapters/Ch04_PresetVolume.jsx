@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useAnimationSequence } from '../hooks/useAnimationSequence';
 import TranscendUI from '../components/TranscendUI';
 import CursorDot from '../components/CursorDot';
@@ -6,28 +6,35 @@ import Callout from '../components/Callout';
 
 
 const STEPS = [
-  { id: 'intro',          duration: 3500 },
+  { id: 'intro',          duration: 1500 },
   { id: 'cursor-to-knob', duration: 500  },
   { id: 'drag-up-start',  duration: 300  },
-  { id: 'drag-up',        duration: 1500 },
-  { id: 'hold-high',      duration: 3000 },
-  { id: 'drag-down',      duration: 1500 },
+  { id: 'drag-up',        duration: 1200 },
+  { id: 'hold-high',      duration: 1500 },
+  { id: 'drag-down',      duration: 1200 },
   { id: 'hold-low',       duration: 1500 },
-  { id: 'drag-mid',       duration: 1500 },
+  { id: 'drag-mid',       duration: 800  },
   { id: 'release',        duration: 300  },
   { id: 'mute-cursor',    duration: 500  },
   { id: 'tap-mute',       duration: 200  },
-  { id: 'muted',          duration: 3600 },
+  { id: 'muted',          duration: 1800 },
   { id: 'tap-unmute',     duration: 200  },
-  { id: 'unmuted',        duration: 1500 },
-  { id: 'outro',          duration: 4000 },
+  { id: 'unmuted',        duration: 1200 },
+  { id: 'outro',          duration: 2200 },
 ];
 
-export default function Ch04_PresetVolume({ voice, onControls }) {
-  const controls = useAnimationSequence(STEPS);
-  const { currentStep, loopProgress } = controls;
+const CALLOUT_MAP = {
+  'intro': 'The right sidebar controls Active Acoustics volume',
+  'drag-up': 'Drag up to increase volume',
+  'hold-high': 'Volume at maximum',
+  'drag-down': 'Drag down to decrease',
+  'muted': 'Mute/unmute Active Acoustics',
+  'outro': 'Volume is independent of recording/playback levels',
+};
 
-  useEffect(() => { if (onControls) onControls(controls); }, [controls.stepIndex, controls.playing, controls.finished]);
+export default function Ch04_PresetVolume({ started, uiRef }) {
+  const getCalloutText = useCallback((stepId) => CALLOUT_MAP[stepId] || null, []);
+  const { currentStep } = useAnimationSequence(STEPS, { started, getCalloutText });
 
   const [ui, setUi] = useState({
     activePreset: 'studio-a',
@@ -50,7 +57,7 @@ export default function Ch04_PresetVolume({ voice, onControls }) {
           cursorVisible: true,
           cursorPos: { x: 455, y: 160 },
           cursorTapping: false,
-          calloutText: 'Use the right sidebar to control the Active Acoustics volume',
+          calloutText: CALLOUT_MAP['intro'],
           calloutVisible: true,
         }));
         break;
@@ -65,14 +72,14 @@ export default function Ch04_PresetVolume({ voice, onControls }) {
           ...s,
           cursorPos: { x: 455, y: 80 },
           volumeLevel: 1.0,
-          calloutText: 'Drag the slider up to increase the volume',
+          calloutText: CALLOUT_MAP['drag-up'],
           calloutVisible: true,
         }));
         break;
       case 'hold-high':
         setUi(s => ({
           ...s,
-          calloutText: 'The volume is now at maximum',
+          calloutText: CALLOUT_MAP['hold-high'],
           calloutVisible: true,
         }));
         break;
@@ -81,7 +88,7 @@ export default function Ch04_PresetVolume({ voice, onControls }) {
           ...s,
           cursorPos: { x: 455, y: 200 },
           volumeLevel: 0.15,
-          calloutText: 'Drag the slider down to decrease the volume',
+          calloutText: CALLOUT_MAP['drag-down'],
           calloutVisible: true,
         }));
         break;
@@ -99,7 +106,7 @@ export default function Ch04_PresetVolume({ voice, onControls }) {
         setUi(s => ({ ...s, cursorTapping: false }));
         break;
       case 'mute-cursor':
-        setUi(s => ({ ...s, cursorPos: { x: 455, y: 310 } }));
+        setUi(s => ({ ...s, cursorPos: { x: 455, y: 292 } }));
         break;
       case 'tap-mute':
         setUi(s => ({ ...s, cursorTapping: true }));
@@ -109,7 +116,7 @@ export default function Ch04_PresetVolume({ voice, onControls }) {
           ...s,
           cursorTapping: false,
           muteActive: true,
-          calloutText: 'Tap here to mute or unmute Active Acoustics',
+          calloutText: CALLOUT_MAP['muted'],
           calloutVisible: true,
         }));
         break;
@@ -128,7 +135,7 @@ export default function Ch04_PresetVolume({ voice, onControls }) {
         setUi(s => ({
           ...s,
           cursorVisible: false,
-          calloutText: 'The volume control is independent of recording and playback levels',
+          calloutText: CALLOUT_MAP['outro'],
           calloutVisible: true,
         }));
         break;
@@ -137,7 +144,7 @@ export default function Ch04_PresetVolume({ voice, onControls }) {
 
   return (
     <div style={{ position: 'relative', display: 'flex', alignItems: 'center', justifyContent: 'center', width: '100%', height: '100%' }}>
-      <div style={{ position: 'relative', width: 480, height: 320 }}>
+      <div ref={uiRef} style={{ position: 'relative', width: 480, height: 320 }}>
         <TranscendUI
           activePreset={ui.activePreset}
           volumeLevel={ui.volumeLevel}
@@ -148,9 +155,9 @@ export default function Ch04_PresetVolume({ voice, onControls }) {
           y={ui.cursorPos.y}
           tapping={ui.cursorTapping}
           visible={ui.cursorVisible}
+          uiRef={uiRef}
         />
-        <Callout text={ui.calloutText} visible={ui.calloutVisible} voice={voice} />
-
+        <Callout text={ui.calloutText} visible={ui.calloutVisible} />
       </div>
     </div>
   );

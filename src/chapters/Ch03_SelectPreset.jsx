@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useAnimationSequence } from '../hooks/useAnimationSequence';
 import TranscendUI from '../components/TranscendUI';
 import CursorDot from '../components/CursorDot';
@@ -6,30 +6,37 @@ import Callout from '../components/Callout';
 
 
 const STEPS = [
-  { id: 'intro',              duration: 3500 },
+  { id: 'intro',              duration: 1500 },
   { id: 'cursor-to-b',        duration: 500  },
   { id: 'tap-studio-b',       duration: 200  },
-  { id: 'active-studio-b',    duration: 3600 },
+  { id: 'active-studio-b',    duration: 1800 },
   { id: 'cursor-to-info',     duration: 400  },
   { id: 'tap-info',           duration: 200  },
-  { id: 'show-info-b',        duration: 5000 },
+  { id: 'show-info-b',        duration: 2500 },
   { id: 'dismiss-info',       duration: 300  },
   { id: 'cursor-to-great',    duration: 500  },
   { id: 'tap-great',          duration: 200  },
-  { id: 'active-great',       duration: 3600 },
-  { id: 'show-info-great',    duration: 4400 },
+  { id: 'active-great',       duration: 1800 },
+  { id: 'show-info-great',    duration: 2200 },
   { id: 'dismiss-info-2',     duration: 300  },
   { id: 'cursor-to-cathedral',duration: 500  },
   { id: 'tap-cathedral',      duration: 200  },
-  { id: 'active-cathedral',   duration: 3000 },
-  { id: 'outro',              duration: 4000 },
+  { id: 'active-cathedral',   duration: 1500 },
+  { id: 'outro',              duration: 2200 },
 ];
 
-export default function Ch03_SelectPreset({ voice, onControls }) {
-  const controls = useAnimationSequence(STEPS);
-  const { currentStep, loopProgress } = controls;
+const CALLOUT_MAP = {
+  'intro': 'Tap any preset to select a room acoustic',
+  'active-studio-b': 'Studio B selected',
+  'show-info-b': '\u24d8 \u2014 read the acoustic description',
+  'active-great': 'Great Hall selected',
+  'active-cathedral': 'Grand Cathedral',
+  'outro': '9 acoustic presets \u2014 one tap to transform your space',
+};
 
-  useEffect(() => { if (onControls) onControls(controls); }, [controls.stepIndex, controls.playing, controls.finished]);
+export default function Ch03_SelectPreset({ started, uiRef }) {
+  const getCalloutText = useCallback((stepId) => CALLOUT_MAP[stepId] || null, []);
+  const { currentStep } = useAnimationSequence(STEPS, { started, getCalloutText });
 
   const [ui, setUi] = useState({
     activePreset: 'studio-a',
@@ -53,7 +60,7 @@ export default function Ch03_SelectPreset({ voice, onControls }) {
           cursorVisible: true,
           cursorPos: { x: 80, y: 65 },
           cursorTapping: false,
-          calloutText: 'Tap any preset button to select a room acoustic',
+          calloutText: CALLOUT_MAP['intro'],
           calloutVisible: true,
         }));
         break;
@@ -68,7 +75,7 @@ export default function Ch03_SelectPreset({ voice, onControls }) {
           ...s,
           cursorTapping: false,
           activePreset: 'studio-b',
-          calloutText: 'Studio B is now selected',
+          calloutText: CALLOUT_MAP['active-studio-b'],
           calloutVisible: true,
         }));
         break;
@@ -84,7 +91,7 @@ export default function Ch03_SelectPreset({ voice, onControls }) {
           cursorTapping: false,
           showInfoTooltip: true,
           infoPresetId: 'studio-b',
-          calloutText: 'Tap the info icon to read the acoustic description',
+          calloutText: CALLOUT_MAP['show-info-b'],
           calloutVisible: true,
         }));
         break;
@@ -102,7 +109,7 @@ export default function Ch03_SelectPreset({ voice, onControls }) {
           ...s,
           cursorTapping: false,
           activePreset: 'great-hall',
-          calloutText: 'Great Hall is now selected',
+          calloutText: CALLOUT_MAP['active-great'],
           calloutVisible: true,
         }));
         break;
@@ -128,7 +135,7 @@ export default function Ch03_SelectPreset({ voice, onControls }) {
           ...s,
           cursorTapping: false,
           activePreset: 'grand-cathedral',
-          calloutText: 'Here is the Grand Cathedral preset',
+          calloutText: CALLOUT_MAP['active-cathedral'],
           calloutVisible: true,
         }));
         break;
@@ -136,7 +143,7 @@ export default function Ch03_SelectPreset({ voice, onControls }) {
         setUi(s => ({
           ...s,
           cursorVisible: false,
-          calloutText: 'There are 9 acoustic presets to transform your space with just one tap',
+          calloutText: CALLOUT_MAP['outro'],
           calloutVisible: true,
         }));
         break;
@@ -145,7 +152,7 @@ export default function Ch03_SelectPreset({ voice, onControls }) {
 
   return (
     <div style={{ position: 'relative', display: 'flex', alignItems: 'center', justifyContent: 'center', width: '100%', height: '100%' }}>
-      <div style={{ position: 'relative', width: 480, height: 320 }}>
+      <div ref={uiRef} style={{ position: 'relative', width: 480, height: 320 }}>
         <TranscendUI
           activePreset={ui.activePreset}
           showInfoTooltip={ui.showInfoTooltip}
@@ -156,9 +163,9 @@ export default function Ch03_SelectPreset({ voice, onControls }) {
           y={ui.cursorPos.y}
           tapping={ui.cursorTapping}
           visible={ui.cursorVisible}
+          uiRef={uiRef}
         />
-        <Callout text={ui.calloutText} visible={ui.calloutVisible} voice={voice} />
-
+        <Callout text={ui.calloutText} visible={ui.calloutVisible} />
       </div>
     </div>
   );

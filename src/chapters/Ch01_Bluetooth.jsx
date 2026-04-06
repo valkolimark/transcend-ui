@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useAnimationSequence } from '../hooks/useAnimationSequence';
 import TranscendUI from '../components/TranscendUI';
 import CursorDot from '../components/CursorDot';
@@ -6,24 +6,31 @@ import Callout from '../components/Callout';
 
 
 const STEPS = [
-  { id: 'intro',            duration: 3500 },
+  { id: 'intro',            duration: 1500 },
   { id: 'swipe-down',       duration: 600  },
-  { id: 'panel-open',       duration: 1500 },
+  { id: 'panel-open',       duration: 1200 },
   { id: 'cursor-to-bt',     duration: 500  },
   { id: 'tap-bt',           duration: 200  },
-  { id: 'bt-modal-open',    duration: 5600 },
+  { id: 'bt-modal-open',    duration: 2800 },
   { id: 'pause-modal',      duration: 1000 },
-  { id: 'bt-paired',        duration: 4000 },
-  { id: 'panel-view-paired',duration: 3000 },
+  { id: 'bt-paired',        duration: 2000 },
+  { id: 'panel-view-paired',duration: 1500 },
   { id: 'close-panel',      duration: 500  },
-  { id: 'outro',            duration: 4000 },
+  { id: 'outro',            duration: 2200 },
 ];
 
-export default function Ch01_Bluetooth({ voice, onControls }) {
-  const controls = useAnimationSequence(STEPS);
-  const { currentStep, loopProgress } = controls;
+const CALLOUT_MAP = {
+  'intro': 'Open the Quick Settings menu',
+  'panel-open': 'Tap Bluetooth to begin pairing',
+  'bt-modal-open': 'Your device will appear in Bluetooth settings',
+  'bt-paired': 'Bluetooth connected \u2713',
+  'panel-view-paired': 'Both inputs now active in Stereo Mode',
+  'outro': 'Bluetooth connected \u2014 ready to use',
+};
 
-  useEffect(() => { if (onControls) onControls(controls); }, [controls.stepIndex, controls.playing, controls.finished]);
+export default function Ch01_Bluetooth({ started, uiRef }) {
+  const getCalloutText = useCallback((stepId) => CALLOUT_MAP[stepId] || null, []);
+  const { currentStep } = useAnimationSequence(STEPS, { started, getCalloutText });
 
   const [ui, setUi] = useState({
     activePreset: 'studio-a',
@@ -51,7 +58,7 @@ export default function Ch01_Bluetooth({ voice, onControls }) {
           cursorVisible: true,
           cursorPos: { x: 240, y: 10 },
           cursorTapping: false,
-          calloutText: 'First, open the Quick Settings menu by swiping down',
+          calloutText: CALLOUT_MAP['intro'],
           calloutVisible: true,
         }));
         break;
@@ -68,7 +75,7 @@ export default function Ch01_Bluetooth({ voice, onControls }) {
         setUi(s => ({
           ...s,
           cursorTapping: false,
-          calloutText: 'Now tap Bluetooth to begin pairing your device',
+          calloutText: CALLOUT_MAP['panel-open'],
           calloutVisible: true,
         }));
         break;
@@ -89,7 +96,7 @@ export default function Ch01_Bluetooth({ voice, onControls }) {
           cursorVisible: false,
           bluetoothActive: true,
           modalType: 'bluetooth-pairing',
-          calloutText: 'Your device will appear here once it is discovered',
+          calloutText: CALLOUT_MAP['bt-modal-open'],
           calloutVisible: true,
         }));
         break;
@@ -100,7 +107,7 @@ export default function Ch01_Bluetooth({ voice, onControls }) {
         setUi(s => ({
           ...s,
           modalType: null,
-          calloutText: 'Your Bluetooth device is now connected',
+          calloutText: CALLOUT_MAP['bt-paired'],
           calloutVisible: true,
         }));
         break;
@@ -108,7 +115,7 @@ export default function Ch01_Bluetooth({ voice, onControls }) {
         setUi(s => ({
           ...s,
           stereoModeActive: true,
-          calloutText: 'Both inputs are now active in Stereo Mode',
+          calloutText: CALLOUT_MAP['panel-view-paired'],
           calloutVisible: true,
         }));
         break;
@@ -127,7 +134,7 @@ export default function Ch01_Bluetooth({ voice, onControls }) {
           ...s,
           cursorTapping: false,
           cursorVisible: false,
-          calloutText: 'Bluetooth is connected and ready to use',
+          calloutText: CALLOUT_MAP['outro'],
           calloutVisible: true,
         }));
         break;
@@ -136,7 +143,7 @@ export default function Ch01_Bluetooth({ voice, onControls }) {
 
   return (
     <div style={{ position: 'relative', display: 'flex', alignItems: 'center', justifyContent: 'center', width: '100%', height: '100%' }}>
-      <div style={{ position: 'relative', width: 480, height: 320 }}>
+      <div ref={uiRef} style={{ position: 'relative', width: 480, height: 320 }}>
         <TranscendUI
           activePreset={ui.activePreset}
           transportState={ui.transportState}
@@ -150,9 +157,9 @@ export default function Ch01_Bluetooth({ voice, onControls }) {
           y={ui.cursorPos.y}
           tapping={ui.cursorTapping}
           visible={ui.cursorVisible}
+          uiRef={uiRef}
         />
-        <Callout text={ui.calloutText} visible={ui.calloutVisible} voice={voice} />
-
+        <Callout text={ui.calloutText} visible={ui.calloutVisible} />
       </div>
     </div>
   );

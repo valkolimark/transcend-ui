@@ -10,24 +10,31 @@ Versioning follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 ## [Unreleased]
 
 ### Added
-- Playback controls bar (play, pause, skip forward/back, replay) below voice selector
-- Step counter display showing current step position (e.g. "3 / 11")
+- CLAUDE.md — persistent project instructions for Claude Code
 - Production PNG image assets for all UI icons, buttons, QR codes, and modals
-- `onControls` callback prop on all 12 chapters to expose animation state to App shell
 
 ### Changed
-- All SVG icon components in `TranscendUI.jsx` replaced with actual Transcend PNG assets
-- Quick Settings toggle pills and action buttons now render full button images (no double-framing)
-- Modal buttons (Cancel, Yes, Close, Wake Up) now use pre-rendered button images with baked-in text
-- Transport bar speaker icon corrected from `volume_btn.png` (knob graphic) to `sound_on_btn.png`
-- Mute button uses `unmuted_icon.png` / `muted_icon.png` Transcend logo assets
-- QR code placeholders replaced with actual `web_ui_qr_code.png` and `online_user_guide_QR_code.png`
-- `useAnimationSequence` hook now plays once and stops (no longer loops)
-- `useAnimationSequence` hook exposes play/pause/skip/restart controls
-- Progress bar moved from inside chapters to App-level `PlaybackControls` component
+- `useAnimationSequence` hook rewritten: accepts `started` prop and `getCalloutText` callback;
+  TTS-gated step advancement — speech `onend` drives animation timing for steps with callout text;
+  steps with no callout use their specified duration as a normal setTimeout
+- ChapterNav redesigned with full sentence menu items ("What Would You Like to Learn?" header);
+  sidebar width increased to 200px with numbered labels and active/hover states
+- All 12 chapters updated to accept `started` and `uiRef` props instead of `voice`/`onControls`
+- Callout component rewritten: only one callout renders at a time, fadeOutUp (200ms) before
+  fadeInUp transition; TTS removed from Callout (now handled by animation hook)
+- CursorDot now positions relative to TranscendUI bounding rect via `uiRef`; cursor coordinates
+  from CHAPTERS.md (480x320 space) are correctly mapped to viewport coordinates
+- App.jsx: animation does not auto-play on load; shows TranscendUI home screen with
+  "Select a chapter to begin" prompt; chapters start fresh on selection via `started` state
+- Step durations aligned to CHAPTERS.md specification values
+- Removed VoiceSelector and PlaybackControls from App shell
 
 ### Fixed
-- End-of-chapter bug where intro callout would flash again due to loop restart re-triggering step 0
+- Animation no longer auto-plays on load; waits for chapter selection
+- TTS-gated step advancement — speech onend drives animation timing
+- Callout overlaps eliminated — fadeOut before fadeIn enforced
+- Cursor coordinates now relative to TranscendUI bounding rect, not viewport
+- End-of-chapter bug where intro callout would flash again due to loop restart
 
 ---
 

@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useAnimationSequence } from '../hooks/useAnimationSequence';
 import TranscendUI from '../components/TranscendUI';
 import CursorDot from '../components/CursorDot';
@@ -6,21 +6,21 @@ import Callout from '../components/Callout';
 
 
 const STEPS = [
-  { id: 'intro',               duration: 3500 },
+  { id: 'intro',               duration: 1500 },
   { id: 'open-quick-settings', duration: 600  },
   { id: 'panel-open',          duration: 1000 },
   { id: 'cursor-to-settings',  duration: 400  },
   { id: 'tap-settings',        duration: 200  },
-  { id: 'login-modal-open',    duration: 4000 },
+  { id: 'login-modal-open',    duration: 2000 },
   { id: 'type-1',              duration: 300  },
   { id: 'type-2',              duration: 300  },
   { id: 'type-3',              duration: 300  },
   { id: 'type-4',              duration: 300  },
   { id: 'type-5',              duration: 300  },
   { id: 'type-enter',          duration: 400  },
-  { id: 'settings-open',       duration: 5000 },
-  { id: 'browse-settings',     duration: 4000 },
-  { id: 'outro',               duration: 4000 },
+  { id: 'settings-open',       duration: 2500 },
+  { id: 'browse-settings',     duration: 2000 },
+  { id: 'outro',               duration: 2200 },
 ];
 
 const NUMPAD_POS = {
@@ -32,11 +32,17 @@ const NUMPAD_POS = {
   'Enter': { x: 305, y: 255 },
 };
 
-export default function Ch11_Settings({ voice, onControls }) {
-  const controls = useAnimationSequence(STEPS);
-  const { currentStep, loopProgress } = controls;
+const CALLOUT_MAP = {
+  'intro': 'Access system settings with the admin passcode',
+  'login-modal-open': 'Enter the 6-digit admin passcode',
+  'settings-open': 'Settings unlocked \u2713',
+  'browse-settings': 'Adjust network, audio, and device preferences',
+  'outro': 'Default passcode: 12345',
+};
 
-  useEffect(() => { if (onControls) onControls(controls); }, [controls.stepIndex, controls.playing, controls.finished]);
+export default function Ch11_Settings({ started, uiRef }) {
+  const getCalloutText = useCallback((stepId) => CALLOUT_MAP[stepId] || null, []);
+  const { currentStep } = useAnimationSequence(STEPS, { started, getCalloutText });
 
   const [ui, setUi] = useState({
     activePreset: 'studio-a',
@@ -63,7 +69,7 @@ export default function Ch11_Settings({ voice, onControls }) {
           cursorVisible: true,
           cursorPos: { x: 240, y: 10 },
           cursorTapping: false,
-          calloutText: 'To access system settings, you will need the admin passcode',
+          calloutText: CALLOUT_MAP['intro'],
           calloutVisible: true,
         }));
         break;
@@ -92,7 +98,7 @@ export default function Ch11_Settings({ voice, onControls }) {
           quickSettingsOpen: false,
           modalType: 'admin-login',
           passcodeDisplay: '------',
-          calloutText: 'Enter the 6-digit admin passcode to continue',
+          calloutText: CALLOUT_MAP['login-modal-open'],
           calloutVisible: true,
         }));
         break;
@@ -151,7 +157,7 @@ export default function Ch11_Settings({ voice, onControls }) {
           cursorVisible: false,
           modalType: null,
           settingsScreen: true,
-          calloutText: 'Settings are now unlocked and accessible',
+          calloutText: CALLOUT_MAP['settings-open'],
           calloutVisible: true,
         }));
         break;
@@ -160,7 +166,7 @@ export default function Ch11_Settings({ voice, onControls }) {
           ...s,
           cursorVisible: true,
           cursorPos: { x: 240, y: 180 },
-          calloutText: 'From here you can adjust network, audio, and device preferences',
+          calloutText: CALLOUT_MAP['browse-settings'],
           calloutVisible: true,
         }));
         break;
@@ -169,7 +175,7 @@ export default function Ch11_Settings({ voice, onControls }) {
           ...s,
           cursorVisible: false,
           settingsScreen: false,
-          calloutText: 'The default admin passcode is 1 2 3 4 5',
+          calloutText: CALLOUT_MAP['outro'],
           calloutVisible: true,
         }));
         break;
@@ -178,7 +184,7 @@ export default function Ch11_Settings({ voice, onControls }) {
 
   return (
     <div style={{ position: 'relative', display: 'flex', alignItems: 'center', justifyContent: 'center', width: '100%', height: '100%' }}>
-      <div style={{ position: 'relative', width: 480, height: 320 }}>
+      <div ref={uiRef} style={{ position: 'relative', width: 480, height: 320 }}>
         <TranscendUI
           activePreset={ui.activePreset}
           quickSettingsOpen={ui.quickSettingsOpen}
@@ -191,9 +197,9 @@ export default function Ch11_Settings({ voice, onControls }) {
           y={ui.cursorPos.y}
           tapping={ui.cursorTapping}
           visible={ui.cursorVisible}
+          uiRef={uiRef}
         />
-        <Callout text={ui.calloutText} visible={ui.calloutVisible} voice={voice} />
-
+        <Callout text={ui.calloutText} visible={ui.calloutVisible} />
       </div>
     </div>
   );

@@ -173,22 +173,27 @@ function QuickSettingsPanel({ stereoModeActive, bluetoothActive }) {
       animation: 'slideDownPanel 380ms cubic-bezier(0.34, 1.1, 0.64, 1) forwards',
       zIndex: 40,
     }}>
-      {/* Row 1 — Two large toggle pills (images ARE the full pill buttons) */}
-      <div style={{ display: 'flex', gap: 8, marginBottom: 4 }}>
+      {/* Row 1 — Two toggle pills spanning 2 columns each on same grid as Row 2 */}
+      <div style={{
+        display: 'grid',
+        gridTemplateColumns: 'repeat(4, 1fr)',
+        gap: 6,
+        marginBottom: 4,
+      }}>
         {[
           { key: 'stereo', label: 'Stereo Mode', active: stereoModeActive,
             imgOn: 'stero_mode_connected.png', imgOff: 'steromode_btn_drk.png' },
           { key: 'bt', label: bluetoothActive ? 'Connected' : 'Bluetooth', active: bluetoothActive,
             imgOn: 'bluetooth_connected.png', imgOff: 'bluetooth_dark.png' },
         ].map(btn => (
-          <div key={btn.key} style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 4 }}>
+          <div key={btn.key} style={{ gridColumn: 'span 2', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 4 }}>
             <img
               src={`${basePath}images/${btn.active ? btn.imgOn : btn.imgOff}`}
               alt={btn.label}
               style={{
                 width: '100%',
                 height: 44,
-                objectFit: 'contain',
+                objectFit: 'fill',
                 borderRadius: 10,
               }}
             />
@@ -221,7 +226,7 @@ function QuickSettingsPanel({ stereoModeActive, bluetoothActive }) {
               style={{
                 width: '100%',
                 height: 48,
-                objectFit: 'contain',
+                objectFit: 'fill',
                 borderRadius: 10,
               }}
             />

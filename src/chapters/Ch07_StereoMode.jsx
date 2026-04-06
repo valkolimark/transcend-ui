@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useAnimationSequence } from '../hooks/useAnimationSequence';
 import TranscendUI from '../components/TranscendUI';
 import CursorDot from '../components/CursorDot';
@@ -6,26 +6,33 @@ import Callout from '../components/Callout';
 
 
 const STEPS = [
-  { id: 'intro',               duration: 3500 },
+  { id: 'intro',               duration: 1500 },
   { id: 'open-quick-settings', duration: 600  },
-  { id: 'panel-showing-off',   duration: 3000 },
+  { id: 'panel-showing-off',   duration: 1500 },
   { id: 'cursor-to-stereo',    duration: 400  },
   { id: 'tap-stereo-on',       duration: 200  },
-  { id: 'stereo-active',       duration: 4000 },
-  { id: 'hold-on',             duration: 1500 },
+  { id: 'stereo-active',       duration: 2000 },
+  { id: 'hold-on',             duration: 1000 },
   { id: 'cursor-tap-again',    duration: 400  },
   { id: 'tap-stereo-off',      duration: 200  },
-  { id: 'stereo-inactive',     duration: 3600 },
-  { id: 'note-soundlok',       duration: 3000 },
+  { id: 'stereo-inactive',     duration: 1800 },
+  { id: 'note-soundlok',       duration: 1500 },
   { id: 'close-panel',         duration: 500  },
-  { id: 'outro',               duration: 4000 },
+  { id: 'outro',               duration: 2200 },
 ];
 
-export default function Ch07_StereoMode({ voice, onControls }) {
-  const controls = useAnimationSequence(STEPS);
-  const { currentStep, loopProgress } = controls;
+const CALLOUT_MAP = {
+  'intro': 'Stereo Mode processes left and right channels independently',
+  'panel-showing-off': 'Stereo Mode is currently OFF',
+  'stereo-active': 'Stereo Mode ON \u2014 dual-channel processing active',
+  'stereo-inactive': 'Stereo Mode OFF \u2014 mono processing',
+  'note-soundlok': '\u26a0 Not available on SoundLok units',
+  'outro': 'Toggle Stereo Mode in Quick Settings',
+};
 
-  useEffect(() => { if (onControls) onControls(controls); }, [controls.stepIndex, controls.playing, controls.finished]);
+export default function Ch07_StereoMode({ started, uiRef }) {
+  const getCalloutText = useCallback((stepId) => CALLOUT_MAP[stepId] || null, []);
+  const { currentStep } = useAnimationSequence(STEPS, { started, getCalloutText });
 
   const [ui, setUi] = useState({
     activePreset: 'studio-a',
@@ -49,7 +56,7 @@ export default function Ch07_StereoMode({ voice, onControls }) {
           cursorVisible: true,
           cursorPos: { x: 240, y: 10 },
           cursorTapping: false,
-          calloutText: 'Stereo Mode processes the left and right channels independently',
+          calloutText: CALLOUT_MAP['intro'],
           calloutVisible: true,
         }));
         break;
@@ -66,7 +73,7 @@ export default function Ch07_StereoMode({ voice, onControls }) {
         setUi(s => ({
           ...s,
           cursorTapping: false,
-          calloutText: 'Stereo Mode is currently turned off',
+          calloutText: CALLOUT_MAP['panel-showing-off'],
           calloutVisible: true,
         }));
         break;
@@ -81,7 +88,7 @@ export default function Ch07_StereoMode({ voice, onControls }) {
           ...s,
           cursorTapping: false,
           stereoModeActive: true,
-          calloutText: 'Stereo Mode is now on with dual-channel processing active',
+          calloutText: CALLOUT_MAP['stereo-active'],
           calloutVisible: true,
         }));
         break;
@@ -99,14 +106,14 @@ export default function Ch07_StereoMode({ voice, onControls }) {
           ...s,
           cursorTapping: false,
           stereoModeActive: false,
-          calloutText: 'Stereo Mode is now off, returning to mono processing',
+          calloutText: CALLOUT_MAP['stereo-inactive'],
           calloutVisible: true,
         }));
         break;
       case 'note-soundlok':
         setUi(s => ({
           ...s,
-          calloutText: 'Please note that Stereo Mode is not available on SoundLok units',
+          calloutText: CALLOUT_MAP['note-soundlok'],
           calloutVisible: true,
         }));
         break;
@@ -124,7 +131,7 @@ export default function Ch07_StereoMode({ voice, onControls }) {
           ...s,
           cursorTapping: false,
           cursorVisible: false,
-          calloutText: 'You can toggle Stereo Mode anytime from Quick Settings',
+          calloutText: CALLOUT_MAP['outro'],
           calloutVisible: true,
         }));
         break;
@@ -133,7 +140,7 @@ export default function Ch07_StereoMode({ voice, onControls }) {
 
   return (
     <div style={{ position: 'relative', display: 'flex', alignItems: 'center', justifyContent: 'center', width: '100%', height: '100%' }}>
-      <div style={{ position: 'relative', width: 480, height: 320 }}>
+      <div ref={uiRef} style={{ position: 'relative', width: 480, height: 320 }}>
         <TranscendUI
           activePreset={ui.activePreset}
           quickSettingsOpen={ui.quickSettingsOpen}
@@ -145,9 +152,9 @@ export default function Ch07_StereoMode({ voice, onControls }) {
           y={ui.cursorPos.y}
           tapping={ui.cursorTapping}
           visible={ui.cursorVisible}
+          uiRef={uiRef}
         />
-        <Callout text={ui.calloutText} visible={ui.calloutVisible} voice={voice} />
-
+        <Callout text={ui.calloutText} visible={ui.calloutVisible} />
       </div>
     </div>
   );

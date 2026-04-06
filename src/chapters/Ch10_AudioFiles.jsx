@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useAnimationSequence } from '../hooks/useAnimationSequence';
 import TranscendUI from '../components/TranscendUI';
 import CursorDot from '../components/CursorDot';
@@ -6,31 +6,39 @@ import Callout from '../components/Callout';
 
 
 const STEPS = [
-  { id: 'intro',                duration: 3500 },
+  { id: 'intro',                duration: 1500 },
   { id: 'cursor-to-hamburger',  duration: 400  },
   { id: 'tap-hamburger',        duration: 200  },
-  { id: 'file-list-open',       duration: 5000 },
+  { id: 'file-list-open',       duration: 2500 },
   { id: 'cursor-to-track2',     duration: 500  },
   { id: 'tap-track2',           duration: 200  },
-  { id: 'track2-selected',      duration: 3000 },
+  { id: 'track2-selected',      duration: 1500 },
   { id: 'cursor-to-play',       duration: 400  },
   { id: 'tap-play',             duration: 200  },
-  { id: 'playing-track2',       duration: 4000 },
+  { id: 'playing-track2',       duration: 2000 },
   { id: 'cursor-to-delete-hint',duration: 500  },
   { id: 'file-manager-reopen',  duration: 200  },
   { id: 'long-press-track',     duration: 600  },
-  { id: 'delete-option',        duration: 4000 },
+  { id: 'delete-option',        duration: 2000 },
   { id: 'cursor-to-delete',     duration: 300  },
   { id: 'tap-delete',           duration: 200  },
-  { id: 'track-removed',        duration: 3000 },
-  { id: 'outro',                duration: 4000 },
+  { id: 'track-removed',        duration: 1500 },
+  { id: 'outro',                duration: 2200 },
 ];
 
-export default function Ch10_AudioFiles({ voice, onControls }) {
-  const controls = useAnimationSequence(STEPS);
-  const { currentStep, loopProgress } = controls;
+const CALLOUT_MAP = {
+  'intro': 'The file manager holds all your recordings',
+  'file-list-open': 'All saved recordings appear here',
+  'track2-selected': 'Track 2 selected',
+  'playing-track2': 'Playing Track 2',
+  'long-press-track': 'Long press to access delete option',
+  'track-removed': 'Track deleted',
+  'outro': 'Organize recordings directly from the controller',
+};
 
-  useEffect(() => { if (onControls) onControls(controls); }, [controls.stepIndex, controls.playing, controls.finished]);
+export default function Ch10_AudioFiles({ started, uiRef }) {
+  const getCalloutText = useCallback((stepId) => CALLOUT_MAP[stepId] || null, []);
+  const { currentStep } = useAnimationSequence(STEPS, { started, getCalloutText });
 
   const [ui, setUi] = useState({
     activePreset: 'studio-a',
@@ -61,7 +69,7 @@ export default function Ch10_AudioFiles({ voice, onControls }) {
           cursorVisible: true,
           cursorPos: { x: 40, y: 270 },
           cursorTapping: false,
-          calloutText: 'The file manager stores all of your recordings',
+          calloutText: CALLOUT_MAP['intro'],
           calloutVisible: true,
         }));
         break;
@@ -76,7 +84,7 @@ export default function Ch10_AudioFiles({ voice, onControls }) {
           ...s,
           cursorTapping: false,
           fileListOpen: true,
-          calloutText: 'All of your saved recordings will appear here',
+          calloutText: CALLOUT_MAP['file-list-open'],
           calloutVisible: true,
         }));
         break;
@@ -93,7 +101,7 @@ export default function Ch10_AudioFiles({ voice, onControls }) {
           fileListOpen: false,
           trackLabel: 'Track 2',
           playbackProgress: 0,
-          calloutText: 'Track 2 is now selected',
+          calloutText: CALLOUT_MAP['track2-selected'],
           calloutVisible: true,
         }));
         break;
@@ -109,7 +117,7 @@ export default function Ch10_AudioFiles({ voice, onControls }) {
           cursorTapping: false,
           transportState: 'playback',
           playbackProgress: 0.4,
-          calloutText: 'Track 2 is now playing',
+          calloutText: CALLOUT_MAP['playing-track2'],
           calloutVisible: true,
         }));
         break;
@@ -133,7 +141,7 @@ export default function Ch10_AudioFiles({ voice, onControls }) {
           ...s,
           cursorTapping: false,
           cursorPos: { x: 100, y: 220 },
-          calloutText: 'Long press on a track to access the delete option',
+          calloutText: CALLOUT_MAP['long-press-track'],
           calloutVisible: true,
         }));
         break;
@@ -156,7 +164,7 @@ export default function Ch10_AudioFiles({ voice, onControls }) {
           cursorTapping: false,
           fileContextMenu: null,
           fileListTracks: ['Track 2', 'Track 3'],
-          calloutText: 'The track has been deleted',
+          calloutText: CALLOUT_MAP['track-removed'],
           calloutVisible: true,
         }));
         break;
@@ -165,7 +173,7 @@ export default function Ch10_AudioFiles({ voice, onControls }) {
           ...s,
           fileListOpen: false,
           cursorVisible: false,
-          calloutText: 'You can organize all your recordings directly from the controller',
+          calloutText: CALLOUT_MAP['outro'],
           calloutVisible: true,
         }));
         break;
@@ -174,7 +182,7 @@ export default function Ch10_AudioFiles({ voice, onControls }) {
 
   return (
     <div style={{ position: 'relative', display: 'flex', alignItems: 'center', justifyContent: 'center', width: '100%', height: '100%' }}>
-      <div style={{ position: 'relative', width: 480, height: 320 }}>
+      <div ref={uiRef} style={{ position: 'relative', width: 480, height: 320 }}>
         <TranscendUI
           activePreset={ui.activePreset}
           transportState={ui.transportState}
@@ -189,9 +197,9 @@ export default function Ch10_AudioFiles({ voice, onControls }) {
           y={ui.cursorPos.y}
           tapping={ui.cursorTapping}
           visible={ui.cursorVisible}
+          uiRef={uiRef}
         />
-        <Callout text={ui.calloutText} visible={ui.calloutVisible} voice={voice} />
-
+        <Callout text={ui.calloutText} visible={ui.calloutVisible} />
       </div>
     </div>
   );

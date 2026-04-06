@@ -1,143 +1,143 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 
-export function useAnimationSequence(steps) {
+/**
+ * TTS-gated animation sequencer.
+ *
+ * Steps with callout text wait for speechSynthesis.onend before advancing.
+ * Steps with NO callout text use their duration (ms) as a setTimeout.
+ *
+ * @param {Array<{id: string, duration: number}>} steps
+ * @param {Object} options
+ * @param {boolean} options.started - animation does not begin until true
+ * @param {Function} options.getCalloutText - (stepId) => string|null
+ */
+export function useAnimationSequence(steps, { started = false, getCalloutText } = {}) {
   const [stepIndex, setStepIndex] = useState(0);
-  const [playing, setPlaying] = useState(true);
+  const [playing, setPlaying] = useState(false);
   const [finished, setFinished] = useState(false);
   const [loopProgress, setLoopProgress] = useState(0);
-  const timeoutsRef = useRef([]);
+  const advancingRef = useRef(false);
+  const timerRef = useRef(null);
   const intervalRef = useRef(null);
-  const startTimeRef = useRef(Date.now());
-  const elapsedBeforePauseRef = useRef(0);
+  const startTimeRef = useRef(null);
+  const mountedRef = useRef(true);
   const totalDuration = steps.reduce((sum, s) => sum + s.duration, 0);
 
-  // Compute cumulative start times for each step
-  const stepStarts = useRef([]);
-  if (stepStarts.current.length !== steps.length) {
-    let cum = 0;
-    stepStarts.current = steps.map(s => {
-      const start = cum;
-      cum += s.duration;
-      return start;
-    });
-  }
-
-  const clearAllTimers = useCallback(() => {
-    timeoutsRef.current.forEach(clearTimeout);
-    timeoutsRef.current = [];
+  const clearTimers = useCallback(() => {
+    if (timerRef.current) {
+      clearTimeout(timerRef.current);
+      timerRef.current = null;
+    }
     if (intervalRef.current) {
       clearInterval(intervalRef.current);
       intervalRef.current = null;
     }
+    window.speechSynthesis?.cancel();
+    advancingRef.current = false;
   }, []);
 
-  // Schedule remaining steps from a given elapsed time
-  const scheduleFrom = useCallback((elapsedMs) => {
-    clearAllTimers();
-    startTimeRef.current = Date.now() - elapsedMs;
-
-    // Find current step at this elapsed time
-    let currentIdx = 0;
-    for (let i = steps.length - 1; i >= 0; i--) {
-      if (elapsedMs >= stepStarts.current[i]) {
-        currentIdx = i;
-        break;
-      }
-    }
-    setStepIndex(currentIdx);
-
-    // Schedule future steps
-    steps.forEach((step, i) => {
-      const delay = stepStarts.current[i] - elapsedMs;
-      if (delay > 0) {
-        const t = setTimeout(() => setStepIndex(i), delay);
-        timeoutsRef.current.push(t);
-      }
-    });
-
-    // Schedule finish
-    const finishDelay = totalDuration - elapsedMs;
-    if (finishDelay > 0) {
-      const t = setTimeout(() => {
-        setFinished(true);
-        setPlaying(false);
-      }, finishDelay);
-      timeoutsRef.current.push(t);
-    }
-
-    // Progress ticker
-    intervalRef.current = setInterval(() => {
-      const elapsed = Date.now() - startTimeRef.current;
-      setLoopProgress(Math.min(elapsed / totalDuration, 1));
-    }, 50);
-  }, [steps, totalDuration, clearAllTimers]);
-
-  // Initial start
+  // Cleanup on unmount
   useEffect(() => {
-    elapsedBeforePauseRef.current = 0;
-    setStepIndex(0);
-    setPlaying(true);
-    setFinished(false);
-    setLoopProgress(0);
-    scheduleFrom(0);
+    mountedRef.current = true;
+    return () => {
+      mountedRef.current = false;
+      clearTimers();
+    };
+  }, [clearTimers]);
 
-    return clearAllTimers;
-  }, [steps]);
+  // Speak text and call onDone when finished
+  const speakAndAdvance = useCallback((text, onDone) => {
+    if (!text || text.trim() === '') {
+      onDone();
+      return;
+    }
+    window.speechSynthesis?.cancel();
+    const utterance = new SpeechSynthesisUtterance(text);
+    utterance.rate = 0.95;
+    utterance.pitch = 1.0;
+    utterance.volume = 1.0;
+    utterance.onend = () => {
+      if (mountedRef.current) onDone();
+    };
+    utterance.onerror = () => {
+      if (mountedRef.current) onDone();
+    };
+    window.speechSynthesis?.speak(utterance);
+  }, []);
 
-  // Play / Pause
-  const play = useCallback(() => {
-    if (finished) {
-      // Restart from beginning
-      elapsedBeforePauseRef.current = 0;
+  // Advance to the next step
+  const advanceStep = useCallback((currentIdx) => {
+    if (!mountedRef.current) return;
+    advancingRef.current = false;
+
+    const nextIdx = currentIdx + 1;
+    if (nextIdx >= steps.length) {
+      // Sequence finished
+      setFinished(true);
+      setPlaying(false);
+      setLoopProgress(1);
+      return;
+    }
+    setStepIndex(nextIdx);
+  }, [steps.length]);
+
+  // Run the current step: show UI, speak if needed, then advance
+  const runStep = useCallback((idx) => {
+    if (!mountedRef.current || advancingRef.current) return;
+    advancingRef.current = true;
+
+    const step = steps[idx];
+    if (!step) return;
+
+    const calloutText = getCalloutText ? getCalloutText(step.id) : null;
+
+    if (calloutText && calloutText.trim() !== '') {
+      // TTS-gated: wait for speech to finish
+      speakAndAdvance(calloutText, () => {
+        if (mountedRef.current) advanceStep(idx);
+      });
+    } else {
+      // No callout: use step duration as timeout
+      timerRef.current = setTimeout(() => {
+        if (mountedRef.current) advanceStep(idx);
+      }, step.duration);
+    }
+  }, [steps, getCalloutText, speakAndAdvance, advanceStep]);
+
+  // When stepIndex changes and we're playing, run the step
+  useEffect(() => {
+    if (!playing || finished) return;
+    runStep(stepIndex);
+  }, [stepIndex, playing, finished, runStep]);
+
+  // Start when `started` flips to true
+  useEffect(() => {
+    if (started) {
+      clearTimers();
+      setStepIndex(0);
       setFinished(false);
       setPlaying(true);
       setLoopProgress(0);
-      scheduleFrom(0);
+      startTimeRef.current = Date.now();
+
+      // Progress ticker
+      intervalRef.current = setInterval(() => {
+        if (startTimeRef.current) {
+          const elapsed = Date.now() - startTimeRef.current;
+          setLoopProgress(Math.min(elapsed / totalDuration, 1));
+        }
+      }, 50);
     } else {
-      setPlaying(true);
-      scheduleFrom(elapsedBeforePauseRef.current);
+      // Reset
+      clearTimers();
+      setStepIndex(0);
+      setPlaying(false);
+      setFinished(false);
+      setLoopProgress(0);
     }
-  }, [finished, scheduleFrom]);
 
-  const pause = useCallback(() => {
-    const elapsed = Date.now() - startTimeRef.current;
-    elapsedBeforePauseRef.current = Math.min(elapsed, totalDuration);
-    setPlaying(false);
-    clearAllTimers();
-  }, [totalDuration, clearAllTimers]);
-
-  const skipTo = useCallback((idx) => {
-    const clamped = Math.max(0, Math.min(idx, steps.length - 1));
-    const elapsed = stepStarts.current[clamped];
-    elapsedBeforePauseRef.current = elapsed;
-    setFinished(false);
-
-    if (playing) {
-      scheduleFrom(elapsed);
-    } else {
-      // Just jump to the step visually
-      setStepIndex(clamped);
-      setLoopProgress(elapsed / totalDuration);
-    }
-  }, [steps, totalDuration, playing, scheduleFrom]);
-
-  const skipForward = useCallback(() => {
-    const next = Math.min(stepIndex + 1, steps.length - 1);
-    skipTo(next);
-  }, [stepIndex, steps.length, skipTo]);
-
-  const skipBack = useCallback(() => {
-    const prev = Math.max(stepIndex - 1, 0);
-    skipTo(prev);
-  }, [stepIndex, skipTo]);
-
-  const restart = useCallback(() => {
-    elapsedBeforePauseRef.current = 0;
-    setFinished(false);
-    setPlaying(true);
-    setLoopProgress(0);
-    scheduleFrom(0);
-  }, [scheduleFrom]);
+    return () => clearTimers();
+  }, [started]); // eslint-disable-line react-hooks/exhaustive-deps
 
   return {
     currentStep: steps[stepIndex]?.id ?? steps[0].id,
@@ -145,11 +145,6 @@ export function useAnimationSequence(steps) {
     loopProgress,
     playing,
     finished,
-    play,
-    pause,
-    skipForward,
-    skipBack,
-    restart,
     totalSteps: steps.length,
   };
 }
