@@ -44,6 +44,9 @@ Versioning follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 - TTS-gated step advancement — speech onend drives animation timing
 - Callout overlaps eliminated — fadeOut before fadeIn enforced
 - Cursor coordinates now relative to TranscendUI bounding rect, not viewport
+- Preset info tooltip now boundary-aware: flips below button when top-row presets
+  (Studio A, Studio B, Recital Hall) are active to stay within device screen bounds;
+  horizontal clamping prevents overflow on left/right edges
 - End-of-chapter bug where intro callout would flash again due to loop restart
 
 ---

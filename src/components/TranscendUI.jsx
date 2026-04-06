@@ -1,3 +1,5 @@
+import { useRef, useState, useEffect } from 'react';
+
 const PRESETS = [
   { id: 'studio-a', label: 'Studio A', desc: 'Intimate recording space with flat, natural response ideal for tracking and mixing.' },
   { id: 'studio-b', label: 'Studio B', desc: 'Warmer response optimized for vocal booths and live tracking sessions.' },
@@ -106,12 +108,57 @@ function PresetButton({ preset, isActive }) {
 /* ─── INFO TOOLTIP ─── */
 
 function InfoTooltip({ preset }) {
+  const tooltipRef = useRef(null);
+  const [placedBelow, setPlacedBelow] = useState(false);
+
+  useEffect(() => {
+    if (!tooltipRef.current || !preset) return;
+    const el = tooltipRef.current;
+    // Find the device screen container (the 480x320 root)
+    let screen = el.closest('[data-transcend-screen]') || el.offsetParent;
+    if (!screen) return;
+    const screenRect = screen.getBoundingClientRect();
+    const tooltipRect = el.getBoundingClientRect();
+    // If tooltip overflows top of device screen, flip below
+    setPlacedBelow(tooltipRect.top < screenRect.top);
+
+    // Horizontal clamp: keep within device screen with 8px padding
+    if (tooltipRect.left < screenRect.left + 8) {
+      el.style.left = '0';
+      el.style.transform = 'none';
+    } else if (tooltipRect.right > screenRect.right - 8) {
+      el.style.left = 'auto';
+      el.style.right = '0';
+      el.style.transform = 'none';
+    }
+  }, [preset]);
+
   if (!preset) return null;
+
+  const placement = placedBelow
+    ? { top: 'calc(100% + 10px)', bottom: 'auto' }
+    : { bottom: 'calc(100% + 10px)', top: 'auto' };
+
+  const arrowStyle = {
+    position: 'absolute',
+    left: '50%',
+    width: 9,
+    height: 9,
+    background: 'var(--bg-tooltip)',
+    borderRight: '1px solid var(--border-tooltip)',
+    borderBottom: '1px solid var(--border-tooltip)',
+  };
+
+  const arrowPlacement = placedBelow
+    ? { top: -5, transform: 'translateX(-50%) rotate(225deg)' }
+    : { bottom: -5, transform: 'translateX(-50%) rotate(45deg)' };
+
   return (
-    <div style={{
+    <div ref={tooltipRef} style={{
       position: 'absolute',
       zIndex: 50,
       width: 215,
+      maxWidth: 'calc(100% - 16px)',
       background: 'var(--bg-tooltip)',
       border: '1px solid var(--border-tooltip)',
       borderRadius: 10,
@@ -120,8 +167,7 @@ function InfoTooltip({ preset }) {
       animation: 'fadeInUp 320ms cubic-bezier(0.34, 1.2, 0.64, 1) forwards',
       left: '50%',
       transform: 'translateX(-50%)',
-      bottom: '100%',
-      marginBottom: 8,
+      ...placement,
     }}>
       <div style={{
         fontSize: 9,
@@ -140,17 +186,7 @@ function InfoTooltip({ preset }) {
       }}>
         {preset.desc}
       </div>
-      <div style={{
-        position: 'absolute',
-        bottom: -5,
-        left: '50%',
-        transform: 'translateX(-50%) rotate(45deg)',
-        width: 9,
-        height: 9,
-        background: 'var(--bg-tooltip)',
-        borderRight: '1px solid var(--border-tooltip)',
-        borderBottom: '1px solid var(--border-tooltip)',
-      }} />
+      <div style={{ ...arrowStyle, ...arrowPlacement }} />
     </div>
   );
 }
@@ -771,7 +807,7 @@ export default function TranscendUI({
   const infoPreset = infoPresetId ? PRESETS.find(p => p.id === infoPresetId) : null;
 
   return (
-    <div style={{
+    <div data-transcend-screen style={{
       position: 'relative',
       width: 480,
       height: 320,
