@@ -47,6 +47,11 @@ Versioning follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 - Transport bar: all volume icons switched from `sound_on_btn.png` to `audio_on.png`
   per asset map; stop button applies `recPulse` animation; playback scrubber knob
   uses `playback_slider_dot.png` instead of CSS circle
+- Transport bar layout: all 4 states use `justify-content: space-evenly` for even
+  button distribution; removed nested flex containers and manual gaps
+- Volume icon sized to 26px across all transport states for correct visual weight
+- Progress bar animates left-to-right during recording via `recSweep` keyframe;
+  playhead dot hidden during recording; animation duration driven by `recStepDuration` prop
 - Preset info tooltip now boundary-aware: flips below button when top-row presets
   (Studio A, Studio B, Recital Hall) are active to stay within device screen bounds;
   horizontal clamping prevents overflow on left/right edges

@@ -137,6 +137,11 @@ body { background: #0a0a0f; overflow: hidden; }
   50%       { opacity: 0.20; }
 }
 
+@keyframes recSweep {
+  from { width: 0%; }
+  to   { width: 100%; }
+}
+
 @keyframes slideDownPanel {
   from { transform: translateY(-100%); }
   to   { transform: translateY(0); }

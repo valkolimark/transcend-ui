@@ -569,115 +569,74 @@ function ModalAdminLogin({ passcodeDisplay = '------' }) {
   );
 }
 
+/* ─── TRANSPORT BAR STYLE ─── */
+
+const T_BAR = {
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'space-evenly',
+  width: '100%',
+  height: '100%',
+  padding: '0 10px',
+};
+
+const BTN_GROUP = { display: 'flex', alignItems: 'center', gap: 6 };
+const VOL_SIZE = 26;
+
 /* ─── TRANSPORT BAR VARIANTS ─── */
 
 function TransportDefault() {
   return (
-    <div style={{
-      display: 'flex',
-      alignItems: 'center',
-      width: '100%',
-      height: '100%',
-      padding: '0 10px',
-    }}>
-      <div style={{ width: 36, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-        <ImgIcon src="playback_menu_icon.png" alt="Files" size={20} />
+    <div style={T_BAR}>
+      <ImgIcon src="playback_menu_icon.png" alt="Files" size={20} />
+      <div style={BTN_GROUP}>
+        <ImgIcon src="rec_btn.png" alt="REC" size={28} />
+        <span style={{ fontSize: 11, fontWeight: 600, color: 'rgba(255,255,255,0.55)', letterSpacing: '0.08em' }}>REC</span>
       </div>
-
-      <div style={{
-        flex: 1,
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        gap: 16,
-      }}>
-        {/* REC button */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-          <ImgIcon src="rec_btn.png" alt="REC" size={28} />
-          <span style={{
-            fontSize: 11, fontWeight: 600,
-            color: 'rgba(255,255,255,0.55)',
-            letterSpacing: '0.08em',
-          }}>REC</span>
-        </div>
-
-        <div style={{ width: 8 }} />
-
-        <ImgIcon src="back_drk_btn.png" alt="Skip Back" size={18} />
-        <ImgIcon src="play_btn.png" alt="Play" size={20} />
-        <ImgIcon src="forward_btn.png" alt="Skip Forward" size={18} />
-
-        <div style={{ width: 8 }} />
-
-        <ImgIcon src="audio_on.png" alt="Volume" size={20} />
-      </div>
+      <ImgIcon src="back_drk_btn.png" alt="Skip Back" size={18} />
+      <ImgIcon src="play_btn.png" alt="Play" size={20} />
+      <ImgIcon src="forward_btn.png" alt="Skip Forward" size={18} />
+      <ImgIcon src="audio_on.png" alt="Volume" size={VOL_SIZE} />
     </div>
   );
 }
 
 function TransportRecording() {
   return (
-    <div style={{
-      display: 'flex',
-      alignItems: 'center',
-      width: '100%',
-      height: '100%',
-      padding: '0 10px',
-    }}>
-      <div style={{ width: 36, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-        <ImgIcon src="playback_menu_icon.png" alt="Files" size={20} />
+    <div style={T_BAR}>
+      <ImgIcon src="playback_menu_icon.png" alt="Files" size={20} />
+      <div style={BTN_GROUP}>
+        <ImgIcon src="stop_btn.png" alt="Stop" size={28} style={{ animation: 'recPulse 1.2s ease-in-out infinite' }} />
+        <span style={{ fontSize: 12, color: 'rgba(255,255,255,0.70)', fontWeight: 500 }}>Stop</span>
       </div>
-
-      <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 16 }}>
-        {/* Stop button with recPulse on icon */}
-        <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
-          <ImgIcon src="stop_btn.png" alt="Stop" size={28} style={{ animation: 'recPulse 1.2s ease-in-out infinite' }} />
-          <span style={{ fontSize: 12, color: 'rgba(255,255,255,0.70)', fontWeight: 500 }}>Stop</span>
-        </div>
-
-        <div style={{ display: 'flex', alignItems: 'center', gap: 5 }}>
-          <ImgIcon src="discard_btn.png" alt="Discard" size={14} />
-          <span style={{ fontSize: 12, color: 'rgba(255,255,255,0.50)' }}>Discard</span>
-        </div>
-
-        <div style={{ flex: 1 }} />
-        <ImgIcon src="audio_on.png" alt="Volume" size={20} />
+      <div style={BTN_GROUP}>
+        <ImgIcon src="discard_btn.png" alt="Discard" size={14} />
+        <span style={{ fontSize: 12, color: 'rgba(255,255,255,0.50)' }}>Discard</span>
       </div>
+      <ImgIcon src="audio_on.png" alt="Volume" size={VOL_SIZE} />
     </div>
   );
 }
 
 function TransportRecordedPaused() {
   return (
-    <div style={{
-      display: 'flex',
-      alignItems: 'center',
-      width: '100%',
-      height: '100%',
-      padding: '0 10px',
-    }}>
-      <div style={{ width: 36, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-        <ImgIcon src="playback_menu_icon.png" alt="Files" size={20} />
+    <div style={T_BAR}>
+      <ImgIcon src="playback_menu_icon.png" alt="Files" size={20} />
+      <div style={BTN_GROUP}>
+        <ImgIcon src="save_btn.png" alt="Save" size={18} />
+        <span style={{ fontSize: 12, color: 'rgba(255,255,255,0.70)', fontWeight: 500 }}>Save</span>
       </div>
-
-      <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 14 }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 5 }}>
-          <ImgIcon src="save_btn.png" alt="Save" size={18} />
-          <span style={{ fontSize: 12, color: 'rgba(255,255,255,0.70)', fontWeight: 500 }}>Save</span>
-        </div>
-        <ImgIcon src="play_btn.png" alt="Play" size={20} />
-        <div style={{ display: 'flex', alignItems: 'center', gap: 5 }}>
-          <ImgIcon src="discard_btn.png" alt="Discard" size={14} />
-          <span style={{ fontSize: 12, color: 'rgba(255,255,255,0.50)' }}>Discard</span>
-        </div>
-        <div style={{ flex: 1 }} />
-        <div style={{
-          border: '1.5px solid var(--blue-primary)',
-          borderRadius: 6, padding: '4px 6px',
-          display: 'flex', alignItems: 'center', justifyContent: 'center',
-        }}>
-          <ImgIcon src="audio_on.png" alt="Volume" size={20} />
-        </div>
+      <ImgIcon src="play_btn.png" alt="Play" size={20} />
+      <div style={BTN_GROUP}>
+        <ImgIcon src="discard_btn.png" alt="Discard" size={14} />
+        <span style={{ fontSize: 12, color: 'rgba(255,255,255,0.50)' }}>Discard</span>
+      </div>
+      <div style={{
+        border: '1.5px solid var(--blue-primary)',
+        borderRadius: 6, padding: '4px 6px',
+        display: 'flex', alignItems: 'center',
+      }}>
+        <ImgIcon src="audio_on.png" alt="Volume" size={VOL_SIZE} />
       </div>
     </div>
   );
@@ -685,35 +644,23 @@ function TransportRecordedPaused() {
 
 function TransportRecordedPlaying() {
   return (
-    <div style={{
-      display: 'flex',
-      alignItems: 'center',
-      width: '100%',
-      height: '100%',
-      padding: '0 10px',
-    }}>
-      <div style={{ width: 36, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-        <ImgIcon src="playback_menu_icon.png" alt="Files" size={20} />
+    <div style={T_BAR}>
+      <ImgIcon src="playback_menu_icon.png" alt="Files" size={20} />
+      <div style={BTN_GROUP}>
+        <ImgIcon src="save_btn.png" alt="Save" size={18} />
+        <span style={{ fontSize: 12, color: 'rgba(255,255,255,0.70)', fontWeight: 500 }}>Save</span>
       </div>
-
-      <div style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 14 }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: 5 }}>
-          <ImgIcon src="save_btn.png" alt="Save" size={18} />
-          <span style={{ fontSize: 12, color: 'rgba(255,255,255,0.70)', fontWeight: 500 }}>Save</span>
-        </div>
-        <ImgIcon src="pause_btn.png" alt="Pause" size={20} />
-        <div style={{ display: 'flex', alignItems: 'center', gap: 5 }}>
-          <ImgIcon src="discard_btn.png" alt="Discard" size={14} />
-          <span style={{ fontSize: 12, color: 'rgba(255,255,255,0.50)' }}>Discard</span>
-        </div>
-        <div style={{ flex: 1 }} />
-        <div style={{
-          border: '1.5px solid var(--blue-primary)',
-          borderRadius: 6, padding: '4px 6px',
-          display: 'flex', alignItems: 'center', justifyContent: 'center',
-        }}>
-          <ImgIcon src="audio_on.png" alt="Volume" size={20} />
-        </div>
+      <ImgIcon src="pause_btn.png" alt="Pause" size={20} />
+      <div style={BTN_GROUP}>
+        <ImgIcon src="discard_btn.png" alt="Discard" size={14} />
+        <span style={{ fontSize: 12, color: 'rgba(255,255,255,0.50)' }}>Discard</span>
+      </div>
+      <div style={{
+        border: '1.5px solid var(--blue-primary)',
+        borderRadius: 6, padding: '4px 6px',
+        display: 'flex', alignItems: 'center',
+      }}>
+        <ImgIcon src="audio_on.png" alt="Volume" size={VOL_SIZE} />
       </div>
     </div>
   );
@@ -729,11 +676,9 @@ function TransportPlayback({ playbackProgress = 0.65 }) {
       padding: '0 10px',
       gap: 8,
     }}>
-      <div style={{ width: 36, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 }}>
-        <ImgIcon src="playback_menu_icon.png" alt="Files" size={20} />
-      </div>
+      <ImgIcon src="playback_menu_icon.png" alt="Files" size={20} />
 
-      <span style={{ fontSize: 11, color: 'rgba(255,255,255,0.45)', whiteSpace: 'nowrap', marginRight: 8 }}>Playback</span>
+      <span style={{ fontSize: 11, color: 'rgba(255,255,255,0.45)', whiteSpace: 'nowrap', flexShrink: 0 }}>Playback</span>
 
       <div style={{
         flex: 1, height: 3,
@@ -757,9 +702,7 @@ function TransportPlayback({ playbackProgress = 0.65 }) {
         />
       </div>
 
-      <div style={{ flexShrink: 0 }}>
-        <ImgIcon src="discard_btn.png" alt="Close" size={18} />
-      </div>
+      <ImgIcon src="discard_btn.png" alt="Close" size={18} style={{ flexShrink: 0 }} />
     </div>
   );
 }
@@ -789,6 +732,7 @@ export default function TranscendUI({
   settingsScreen = false,
   browserChrome = false,
   passcodeDisplay = '------',
+  recStepDuration = 3500,
 }) {
   /* Layout constants */
   const MAIN_W = 432;
@@ -1013,23 +957,33 @@ export default function TranscendUI({
         background: 'var(--progress-track)',
       }}>
         <div style={{
-          width: `${playbackProgress * 100}%`,
           height: '100%',
           background: 'var(--progress-fill)',
-          transition: 'width 300ms linear',
+          ...(transportState === 'recording'
+            ? {
+                animation: `recSweep ${recStepDuration}ms linear forwards`,
+                transition: 'none',
+              }
+            : {
+                width: `${playbackProgress * 100}%`,
+                transition: 'width 300ms linear',
+              }
+          ),
         }} />
-        <div style={{
-          position: 'absolute',
-          top: -2.5,
-          left: `${playbackProgress * 100}%`,
-          transform: 'translateX(-50%)',
-          width: 8,
-          height: 8,
-          borderRadius: '50%',
-          background: 'var(--progress-dot)',
-          boxShadow: '0 0 4px rgba(255,255,255,0.60)',
-          transition: 'left 300ms linear',
-        }} />
+        {transportState !== 'recording' && (
+          <div style={{
+            position: 'absolute',
+            top: -2.5,
+            left: `${playbackProgress * 100}%`,
+            transform: 'translateX(-50%)',
+            width: 8,
+            height: 8,
+            borderRadius: '50%',
+            background: 'var(--progress-dot)',
+            boxShadow: '0 0 4px rgba(255,255,255,0.60)',
+            transition: 'left 300ms linear',
+          }} />
+        )}
       </div>
 
       {/* ─── TRANSPORT BAR ─── */}

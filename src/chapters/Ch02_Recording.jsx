@@ -79,6 +79,7 @@ export default function Ch02_Recording({ started, uiRef }) {
           transportState: 'recording',
           recordingActive: true,
           recordingHeader: 'Recording...',
+          recStepDuration: 3500,
           calloutText: CALLOUT_MAP['recording-active'],
           calloutVisible: true,
         }));
@@ -158,6 +159,7 @@ export default function Ch02_Recording({ started, uiRef }) {
           recordingActive={ui.recordingActive}
           recordingHeader={ui.recordingHeader}
           playbackProgress={ui.playbackProgress}
+          recStepDuration={ui.recStepDuration}
         />
         <CursorDot
           x={ui.cursorPos.x}
