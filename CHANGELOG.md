@@ -47,14 +47,12 @@ Versioning follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 - Transport bar: all volume icons switched from `sound_on_btn.png` to `audio_on.png`
   per asset map; stop button applies `recPulse` animation; playback scrubber knob
   uses `playback_slider_dot.png` instead of CSS circle
-- Transport bar completely rewritten to Figma-derived proportional layout:
-  fixed 51px left (hamburger + right border) and right (volume) sections;
-  flexible middle section varies per state with exact flex ratios;
-  State 2 uses 50/50 flex split with vertical divider;
-  State 3 uses centered button group with dividers;
-  State 4 uses flex-grow scrubber with border-left volume section;
-  all icons use `<img>` tags with `basePath` for GitHub Pages compatibility;
-  CSS classes in App.css replace all inline transport styles
+- Transport bar rewritten to exact Figma spec (710x78 scaled to 425x48):
+  State 1 default uses 3-section layout (left 138px: menu cell 50px with border +
+  REC btn 88px | center 152px: 3 controls with 24px gap | right 50px: volume);
+  `justify-content: space-between` on outer bar distributes sections;
+  all CSS uses `tbar-*` class prefix; all old `t-*` classes removed;
+  icons sized proportionally: menu 34px, REC 30px, controls 36px, volume 36px
 - Right sidebar rewritten to Figma-derived layout: 55px width (was ~46px),
   2px solid #3A78FF border-left replaces separate separator element;
   volume slider with 9px track, 26px dual-circle knob (gray outer / blue inner),

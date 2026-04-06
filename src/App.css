@@ -67,7 +67,6 @@
   font-weight: 400;
 }
 
-/* ── Section label ────────────────────────────────────── */
 .sb-section-label {
   font-size: 9px;
   font-weight: 700;
@@ -78,7 +77,6 @@
   flex-shrink: 0;
 }
 
-/* ── Chapter list ─────────────────────────────────────── */
 .chapter-list {
   flex: 1;
   overflow-y: auto;
@@ -87,7 +85,6 @@
 }
 .chapter-list::-webkit-scrollbar { display: none; }
 
-/* ── Chapter items ────────────────────────────────────── */
 .ch-item {
   display: flex;
   align-items: center;
@@ -101,9 +98,7 @@
   user-select: none;
 }
 
-.ch-item:hover {
-  background: rgba(255, 255, 255, 0.04);
-}
+.ch-item:hover { background: rgba(255, 255, 255, 0.04); }
 
 .ch-item.active {
   background: rgba(65, 105, 225, 0.14);
@@ -119,9 +114,7 @@
   font-variant-numeric: tabular-nums;
   flex-shrink: 0;
 }
-.ch-item.active .ch-num {
-  color: #7CA8FF;
-}
+.ch-item.active .ch-num { color: #7CA8FF; }
 
 .ch-divider {
   width: 1px;
@@ -141,7 +134,6 @@
   font-weight: 500;
 }
 
-/* ── Sidebar footer ───────────────────────────────────── */
 .sidebar-footer {
   padding: 12px 18px;
   border-top: 1px solid rgba(255, 255, 255, 0.05);
@@ -151,11 +143,7 @@
   flex-shrink: 0;
 }
 
-.wenger-brand {
-  display: flex;
-  align-items: center;
-  gap: 7px;
-}
+.wenger-brand { display: flex; align-items: center; gap: 7px; }
 
 .w-mark {
   width: 22px;
@@ -205,11 +193,7 @@
   width: 560px;
   height: 560px;
   border-radius: 50%;
-  background: radial-gradient(
-    circle,
-    rgba(65, 105, 225, 0.055) 0%,
-    transparent 65%
-  );
+  background: radial-gradient(circle, rgba(65,105,225,0.055) 0%, transparent 65%);
   pointer-events: none;
   top: 50%;
   left: 50%;
@@ -217,10 +201,7 @@
   z-index: 0;
 }
 
-.device-wrap {
-  position: relative;
-  z-index: 2;
-}
+.device-wrap { position: relative; z-index: 2; }
 
 /* ── Callout bubble ───────────────────────────────────── */
 .callout-bubble {
@@ -244,8 +225,7 @@
   position: absolute;
   bottom: -5px;
   right: 52px;
-  width: 0;
-  height: 0;
+  width: 0; height: 0;
   border-left: 5px solid transparent;
   border-right: 5px solid transparent;
   border-top: 5px solid rgba(65, 105, 225, 0.35);
@@ -261,80 +241,64 @@
   to   { opacity: 0; transform: translateY(-6px); }
 }
 
-/* ══════════════════════════════════════════════════════════
-   TRANSPORT BAR — Figma-derived proportional layout
-   Figma: 710×78px → Device: 432×48px (scale ~0.61)
-   ══════════════════════════════════════════════════════════ */
+/* ===========================================================
+   TRANSPORT BAR -- Figma 710x78 scaled to 425x48
+   Width scale: 0.599  Height scale: 0.615
+   =========================================================== */
 
-.t-bar {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  width: 100%;
-  height: 100%;
-  background: var(--bg-transport);
-  isolation: isolate;
-  flex-shrink: 0;
-}
-
-/* ── Fixed left section — hamburger icon ────────────────── */
-.t-left {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 51px;
-  min-width: 51px;
-  height: 100%;
-  border-right: 1.5px solid #27292E;
-  flex-shrink: 0;
-  z-index: 2;
-  cursor: pointer;
-}
-.t-left img { width: 34px; height: 34px; object-fit: contain; }
-
-/* ── Fixed right section — volume icon ──────────────────── */
-.t-right {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 51px;
-  min-width: 51px;
-  height: 100%;
-  flex-shrink: 0;
-  cursor: pointer;
-}
-.t-right img { width: 36px; height: 36px; object-fit: contain; }
-
-/* State 3 highlight */
-.t-right--highlighted img {
-  border: 1.5px solid #4169E1;
-  border-radius: 6px;
-  padding: 3px;
-  box-sizing: border-box;
-}
-
-/* ── STATE 1 — Default middle ────────────────────────���──── */
-.t-mid-default {
+/* -- Outer bar (shared by all states) ---------------------- */
+.tbar-default {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
   align-items: center;
-  flex: 1;
-  height: 100%;
-  padding: 0 4px;
+  width: 100%;
+  height: 48px;
+  background: #1C1E1F;
+  isolation: isolate;
+  flex-shrink: 0;
 }
 
-.t-rec-group {
+/* -- STATE 1: Left section (menu + REC) -------------------- */
+.tbar-left {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  width: 138px;
+  min-width: 138px;
+  height: 48px;
+  flex-shrink: 0;
+}
+
+.tbar-menu-cell {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 50px;
+  min-width: 50px;
+  height: 48px;
+  border-right: 2px solid #27292E;
+  flex-shrink: 0;
+  cursor: pointer;
+  box-sizing: border-box;
+}
+
+.tbar-menu-icon { width: 34px; height: 34px; object-fit: contain; }
+
+.tbar-rec-btn {
   display: flex;
   align-items: center;
   padding: 0 16px;
-  gap: 4px;
-  height: 100%;
-  cursor: pointer;
+  gap: 3px;
+  width: 88px;
+  height: 48px;
   flex-shrink: 0;
+  cursor: pointer;
 }
-.t-rec-group img { width: 30px; height: 30px; object-fit: contain; }
-.t-rec-group .rec-label {
+
+.tbar-rec-icon { width: 30px; height: 30px; object-fit: contain; flex-shrink: 0; }
+
+.tbar-rec-label {
   font-family: 'Avenir LT Pro', 'Avenir', 'Nunito', sans-serif;
   font-weight: 350;
   font-size: 10px;
@@ -344,143 +308,118 @@
   white-space: nowrap;
 }
 
-.t-playback-controls {
+/* -- STATE 1: Center (playback controls) ------------------- */
+.tbar-controls {
   display: flex;
+  flex-direction: row;
   align-items: center;
   gap: 24px;
+  width: 152px;
+  height: 36px;
   flex-shrink: 0;
-  padding-right: 4px;
 }
-.t-playback-controls img {
-  width: 36px; height: 36px;
-  object-fit: contain;
+
+.tbar-ctrl-icon { width: 36px; height: 36px; object-fit: contain; cursor: pointer; flex-shrink: 0; }
+
+/* -- Volume cell (right, all states) ----------------------- */
+.tbar-vol-cell {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 50px;
+  min-width: 50px;
+  height: 48px;
+  flex-shrink: 0;
   cursor: pointer;
 }
 
-/* ── STATE 2 — Recording middle ─────────────────────────── */
-.t-mid-recording {
+.tbar-vol-icon { width: 36px; height: 36px; object-fit: contain; }
+
+.tbar-vol-highlighted {
+  border: 1.5px solid #4169E1;
+  border-radius: 6px;
+  box-sizing: border-box;
+}
+
+/* -- STATE 2: Recording middle (Stop | Discard) ------------ */
+.tbar-mid-recording {
   display: flex;
   flex-direction: row;
   align-items: center;
   flex: 1;
   height: 36px;
-  align-self: center;
 }
 
-.t-stop-btn {
+.tbar-stop-btn, .tbar-discard-btn {
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 4px;
+  gap: 3px;
   flex: 1;
   height: 36px;
   cursor: pointer;
 }
-.t-stop-btn img { width: 30px; height: 30px; object-fit: contain; }
-.t-stop-btn .stop-label {
+
+.tbar-btn-label {
   font-family: 'Avenir LT Pro', 'Avenir', 'Nunito', sans-serif;
   font-weight: 400;
   font-size: 10px;
   color: #DFE2E6;
+  white-space: nowrap;
 }
 
-.t-btn-divider {
+.tbar-btn-divider {
   width: 0;
   height: 36px;
-  border: 1px solid #454950;
+  border-right: 1px solid #454950;
   flex-shrink: 0;
-  align-self: center;
 }
 
-.t-discard-btn {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 4px;
-  flex: 1;
-  height: 36px;
-  cursor: pointer;
-}
-.t-discard-btn img { width: 36px; height: 36px; object-fit: contain; }
-.t-discard-btn .discard-label {
-  font-family: 'Avenir LT Pro', 'Avenir', 'Nunito', sans-serif;
-  font-weight: 400;
-  font-size: 10px;
-  color: #DFE2E6;
-}
-
-/* stop icon pulse */
 .stop-pulse { animation: recPulse 1.2s ease-in-out infinite; }
 
-/* ── STATE 3 — Preview middle ───────────────────────────── */
-.t-mid-preview {
+/* -- STATE 3: Preview middle (Save | Play | Discard) ------- */
+.tbar-mid-preview {
   display: flex;
   justify-content: center;
   align-items: center;
   flex: 1;
-  height: 100%;
+  height: 48px;
 }
 
-.t-preview-buttons {
+.tbar-preview-buttons {
   display: flex;
   align-items: center;
-  gap: 24px;
+  gap: 14px;
   height: 36px;
 }
 
-.t-save-btn {
+.tbar-save-btn, .tbar-discard-prev {
   display: flex;
   align-items: center;
-  gap: 4px;
+  gap: 3px;
   height: 36px;
   cursor: pointer;
 }
-.t-save-btn img { width: 36px; height: 36px; object-fit: contain; }
-.t-save-btn .save-label {
-  font-family: 'Avenir LT Pro', 'Avenir', 'Nunito', sans-serif;
-  font-weight: 350;
-  font-size: 10px;
-  letter-spacing: 0.2px;
-  color: #DFE2E6;
-}
 
-.t-play-preview {
+.tbar-play-preview {
   display: flex;
   align-items: center;
   width: 36px; height: 36px;
   cursor: pointer;
 }
-.t-play-preview img { width: 36px; height: 36px; object-fit: contain; }
 
-.t-discard-prev-btn {
+/* -- STATE 4: Playback middle ----------------------------- */
+.tbar-mid-playback {
   display: flex;
   align-items: center;
-  gap: 4px;
-  height: 36px;
-  cursor: pointer;
-}
-.t-discard-prev-btn img { width: 36px; height: 36px; object-fit: contain; }
-.t-discard-prev-btn .discard-label {
-  font-family: 'Avenir LT Pro', 'Avenir', 'Nunito', sans-serif;
-  font-weight: 350;
-  font-size: 10px;
-  letter-spacing: 0.2px;
-  color: #DFE2E6;
-}
-
-/* ── STATE 4 — Playback middle ──────────────────────────── */
-.t-mid-playback {
-  display: flex;
-  justify-content: flex-end;
-  align-items: center;
-  padding: 0 0 0 14px;
-  gap: 16px;
+  padding: 0 0 0 12px;
+  gap: 10px;
   flex: 1;
-  height: 100%;
+  height: 48px;
   background: #171919;
 }
 
-.t-playback-label {
+.tbar-playback-label {
   font-family: 'Avenir LT Pro', 'Avenir', 'Nunito', sans-serif;
   font-weight: 350;
   font-size: 11px;
@@ -491,9 +430,7 @@
   flex-shrink: 0;
 }
 
-.t-scrubber {
-  display: flex;
-  align-items: center;
+.tbar-scrubber {
   flex: 1;
   height: 5px;
   background: #454950;
@@ -502,7 +439,7 @@
   cursor: pointer;
 }
 
-.t-scrubber-fill {
+.tbar-scrubber-fill {
   height: 5px;
   background: #4169E1;
   border-radius: 6px;
@@ -510,31 +447,16 @@
   left: 0;
 }
 
-.t-scrubber-dot {
+.tbar-scrubber-dot {
   position: absolute;
-  width: 20px;
-  height: 20px;
+  width: 20px; height: 20px;
   object-fit: contain;
   transform: translate(-50%, -50%);
   top: 50%;
   z-index: 2;
 }
 
-.t-right-playback {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 8px;
-  width: 51px;
-  min-width: 51px;
-  height: 100%;
-  border-left: 1px solid #454950;
-  flex-shrink: 0;
-  cursor: pointer;
-}
-.t-right-playback img { width: 20px; height: 20px; object-fit: contain; }
-
-/* ── Status header row (States 2 & 3) ──────────────────── */
+/* -- Status header (States 2 & 3) ------------------------- */
 .t-status-header {
   display: flex;
   justify-content: space-between;
@@ -555,9 +477,9 @@
   letter-spacing: 0.2px;
 }
 
-/* ══════════════════════════════════════════════════════════
-   RIGHT SIDEBAR — Figma-derived (92×480 → 55×320)
-   ══════════════════════════════════════════════════════════ */
+/* ===========================================================
+   RIGHT SIDEBAR -- Figma 92x480 scaled to 55x320
+   =========================================================== */
 
 .right-sidebar {
   background: #1C1E1F;
@@ -565,7 +487,6 @@
   overflow: hidden;
 }
 
-/* ── Aux button area ────────────────────────────────────── */
 .sb-top {
   position: absolute;
   width: 100%;
@@ -579,31 +500,24 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  width: 43px;
-  height: 43px;
+  width: 43px; height: 43px;
   padding: 5px;
   cursor: pointer;
 }
 .sb-aux-btn img { width: 32px; height: 32px; object-fit: contain; }
 
-.sb-top-divider {
-  width: 100%;
-  border-bottom: 1px solid #27292E;
-}
+.sb-top-divider { width: 100%; border-bottom: 1px solid #27292E; }
 
-/* ── Volume slider ──────────────────────────────────────── */
 .sb-slider {
   position: absolute;
   width: 26px;
   left: 50%;
   transform: translateX(-50%);
-  /* top and height set via style prop */
 }
 
 .sb-track {
   position: absolute;
-  width: 9px;
-  height: 200px;
+  width: 9px; height: 200px;
   left: 50%;
   transform: translateX(-50%);
   top: 0;
@@ -623,8 +537,7 @@
 
 .sb-knob {
   position: absolute;
-  width: 26px;
-  height: 26px;
+  width: 26px; height: 26px;
   left: 50%;
   transform: translateX(-50%);
   cursor: grab;
@@ -633,30 +546,24 @@
 
 .sb-knob-outer {
   position: absolute;
-  width: 26px;
-  height: 26px;
-  left: 0;
-  top: 0;
+  width: 26px; height: 26px;
+  left: 0; top: 0;
   background: #DFE2E6;
-  box-shadow: 0 0 16px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 0 16px rgba(0,0,0,0.3);
   border-radius: 50%;
 }
 
 .sb-knob-inner {
   position: absolute;
-  width: 20px;
-  height: 20px;
-  left: 3px;
-  top: 3px;
+  width: 20px; height: 20px;
+  left: 3px; top: 3px;
   background: #374FD5;
   border-radius: 50%;
 }
 
-/* ── Mute button ────────────────────────────────────────── */
 .sb-mute {
   position: absolute;
-  width: 36px;
-  height: 36px;
+  width: 36px; height: 36px;
   left: 50%;
   transform: translateX(-50%);
   bottom: 8px;

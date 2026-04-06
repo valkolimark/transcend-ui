@@ -554,132 +554,136 @@ function ModalAdminLogin({ passcodeDisplay = '------' }) {
 
 /* ─── TRANSPORT BAR VARIANTS (Figma-derived proportional layout) ─── */
 
-function TransportLeft() {
-  return (
-    <div className="t-left">
-      <img src={`${basePath}images/playback_menu_icon.png`} alt="Files" />
-    </div>
-  );
-}
-
-function TransportRight({ highlighted = false }) {
-  return (
-    <div className={`t-right${highlighted ? ' t-right--highlighted' : ''}`}>
-      <img src={`${basePath}images/audio_on.png`} alt="Volume" />
-    </div>
-  );
-}
+/* ─── TRANSPORT BAR — Figma 710×78 → scaled to 425×48 ─── */
 
 function TransportDefault() {
   return (
-    <div className="t-bar">
-      <TransportLeft />
-      <div className="t-mid-default">
-        <div className="t-rec-group">
-          <img src={`${basePath}images/rec_btn.png`} alt="REC" />
-          <span className="rec-label">REC</span>
+    <div className="tbar-default">
+      <div className="tbar-left">
+        <div className="tbar-menu-cell">
+          <img src={`${basePath}images/playback_menu_icon.png`} className="tbar-menu-icon" alt="Files" />
         </div>
-        <div className="t-playback-controls">
-          <img src={`${basePath}images/back_drk_btn.png`} alt="Skip back" />
-          <img src={`${basePath}images/play_btn.png`} alt="Play" />
-          <img src={`${basePath}images/forward_btn.png`} alt="Skip forward" />
+        <div className="tbar-rec-btn">
+          <img src={`${basePath}images/rec_btn.png`} className="tbar-rec-icon" alt="REC" />
+          <span className="tbar-rec-label">REC</span>
         </div>
       </div>
-      <TransportRight />
+      <div className="tbar-controls">
+        <img src={`${basePath}images/back_drk_btn.png`} className="tbar-ctrl-icon" alt="Skip back" />
+        <img src={`${basePath}images/play_btn.png`} className="tbar-ctrl-icon" alt="Play" />
+        <img src={`${basePath}images/forward_btn.png`} className="tbar-ctrl-icon" alt="Skip forward" />
+      </div>
+      <div className="tbar-vol-cell">
+        <img src={`${basePath}images/audio_on.png`} className="tbar-vol-icon" alt="Volume" />
+      </div>
     </div>
   );
 }
 
 function TransportRecording() {
   return (
-    <div className="t-bar">
-      <TransportLeft />
-      <div className="t-mid-recording">
-        <div className="t-stop-btn">
-          <img src={`${basePath}images/stop_btn.png`} className="stop-pulse" alt="Stop" />
-          <span className="stop-label">Stop</span>
+    <div className="tbar-default">
+      <div className="tbar-menu-cell">
+        <img src={`${basePath}images/playback_menu_icon.png`} className="tbar-menu-icon" alt="Files" />
+      </div>
+      <div className="tbar-mid-recording">
+        <div className="tbar-stop-btn">
+          <img src={`${basePath}images/stop_btn.png`} className="tbar-rec-icon stop-pulse" alt="Stop" />
+          <span className="tbar-btn-label">Stop</span>
         </div>
-        <div className="t-btn-divider" />
-        <div className="t-discard-btn">
-          <img src={`${basePath}images/discard_btn.png`} alt="Discard" />
-          <span className="discard-label">Discard</span>
+        <div className="tbar-btn-divider" />
+        <div className="tbar-discard-btn">
+          <img src={`${basePath}images/discard_btn.png`} className="tbar-ctrl-icon" alt="Discard" />
+          <span className="tbar-btn-label">Discard</span>
         </div>
       </div>
-      <TransportRight />
+      <div className="tbar-vol-cell">
+        <img src={`${basePath}images/audio_on.png`} className="tbar-vol-icon" alt="Volume" />
+      </div>
     </div>
   );
 }
 
 function TransportRecordedPaused() {
   return (
-    <div className="t-bar">
-      <TransportLeft />
-      <div className="t-mid-preview">
-        <div className="t-preview-buttons">
-          <div className="t-save-btn">
-            <img src={`${basePath}images/save_btn.png`} alt="Save" />
-            <span className="save-label">Save</span>
+    <div className="tbar-default">
+      <div className="tbar-menu-cell">
+        <img src={`${basePath}images/playback_menu_icon.png`} className="tbar-menu-icon" alt="Files" />
+      </div>
+      <div className="tbar-mid-preview">
+        <div className="tbar-preview-buttons">
+          <div className="tbar-save-btn">
+            <img src={`${basePath}images/save_btn.png`} className="tbar-ctrl-icon" alt="Save" />
+            <span className="tbar-btn-label">Save</span>
           </div>
-          <div className="t-btn-divider" />
-          <div className="t-play-preview">
-            <img src={`${basePath}images/play_btn.png`} alt="Play" />
+          <div className="tbar-btn-divider" />
+          <div className="tbar-play-preview">
+            <img src={`${basePath}images/play_btn.png`} className="tbar-ctrl-icon" alt="Play" />
           </div>
-          <div className="t-btn-divider" />
-          <div className="t-discard-prev-btn">
-            <img src={`${basePath}images/discard_btn.png`} alt="Discard" />
-            <span className="discard-label">Discard</span>
+          <div className="tbar-btn-divider" />
+          <div className="tbar-discard-prev">
+            <img src={`${basePath}images/discard_btn.png`} className="tbar-ctrl-icon" alt="Discard" />
+            <span className="tbar-btn-label">Discard</span>
           </div>
         </div>
       </div>
-      <TransportRight highlighted />
+      <div className="tbar-vol-cell tbar-vol-highlighted">
+        <img src={`${basePath}images/audio_on.png`} className="tbar-vol-icon" alt="Volume" />
+      </div>
     </div>
   );
 }
 
 function TransportRecordedPlaying() {
   return (
-    <div className="t-bar">
-      <TransportLeft />
-      <div className="t-mid-preview">
-        <div className="t-preview-buttons">
-          <div className="t-save-btn">
-            <img src={`${basePath}images/save_btn.png`} alt="Save" />
-            <span className="save-label">Save</span>
+    <div className="tbar-default">
+      <div className="tbar-menu-cell">
+        <img src={`${basePath}images/playback_menu_icon.png`} className="tbar-menu-icon" alt="Files" />
+      </div>
+      <div className="tbar-mid-preview">
+        <div className="tbar-preview-buttons">
+          <div className="tbar-save-btn">
+            <img src={`${basePath}images/save_btn.png`} className="tbar-ctrl-icon" alt="Save" />
+            <span className="tbar-btn-label">Save</span>
           </div>
-          <div className="t-btn-divider" />
-          <div className="t-play-preview">
-            <img src={`${basePath}images/pause_btn.png`} alt="Pause" />
+          <div className="tbar-btn-divider" />
+          <div className="tbar-play-preview">
+            <img src={`${basePath}images/pause_btn.png`} className="tbar-ctrl-icon" alt="Pause" />
           </div>
-          <div className="t-btn-divider" />
-          <div className="t-discard-prev-btn">
-            <img src={`${basePath}images/discard_btn.png`} alt="Discard" />
-            <span className="discard-label">Discard</span>
+          <div className="tbar-btn-divider" />
+          <div className="tbar-discard-prev">
+            <img src={`${basePath}images/discard_btn.png`} className="tbar-ctrl-icon" alt="Discard" />
+            <span className="tbar-btn-label">Discard</span>
           </div>
         </div>
       </div>
-      <TransportRight highlighted />
+      <div className="tbar-vol-cell tbar-vol-highlighted">
+        <img src={`${basePath}images/audio_on.png`} className="tbar-vol-icon" alt="Volume" />
+      </div>
     </div>
   );
 }
 
 function TransportPlayback({ playbackProgress = 0.65 }) {
   return (
-    <div className="t-bar" style={{ background: '#202223' }}>
-      <TransportLeft />
-      <div className="t-mid-playback">
-        <span className="t-playback-label">Playback</span>
-        <div className="t-scrubber">
-          <div className="t-scrubber-fill" style={{ width: `${playbackProgress * 100}%` }} />
+    <div className="tbar-default" style={{ background: '#202223' }}>
+      <div className="tbar-menu-cell">
+        <img src={`${basePath}images/playback_menu_icon.png`} className="tbar-menu-icon" alt="Files" />
+      </div>
+      <div className="tbar-mid-playback">
+        <span className="tbar-playback-label">Playback</span>
+        <div className="tbar-scrubber">
+          <div className="tbar-scrubber-fill" style={{ width: `${playbackProgress * 100}%` }} />
           <img
             src={`${basePath}images/playback_slider_dot.png`}
-            className="t-scrubber-dot"
+            className="tbar-scrubber-dot"
             style={{ left: `${playbackProgress * 100}%` }}
             alt="scrubber"
           />
         </div>
       </div>
-      <div className="t-right-playback">
-        <img src={`${basePath}images/audio_on.png`} alt="Volume" />
+      <div className="tbar-vol-cell" style={{ borderLeft: '1px solid #454950' }}>
+        <img src={`${basePath}images/audio_on.png`} className="tbar-vol-icon" alt="Volume" />
       </div>
     </div>
   );
