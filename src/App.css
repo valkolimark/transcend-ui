@@ -559,7 +559,7 @@
 
 .sb-mute {
   position: absolute;
-  width: 25px; height: 25px;
+  width: 36px; height: 36px;
   left: 50%;
   transform: translateX(-50%);
   bottom: 8px;
