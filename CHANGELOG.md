@@ -55,6 +55,12 @@ Versioning follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
   State 4 uses flex-grow scrubber with border-left volume section;
   all icons use `<img>` tags with `basePath` for GitHub Pages compatibility;
   CSS classes in App.css replace all inline transport styles
+- Right sidebar rewritten to Figma-derived layout: 55px width (was ~46px),
+  2px solid #3A78FF border-left replaces separate separator element;
+  volume slider with 9px track, 26px dual-circle knob (gray outer / blue inner),
+  blue fill grows upward from knob center; mute button at bottom with PNG icons;
+  aux button at top with divider line; all CSS classes in App.css
+- Main content width adjusted from 432px to 425px to accommodate wider sidebar
 - Progress bar animates left-to-right during recording via `recSweep` keyframe;
   playhead dot hidden during recording; animation duration driven by `recStepDuration` prop
 - Preset info tooltip now boundary-aware: flips below button when top-row presets

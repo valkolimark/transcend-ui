@@ -554,3 +554,115 @@
   color: rgba(255,255,255,0.38);
   letter-spacing: 0.2px;
 }
+
+/* ══════════════════════════════════════════════════════════
+   RIGHT SIDEBAR — Figma-derived (92×480 → 55×320)
+   ══════════════════════════════════════════════════════════ */
+
+.right-sidebar {
+  background: #1C1E1F;
+  border-left: 2px solid #3A78FF;
+  overflow: hidden;
+}
+
+/* ── Aux button area ────────────────────────────────────── */
+.sb-top {
+  position: absolute;
+  width: 100%;
+  top: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.sb-aux-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 43px;
+  height: 43px;
+  padding: 5px;
+  cursor: pointer;
+}
+.sb-aux-btn img { width: 32px; height: 32px; object-fit: contain; }
+
+.sb-top-divider {
+  width: 100%;
+  border-bottom: 1px solid #27292E;
+}
+
+/* ── Volume slider ──────────────────────────────────────── */
+.sb-slider {
+  position: absolute;
+  width: 26px;
+  left: 50%;
+  transform: translateX(-50%);
+  /* top and height set via style prop */
+}
+
+.sb-track {
+  position: absolute;
+  width: 9px;
+  height: 200px;
+  left: 50%;
+  transform: translateX(-50%);
+  top: 0;
+  background: #454950;
+  border-radius: 6px;
+}
+
+.sb-fill {
+  position: absolute;
+  width: 9px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #374FD5;
+  border-radius: 6px;
+  transition: top 0.3s ease, height 0.3s ease, opacity 0.3s ease;
+}
+
+.sb-knob {
+  position: absolute;
+  width: 26px;
+  height: 26px;
+  left: 50%;
+  transform: translateX(-50%);
+  cursor: grab;
+  transition: top 0.3s ease, opacity 0.3s ease;
+}
+
+.sb-knob-outer {
+  position: absolute;
+  width: 26px;
+  height: 26px;
+  left: 0;
+  top: 0;
+  background: #DFE2E6;
+  box-shadow: 0 0 16px rgba(0, 0, 0, 0.3);
+  border-radius: 50%;
+}
+
+.sb-knob-inner {
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  left: 3px;
+  top: 3px;
+  background: #374FD5;
+  border-radius: 50%;
+}
+
+/* ── Mute button ────────────────────────────────────────── */
+.sb-mute {
+  position: absolute;
+  width: 36px;
+  height: 36px;
+  left: 50%;
+  transform: translateX(-50%);
+  bottom: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+.sb-mute img { width: 32px; height: 32px; object-fit: contain; }

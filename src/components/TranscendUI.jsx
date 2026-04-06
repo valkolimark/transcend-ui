@@ -31,24 +31,7 @@ function ImgIcon({ src, alt = '', size = 20, style = {} }) {
   );
 }
 
-/* ─── MUTE BUTTON ─── */
-
-function MuteButton({ muted = false }) {
-  return (
-    <div style={{
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center',
-      position: 'relative',
-    }}>
-      <ImgIcon
-        src={muted ? 'muted_icon.png' : 'unmuted_icon.png'}
-        alt={muted ? 'Muted' : 'Unmuted'}
-        size={32}
-      />
-    </div>
-  );
-}
+/* ─── (MuteButton removed — now inline in sidebar) ─── */
 
 /* ─── PRESET BUTTON ─── */
 
@@ -730,9 +713,8 @@ export default function TranscendUI({
   recStepDuration = 3500,
 }) {
   /* Layout constants */
-  const MAIN_W = 432;
-  const SEP_W = 1.5;
-  const SIDEBAR_W = 480 - MAIN_W - SEP_W; /* ~46.5 */
+  const SIDEBAR_W = 55;
+  const MAIN_W = 480 - SIDEBAR_W; /* 425 */
   const TRANSPORT_H = 48;
   const SCRUB_H = 20;
   const PROGRESS_H = 3;
@@ -742,11 +724,14 @@ export default function TranscendUI({
   const PROGRESS_TOP = SCRUB_TOP + SCRUB_H; /* 269 */
   const TRANSPORT_TOP = PROGRESS_TOP + PROGRESS_H; /* 272 */
 
-  /* Volume slider */
-  const sliderTrackH = 150;
-  const knobSize = 22;
-  const knobTop = (1 - volumeLevel) * sliderTrackH;
-  const stemHeight = sliderTrackH - knobTop - knobSize / 2;
+  /* Volume slider — Figma-derived, scaled to 55×320 sidebar */
+  const SB_TRACK_H = 200;
+  const SB_KNOB = 26;
+  const SB_TRACK_TOP = 56;        /* below aux area */
+  const sbKnobTravel = SB_TRACK_H - SB_KNOB;
+  const sbKnobTop = (1 - volumeLevel) * sbKnobTravel;
+  const sbFillTop = sbKnobTop + SB_KNOB / 2;
+  const sbFillHeight = Math.max(0, SB_TRACK_H - sbFillTop);
 
   const infoPreset = infoPresetId ? PRESETS.find(p => p.id === infoPresetId) : null;
 
@@ -812,87 +797,51 @@ export default function TranscendUI({
         </div>
       </div>
 
-      {/* ─── BLUE SEPARATOR LINE (full height) ─── */}
-      <div style={{
+      {/* ─── RIGHT SIDEBAR (Figma-derived) ─── */}
+      <div className="right-sidebar" style={{
         position: 'absolute',
         left: MAIN_W,
         top: 0,
-        width: SEP_W,
-        height: 320,
-        background: 'var(--separator-color)',
-      }} />
-
-      {/* ─── RIGHT SIDEBAR ─── */}
-      <div style={{
-        position: 'absolute',
-        left: MAIN_W + SEP_W,
-        top: 0,
         width: SIDEBAR_W,
         height: 320,
-        background: 'var(--bg-sidebar)',
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
       }}>
-        {/* Aux button (top) */}
-        <div style={{
-          width: SIDEBAR_W,
-          height: 48,
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-        }}>
-          <ImgIcon src="aux_menu_icon.png" alt="Aux" size={24} />
+        {/* Aux button + divider */}
+        <div className="sb-top">
+          <div className="sb-aux-btn">
+            <img src={`${basePath}images/aux_menu_icon.png`} alt="Aux" />
+          </div>
+          <div className="sb-top-divider" />
         </div>
 
-        {/* Volume slider (center) */}
-        <div style={{
-          flex: 1,
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-          justifyContent: 'center',
-        }}>
-          <div style={{
-            position: 'relative',
-            width: 6,
-            height: sliderTrackH,
-            background: 'var(--slider-track)',
-            borderRadius: 4,
-          }}>
-            {/* Stem below knob */}
-            <div style={{
-              position: 'absolute',
-              bottom: 0,
-              left: '50%',
-              transform: 'translateX(-50%)',
-              width: 3,
-              height: Math.max(0, stemHeight),
-              background: 'var(--slider-stem)',
-              borderRadius: '0 0 2px 2px',
-              transition: 'height 300ms ease',
-            }} />
-            {/* Knob */}
-            <div style={{
-              position: 'absolute',
-              top: knobTop - knobSize / 2,
-              left: '50%',
-              transform: 'translateX(-50%)',
-              width: knobSize,
-              height: knobSize,
-              borderRadius: '50%',
-              background: muteActive ? 'rgba(255,255,255,0.25)' : 'var(--slider-knob)',
-              boxShadow: muteActive ? 'none' : '0 0 10px var(--slider-knob-glow)',
-              transition: 'top 300ms ease, background 300ms ease',
-            }} />
+        {/* Volume slider */}
+        <div className="sb-slider" style={{ top: SB_TRACK_TOP }}>
+          <div className="sb-track" />
+          <div
+            className="sb-fill"
+            style={{
+              top: sbFillTop,
+              height: sbFillHeight,
+              opacity: muteActive ? 0.25 : 1,
+            }}
+          />
+          <div
+            className="sb-knob"
+            style={{
+              top: sbKnobTop,
+              opacity: muteActive ? 0.4 : 1,
+            }}
+          >
+            <div className="sb-knob-outer" />
+            <div className="sb-knob-inner" />
           </div>
         </div>
 
-        {/* Mute button (bottom) */}
-        <div style={{
-          marginBottom: 4,
-        }}>
-          <MuteButton muted={muteActive} />
+        {/* Mute button */}
+        <div className="sb-mute">
+          <img
+            src={`${basePath}images/${muteActive ? 'muted_icon.png' : 'unmuted_icon.png'}`}
+            alt={muteActive ? 'Unmute' : 'Mute'}
+          />
         </div>
       </div>
 
