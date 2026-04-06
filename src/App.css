@@ -283,7 +283,7 @@
   box-sizing: border-box;
 }
 
-.tbar-menu-icon { width: 34px; height: 34px; object-fit: contain; }
+.tbar-menu-icon { width: 25px; height: 25px; object-fit: contain; }
 
 .tbar-rec-btn {
   display: flex;
@@ -296,7 +296,7 @@
   cursor: pointer;
 }
 
-.tbar-rec-icon { width: 30px; height: 30px; object-fit: contain; flex-shrink: 0; }
+.tbar-rec-icon { width: 25px; height: 25px; object-fit: contain; flex-shrink: 0; }
 
 .tbar-rec-label {
   font-family: 'Avenir LT Pro', 'Avenir', 'Nunito', sans-serif;
@@ -319,7 +319,7 @@
   flex-shrink: 0;
 }
 
-.tbar-ctrl-icon { width: 36px; height: 36px; object-fit: contain; cursor: pointer; flex-shrink: 0; }
+.tbar-ctrl-icon { width: 25px; height: 25px; object-fit: contain; cursor: pointer; flex-shrink: 0; }
 
 /* -- Volume cell (right, all states) ----------------------- */
 .tbar-vol-cell {
@@ -333,7 +333,7 @@
   cursor: pointer;
 }
 
-.tbar-vol-icon { width: 36px; height: 36px; object-fit: contain; }
+.tbar-vol-icon { width: 25px; height: 25px; object-fit: contain; }
 
 /* tbar-vol-highlighted removed per user request */
 
@@ -400,7 +400,7 @@
 .tbar-play-preview {
   display: flex;
   align-items: center;
-  width: 36px; height: 36px;
+  width: 25px; height: 25px;
   cursor: pointer;
 }
 
@@ -559,7 +559,7 @@
 
 .sb-mute {
   position: absolute;
-  width: 36px; height: 36px;
+  width: 25px; height: 25px;
   left: 50%;
   transform: translateX(-50%);
   bottom: 8px;
