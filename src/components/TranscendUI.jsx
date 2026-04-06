@@ -569,140 +569,135 @@ function ModalAdminLogin({ passcodeDisplay = '------' }) {
   );
 }
 
-/* ─── TRANSPORT BAR STYLE ─── */
+/* ─── TRANSPORT BAR VARIANTS (Figma-derived proportional layout) ─── */
 
-const T_BAR = {
-  display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'space-evenly',
-  width: '100%',
-  height: '100%',
-  padding: '0 10px',
-};
+function TransportLeft() {
+  return (
+    <div className="t-left">
+      <img src={`${basePath}images/playback_menu_icon.png`} alt="Files" />
+    </div>
+  );
+}
 
-const BTN_GROUP = { display: 'flex', alignItems: 'center', gap: 6 };
-const VOL_SIZE = 26;
-
-/* ─── TRANSPORT BAR VARIANTS ─── */
+function TransportRight({ highlighted = false }) {
+  return (
+    <div className={`t-right${highlighted ? ' t-right--highlighted' : ''}`}>
+      <img src={`${basePath}images/audio_on.png`} alt="Volume" />
+    </div>
+  );
+}
 
 function TransportDefault() {
   return (
-    <div style={T_BAR}>
-      <ImgIcon src="playback_menu_icon.png" alt="Files" size={20} />
-      <div style={BTN_GROUP}>
-        <ImgIcon src="rec_btn.png" alt="REC" size={28} />
-        <span style={{ fontSize: 11, fontWeight: 600, color: 'rgba(255,255,255,0.55)', letterSpacing: '0.08em' }}>REC</span>
+    <div className="t-bar">
+      <TransportLeft />
+      <div className="t-mid-default">
+        <div className="t-rec-group">
+          <img src={`${basePath}images/rec_btn.png`} alt="REC" />
+          <span className="rec-label">REC</span>
+        </div>
+        <div className="t-playback-controls">
+          <img src={`${basePath}images/back_drk_btn.png`} alt="Skip back" />
+          <img src={`${basePath}images/play_btn.png`} alt="Play" />
+          <img src={`${basePath}images/forward_btn.png`} alt="Skip forward" />
+        </div>
       </div>
-      <ImgIcon src="back_drk_btn.png" alt="Skip Back" size={18} />
-      <ImgIcon src="play_btn.png" alt="Play" size={20} />
-      <ImgIcon src="forward_btn.png" alt="Skip Forward" size={18} />
-      <ImgIcon src="audio_on.png" alt="Volume" size={VOL_SIZE} />
+      <TransportRight />
     </div>
   );
 }
 
 function TransportRecording() {
   return (
-    <div style={T_BAR}>
-      <ImgIcon src="playback_menu_icon.png" alt="Files" size={20} />
-      <div style={BTN_GROUP}>
-        <ImgIcon src="stop_btn.png" alt="Stop" size={28} style={{ animation: 'recPulse 1.2s ease-in-out infinite' }} />
-        <span style={{ fontSize: 12, color: 'rgba(255,255,255,0.70)', fontWeight: 500 }}>Stop</span>
+    <div className="t-bar">
+      <TransportLeft />
+      <div className="t-mid-recording">
+        <div className="t-stop-btn">
+          <img src={`${basePath}images/stop_btn.png`} className="stop-pulse" alt="Stop" />
+          <span className="stop-label">Stop</span>
+        </div>
+        <div className="t-btn-divider" />
+        <div className="t-discard-btn">
+          <img src={`${basePath}images/discard_btn.png`} alt="Discard" />
+          <span className="discard-label">Discard</span>
+        </div>
       </div>
-      <div style={BTN_GROUP}>
-        <ImgIcon src="discard_btn.png" alt="Discard" size={14} />
-        <span style={{ fontSize: 12, color: 'rgba(255,255,255,0.50)' }}>Discard</span>
-      </div>
-      <ImgIcon src="audio_on.png" alt="Volume" size={VOL_SIZE} />
+      <TransportRight />
     </div>
   );
 }
 
 function TransportRecordedPaused() {
   return (
-    <div style={T_BAR}>
-      <ImgIcon src="playback_menu_icon.png" alt="Files" size={20} />
-      <div style={BTN_GROUP}>
-        <ImgIcon src="save_btn.png" alt="Save" size={18} />
-        <span style={{ fontSize: 12, color: 'rgba(255,255,255,0.70)', fontWeight: 500 }}>Save</span>
+    <div className="t-bar">
+      <TransportLeft />
+      <div className="t-mid-preview">
+        <div className="t-preview-buttons">
+          <div className="t-save-btn">
+            <img src={`${basePath}images/save_btn.png`} alt="Save" />
+            <span className="save-label">Save</span>
+          </div>
+          <div className="t-btn-divider" />
+          <div className="t-play-preview">
+            <img src={`${basePath}images/play_btn.png`} alt="Play" />
+          </div>
+          <div className="t-btn-divider" />
+          <div className="t-discard-prev-btn">
+            <img src={`${basePath}images/discard_btn.png`} alt="Discard" />
+            <span className="discard-label">Discard</span>
+          </div>
+        </div>
       </div>
-      <ImgIcon src="play_btn.png" alt="Play" size={20} />
-      <div style={BTN_GROUP}>
-        <ImgIcon src="discard_btn.png" alt="Discard" size={14} />
-        <span style={{ fontSize: 12, color: 'rgba(255,255,255,0.50)' }}>Discard</span>
-      </div>
-      <div style={{
-        border: '1.5px solid var(--blue-primary)',
-        borderRadius: 6, padding: '4px 6px',
-        display: 'flex', alignItems: 'center',
-      }}>
-        <ImgIcon src="audio_on.png" alt="Volume" size={VOL_SIZE} />
-      </div>
+      <TransportRight highlighted />
     </div>
   );
 }
 
 function TransportRecordedPlaying() {
   return (
-    <div style={T_BAR}>
-      <ImgIcon src="playback_menu_icon.png" alt="Files" size={20} />
-      <div style={BTN_GROUP}>
-        <ImgIcon src="save_btn.png" alt="Save" size={18} />
-        <span style={{ fontSize: 12, color: 'rgba(255,255,255,0.70)', fontWeight: 500 }}>Save</span>
+    <div className="t-bar">
+      <TransportLeft />
+      <div className="t-mid-preview">
+        <div className="t-preview-buttons">
+          <div className="t-save-btn">
+            <img src={`${basePath}images/save_btn.png`} alt="Save" />
+            <span className="save-label">Save</span>
+          </div>
+          <div className="t-btn-divider" />
+          <div className="t-play-preview">
+            <img src={`${basePath}images/pause_btn.png`} alt="Pause" />
+          </div>
+          <div className="t-btn-divider" />
+          <div className="t-discard-prev-btn">
+            <img src={`${basePath}images/discard_btn.png`} alt="Discard" />
+            <span className="discard-label">Discard</span>
+          </div>
+        </div>
       </div>
-      <ImgIcon src="pause_btn.png" alt="Pause" size={20} />
-      <div style={BTN_GROUP}>
-        <ImgIcon src="discard_btn.png" alt="Discard" size={14} />
-        <span style={{ fontSize: 12, color: 'rgba(255,255,255,0.50)' }}>Discard</span>
-      </div>
-      <div style={{
-        border: '1.5px solid var(--blue-primary)',
-        borderRadius: 6, padding: '4px 6px',
-        display: 'flex', alignItems: 'center',
-      }}>
-        <ImgIcon src="audio_on.png" alt="Volume" size={VOL_SIZE} />
-      </div>
+      <TransportRight highlighted />
     </div>
   );
 }
 
 function TransportPlayback({ playbackProgress = 0.65 }) {
   return (
-    <div style={{
-      display: 'flex',
-      alignItems: 'center',
-      width: '100%',
-      height: '100%',
-      padding: '0 10px',
-      gap: 8,
-    }}>
-      <ImgIcon src="playback_menu_icon.png" alt="Files" size={20} />
-
-      <span style={{ fontSize: 11, color: 'rgba(255,255,255,0.45)', whiteSpace: 'nowrap', flexShrink: 0 }}>Playback</span>
-
-      <div style={{
-        flex: 1, height: 3,
-        background: 'rgba(255,255,255,0.12)',
-        borderRadius: 2, position: 'relative',
-      }}>
-        <div style={{
-          width: `${playbackProgress * 100}%`, height: '100%',
-          background: 'var(--progress-fill)', borderRadius: 2,
-        }} />
-        <ImgIcon
-          src="playback_slider_dot.png"
-          alt="scrubber knob"
-          size={14}
-          style={{
-            position: 'absolute',
-            top: '50%',
-            left: `${playbackProgress * 100}%`,
-            transform: 'translate(-50%, -50%)',
-          }}
-        />
+    <div className="t-bar" style={{ background: '#202223' }}>
+      <TransportLeft />
+      <div className="t-mid-playback">
+        <span className="t-playback-label">Playback</span>
+        <div className="t-scrubber">
+          <div className="t-scrubber-fill" style={{ width: `${playbackProgress * 100}%` }} />
+          <img
+            src={`${basePath}images/playback_slider_dot.png`}
+            className="t-scrubber-dot"
+            style={{ left: `${playbackProgress * 100}%` }}
+            alt="scrubber"
+          />
+        </div>
       </div>
-
-      <ImgIcon src="discard_btn.png" alt="Close" size={18} style={{ flexShrink: 0 }} />
+      <div className="t-right-playback">
+        <img src={`${basePath}images/audio_on.png`} alt="Volume" />
+      </div>
     </div>
   );
 }
@@ -923,27 +918,17 @@ export default function TranscendUI({
         </span>
       </div>
 
-      {/* Recording header (replaces scrub row when recording/previewing) */}
+      {/* Status header (replaces scrub row when recording/previewing) */}
       {recordingHeader && (
-        <div style={{
+        <div className="t-status-header" style={{
           position: 'absolute',
           top: SCRUB_TOP,
           left: 0,
           width: MAIN_W,
           height: SCRUB_H,
-          background: 'var(--bg-transport-header)',
-          borderTop: '2px solid var(--blue-primary)',
-          padding: '0 12px',
-          display: 'flex',
-          justifyContent: 'space-between',
-          alignItems: 'center',
         }}>
-          <span style={{ fontSize: 10, fontWeight: 300, color: 'var(--text-status)' }}>
-            {recordingHeader}
-          </span>
-          <span style={{ fontSize: 10, fontWeight: 300, color: 'var(--text-status)' }}>
-            {timestamp}
-          </span>
+          <span className="t-status-text">{recordingHeader}</span>
+          <span className="t-status-text">{timestamp}</span>
         </div>
       )}
 
@@ -993,10 +978,7 @@ export default function TranscendUI({
         left: 0,
         width: MAIN_W,
         height: TRANSPORT_H,
-        background: 'var(--bg-transport)',
-        borderTop: '1px solid var(--border-transport)',
-        display: 'flex',
-        alignItems: 'center',
+        overflow: 'hidden',
       }}>
         {transportState === 'default' && <TransportDefault />}
         {transportState === 'recording' && <TransportRecording />}

@@ -47,9 +47,14 @@ Versioning follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 - Transport bar: all volume icons switched from `sound_on_btn.png` to `audio_on.png`
   per asset map; stop button applies `recPulse` animation; playback scrubber knob
   uses `playback_slider_dot.png` instead of CSS circle
-- Transport bar layout: all 4 states use `justify-content: space-evenly` for even
-  button distribution; removed nested flex containers and manual gaps
-- Volume icon sized to 26px across all transport states for correct visual weight
+- Transport bar completely rewritten to Figma-derived proportional layout:
+  fixed 51px left (hamburger + right border) and right (volume) sections;
+  flexible middle section varies per state with exact flex ratios;
+  State 2 uses 50/50 flex split with vertical divider;
+  State 3 uses centered button group with dividers;
+  State 4 uses flex-grow scrubber with border-left volume section;
+  all icons use `<img>` tags with `basePath` for GitHub Pages compatibility;
+  CSS classes in App.css replace all inline transport styles
 - Progress bar animates left-to-right during recording via `recSweep` keyframe;
   playhead dot hidden during recording; animation duration driven by `recStepDuration` prop
 - Preset info tooltip now boundary-aware: flips below button when top-row presets
