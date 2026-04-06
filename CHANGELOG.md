@@ -12,6 +12,7 @@ Versioning follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 ### Added
 - CLAUDE.md — persistent project instructions for Claude Code
 - NARRATION_SPEC.md — voice narration specification using Edge TTS
+- `App.css` — dedicated stylesheet for app shell per SHELL_REDESIGN_SPEC.md
 - `useNarration` hook — plays pre-generated Edge TTS audio via HTML5 Audio API
 - `scripts/generate-narration.js` — generates 71 MP3 narration files using `edge-tts` CLI
 - 71 pre-generated narration MP3s in `public/narration/` (~1.7 MB total, Aria Neural voice)
@@ -23,8 +24,11 @@ Versioning follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
   narration-gated step advancement — audio `onended` drives animation timing for steps with
   callout text; steps with no callout use their specified duration as a normal setTimeout;
   now uses `useNarration` hook instead of Web Speech API
-- ChapterNav redesigned with full sentence menu items ("What Would You Like to Learn?" header);
-  sidebar width increased to 200px with numbered labels and active/hover states
+- App shell redesigned per SHELL_REDESIGN_SPEC.md: brand header with Wenger pill,
+  "Transcend TS1" title, section label, chapter list with number + divider + title layout,
+  Wenger footer with version badge; sidebar width 218px
+- Main stage with ambient radial blue glow behind device
+- Callout redesigned as floating pill with pointer arrow and calloutIn/calloutOut animations
 - All 12 chapters updated to accept `started` and `uiRef` props instead of `voice`/`onControls`
 - Callout component rewritten: only one callout renders at a time, fadeOutUp (200ms) before
   fadeInUp transition; TTS removed from Callout (now handled by animation hook)

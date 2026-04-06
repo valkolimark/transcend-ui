@@ -1,4 +1,5 @@
 import { useState, useRef } from 'react';
+import './App.css';
 import ChapterNav from './components/ChapterNav';
 import TranscendUI from './components/TranscendUI';
 
@@ -27,48 +28,28 @@ export default function App() {
   const ActiveChapter = CHAPTER_COMPONENTS[activeChapter];
 
   const handleChapterSelect = (i) => {
-    // Cancel any in-progress speech immediately
     window.speechSynthesis?.cancel();
     setStarted(false);
     setActiveChapter(i);
-    // After a tick, start the chapter fresh
     setTimeout(() => setStarted(true), 50);
   };
 
   return (
-    <div style={{
-      display: 'flex',
-      width: '100vw',
-      height: '100vh',
-      background: 'var(--bg-app)',
-      overflow: 'hidden',
-      fontFamily: "'Avenir LT Pro', 'Avenir', 'Nunito', sans-serif",
-    }}>
-      {/* Sidebar */}
+    <div className="app">
       <ChapterNav
         activeIndex={started ? activeChapter : -1}
         onChange={handleChapterSelect}
       />
 
-      {/* Main content area */}
-      <div style={{
-        flex: 1,
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        position: 'relative',
-        overflow: 'hidden',
-      }}>
+      <div className="main-stage">
+        <div className="stage-glow" />
+
         {started ? (
-          <ActiveChapter key={activeChapter} started={started} uiRef={uiRef} />
+          <div className="device-wrap">
+            <ActiveChapter key={activeChapter} started={started} uiRef={uiRef} />
+          </div>
         ) : (
-          /* Default resting state — no animation */
-          <div style={{
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            gap: 24,
-          }}>
+          <div className="device-wrap" style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 24 }}>
             <div ref={uiRef} style={{ position: 'relative', width: 480, height: 320 }}>
               <TranscendUI
                 activePreset="studio-a"
@@ -80,11 +61,10 @@ export default function App() {
               />
             </div>
             <div style={{
-              fontSize: 13,
+              fontSize: 12.5,
               fontWeight: 400,
-              color: 'rgba(255,255,255,0.40)',
+              color: 'rgba(255,255,255,0.30)',
               textAlign: 'center',
-              fontFamily: "'Avenir LT Pro', 'Avenir', 'Nunito', sans-serif",
               letterSpacing: '0.02em',
             }}>
               Select a chapter to begin.

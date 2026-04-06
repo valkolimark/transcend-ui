@@ -10,80 +10,48 @@ const CHAPTERS = [
   { id: 9, title: 'Standby Mode' },
   { id: 10, title: 'Audio Files' },
   { id: 11, title: 'Settings' },
-  { id: 12, title: 'Help' },
+  { id: 12, title: 'Help Menu' },
 ];
 
 export default function ChapterNav({ activeIndex, onChange }) {
   return (
-    <div style={{
-      width: 200,
-      flexShrink: 0,
-      background: '#0a0a0f',
-      borderRight: '1px solid rgba(255,255,255,0.07)',
-      display: 'flex',
-      flexDirection: 'column',
-      height: '100vh',
-      overflowY: 'auto',
-    }}>
-      {/* Header */}
-      <div style={{
-        padding: '20px 14px 16px',
-        borderBottom: '1px solid rgba(255,255,255,0.08)',
-        color: 'var(--text-primary)',
-        fontWeight: 600,
-        fontSize: 13,
-        lineHeight: 1.3,
-        fontFamily: "'Avenir LT Pro', 'Avenir', 'Nunito', sans-serif",
-      }}>
-        What Would You Like to Learn?
+    <div className="sidebar">
+      {/* Brand header */}
+      <div className="sidebar-header">
+        <div className="brand-pill">
+          <div className="brand-pill-dot" />
+          <span className="brand-pill-label">Wenger</span>
+        </div>
+        <div className="sidebar-title">Transcend TS1</div>
+        <div className="sidebar-subtitle">Interactive Guide · 12 Chapters</div>
       </div>
 
-      {/* Menu items */}
-      {CHAPTERS.map((ch, i) => {
-        const isActive = i === activeIndex;
-        return (
+      {/* Section label */}
+      <div className="sb-section-label">Chapters</div>
+
+      {/* Chapter list */}
+      <div className="chapter-list">
+        {CHAPTERS.map((ch, i) => (
           <div
             key={ch.id}
+            className={`ch-item ${i === activeIndex ? 'active' : ''}`}
             onClick={() => onChange(i)}
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              padding: '12px 14px',
-              minHeight: 48,
-              cursor: 'pointer',
-              background: isActive ? 'rgba(65,105,225,0.15)' : 'transparent',
-              borderLeft: isActive ? '2px solid #4169E1' : '2px solid transparent',
-              transition: 'background 150ms ease',
-            }}
-            onMouseEnter={(e) => {
-              if (!isActive) e.currentTarget.style.background = 'rgba(255,255,255,0.04)';
-            }}
-            onMouseLeave={(e) => {
-              if (!isActive) e.currentTarget.style.background = 'transparent';
-            }}
           >
-            <span style={{
-              color: 'var(--text-tertiary)',
-              fontWeight: 400,
-              fontSize: 11,
-              marginRight: 8,
-              flexShrink: 0,
-              fontFamily: "'Avenir LT Pro', 'Avenir', 'Nunito', sans-serif",
-            }}>
-              {ch.id}.
-            </span>
-            <span style={{
-              color: isActive ? 'var(--text-primary)' : 'var(--text-secondary)',
-              fontSize: 13,
-              fontWeight: isActive ? 600 : 400,
-              fontFamily: "'Avenir LT Pro', 'Avenir', 'Nunito', sans-serif",
-              lineHeight: 1.3,
-            }}>
-              {ch.title}
-            </span>
+            <span className="ch-num">{ch.id}</span>
+            <div className="ch-divider" />
+            <span className="ch-title">{ch.title}</span>
           </div>
-        );
-      })}
+        ))}
+      </div>
+
+      {/* Footer */}
+      <div className="sidebar-footer">
+        <div className="wenger-brand">
+          <div className="w-mark">W</div>
+          <span className="w-name">Wenger</span>
+        </div>
+        <span className="ver-badge">v1.0</span>
+      </div>
     </div>
   );
 }
