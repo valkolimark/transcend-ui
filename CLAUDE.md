@@ -19,6 +19,7 @@
 | `UI_SPEC.md` | Pixel-accurate component specs, all colors |
 | `ANIMATION_SPEC.md` | Timing system, useAnimationSequence hook, keyframes |
 | `CHAPTERS.md` | Step-by-step scripts for all 12 chapters |
+| `NARRATION_SPEC.md` | Voice narration — natural TTS voice selection, useNarration hook |
 | `GIT_SETUP.md` | Build order, commit messages, README/CHANGELOG templates |
 
 These files are authoritative. Never override them with assumptions.
@@ -34,6 +35,7 @@ These files are authoritative. Never override them with assumptions.
 - Font stack: `"Avenir LT Pro", "Avenir", "Nunito", sans-serif` (exact order)
 - `key={activeChapter}` on active chapter component to reset animation on switch
 - `vite.config.js` base must be `'/transcend-ui/'` for GitHub Pages
+- **Voice narration:** always use `useNarration` hook — never call `speechSynthesis` directly. Voice selection, speech parameters, and text sanitization must follow `NARRATION_SPEC.md` exactly. Never use the browser default voice without running the priority selection algorithm first.
 
 ---
 

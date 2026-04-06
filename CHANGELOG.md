@@ -11,12 +11,18 @@ Versioning follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ### Added
 - CLAUDE.md — persistent project instructions for Claude Code
+- NARRATION_SPEC.md — voice narration specification using Edge TTS
+- `useNarration` hook — plays pre-generated Edge TTS audio via HTML5 Audio API
+- `scripts/generate-narration.js` — generates 71 MP3 narration files using `edge-tts` CLI
+- 71 pre-generated narration MP3s in `public/narration/` (~1.7 MB total, Aria Neural voice)
+- `public/narration/manifest.json` — callout text → MP3 path mapping
 - Production PNG image assets for all UI icons, buttons, QR codes, and modals
 
 ### Changed
 - `useAnimationSequence` hook rewritten: accepts `started` prop and `getCalloutText` callback;
-  TTS-gated step advancement — speech `onend` drives animation timing for steps with callout text;
-  steps with no callout use their specified duration as a normal setTimeout
+  narration-gated step advancement — audio `onended` drives animation timing for steps with
+  callout text; steps with no callout use their specified duration as a normal setTimeout;
+  now uses `useNarration` hook instead of Web Speech API
 - ChapterNav redesigned with full sentence menu items ("What Would You Like to Learn?" header);
   sidebar width increased to 200px with numbered labels and active/hover states
 - All 12 chapters updated to accept `started` and `uiRef` props instead of `voice`/`onControls`

@@ -7,6 +7,7 @@
     "build": "vite build",
     "preview": "vite preview",
     "generate-tts": "node scripts/generate-tts.mjs",
+    "narration": "node scripts/generate-narration.js",
     "predeploy": "npm run build",
     "deploy": "gh-pages -d dist"
   },

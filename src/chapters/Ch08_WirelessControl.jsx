@@ -21,12 +21,12 @@ const STEPS = [
 ];
 
 const CALLOUT_MAP = {
-  'intro': 'Control Transcend from any device on your Wi-Fi network',
-  'qr-modal-open': 'Scan the QR code to open the web interface',
-  'hold-qr': 'Must be on same Wi-Fi network as Transcend',
-  'show-web-ui': 'Full control from any browser \u2014 no app needed',
-  'show-standby-state': 'Even the standby screen is accessible remotely',
-  'outro': 'Net Control \u2014 your space, from anywhere on the network',
+  'intro': 'Control Transcend from any device on your Wi-Fi network.',
+  'qr-modal-open': 'Scan the QR code to open the web interface.',
+  'hold-qr': 'Your device must be on the same Wi-Fi network as the Transcend unit.',
+  'show-web-ui': 'Full control from any browser \u2014 no app needed.',
+  'show-standby-state': 'Even the standby screen is accessible remotely.',
+  'outro': 'Net Control \u2014 your space, from anywhere on the network.',
 };
 
 export default function Ch08_WirelessControl({ started, uiRef }) {

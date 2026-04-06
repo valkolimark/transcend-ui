@@ -25,12 +25,12 @@ const STEPS = [
 ];
 
 const CALLOUT_MAP = {
-  'intro': 'Tap REC to start recording',
-  'recording-active': 'Recording in progress \u2014 red dot pulses',
-  'recorded-pause': 'Recording stopped \u2014 review before saving',
-  'recorded-playing': 'Preview your recording',
-  'saved-confirm': 'Track saved to file manager \u2713',
-  'outro': 'Record, review, and save \u2014 all from the home screen',
+  'intro': 'Tap REC to start recording.',
+  'recording-active': 'Recording is in progress \u2014 watch the red dot pulse.',
+  'recorded-pause': 'Recording stopped \u2014 review before saving.',
+  'recorded-playing': 'Preview your recording.',
+  'saved-confirm': 'Your track has been saved to the file manager.',
+  'outro': 'Record, review, and save \u2014 all from the home screen.',
 };
 
 export default function Ch02_Recording({ started, uiRef }) {

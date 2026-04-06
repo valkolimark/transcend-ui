@@ -24,12 +24,12 @@ const STEPS = [
 ];
 
 const CALLOUT_MAP = {
-  'intro': 'The right sidebar controls Active Acoustics volume',
-  'drag-up': 'Drag up to increase volume',
-  'hold-high': 'Volume at maximum',
-  'drag-down': 'Drag down to decrease',
-  'muted': 'Mute/unmute Active Acoustics',
-  'outro': 'Volume is independent of recording/playback levels',
+  'intro': 'The right sidebar controls Active Acoustics volume.',
+  'drag-up': 'Drag up to increase volume.',
+  'hold-high': 'Volume is now at maximum.',
+  'drag-down': 'Drag down to decrease the volume.',
+  'muted': 'Tap the mute button to toggle Active Acoustics on or off.',
+  'outro': 'Volume is independent of recording and playback levels.',
 };
 
 export default function Ch04_PresetVolume({ started, uiRef }) {

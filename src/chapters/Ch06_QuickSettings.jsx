@@ -21,12 +21,12 @@ const STEPS = [
 ];
 
 const CALLOUT_MAP = {
-  'intro': 'Swipe down from the top to open Quick Settings',
-  'panel-open': 'Quick Settings \u2014 access key controls fast',
-  'highlight-stereo': 'Toggle Stereo Mode here',
-  'highlight-bt': 'Or manage Bluetooth',
-  'callout-summary': 'Help \u00b7 Net Control \u00b7 Settings \u00b7 Standby',
-  'outro': 'Quick Settings: always one swipe away',
+  'intro': 'Swipe down from the top to open Quick Settings.',
+  'panel-open': 'Quick Settings gives you fast access to the most-used controls.',
+  'highlight-stereo': 'Toggle Stereo Mode here.',
+  'highlight-bt': 'You can also manage your Bluetooth connection here.',
+  'callout-summary': 'The bottom row includes Help, Net Control, Settings, and Standby.',
+  'outro': 'Quick Settings: always one swipe away.',
 };
 
 export default function Ch06_QuickSettings({ started, uiRef }) {

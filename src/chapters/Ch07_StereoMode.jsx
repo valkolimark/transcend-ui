@@ -22,12 +22,12 @@ const STEPS = [
 ];
 
 const CALLOUT_MAP = {
-  'intro': 'Stereo Mode processes left and right channels independently',
-  'panel-showing-off': 'Stereo Mode is currently OFF',
-  'stereo-active': 'Stereo Mode ON \u2014 dual-channel processing active',
-  'stereo-inactive': 'Stereo Mode OFF \u2014 mono processing',
-  'note-soundlok': '\u26a0 Not available on SoundLok units',
-  'outro': 'Toggle Stereo Mode in Quick Settings',
+  'intro': 'Stereo Mode processes left and right channels independently.',
+  'panel-showing-off': 'Stereo Mode is currently off.',
+  'stereo-active': 'Stereo Mode is on \u2014 both channels are now processed independently.',
+  'stereo-inactive': 'Stereo Mode is off \u2014 the system returns to mono processing.',
+  'note-soundlok': 'Not available on SoundLok units.',
+  'outro': 'You can toggle Stereo Mode anytime from Quick Settings.',
 };
 
 export default function Ch07_StereoMode({ started, uiRef }) {

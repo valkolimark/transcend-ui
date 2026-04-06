@@ -26,12 +26,12 @@ const STEPS = [
 ];
 
 const CALLOUT_MAP = {
-  'intro': 'Tap any preset to select a room acoustic',
-  'active-studio-b': 'Studio B selected',
-  'show-info-b': '\u24d8 \u2014 read the acoustic description',
-  'active-great': 'Great Hall selected',
-  'active-cathedral': 'Grand Cathedral',
-  'outro': '9 acoustic presets \u2014 one tap to transform your space',
+  'intro': 'Tap any preset to select a room acoustic.',
+  'active-studio-b': 'Studio B is now selected.',
+  'show-info-b': 'Tap the info badge to read a description of the acoustic preset.',
+  'active-great': 'Great Hall is now selected.',
+  'active-cathedral': 'Grand Cathedral is now active.',
+  'outro': '9 acoustic presets \u2014 one tap to transform your space.',
 };
 
 export default function Ch03_SelectPreset({ started, uiRef }) {

@@ -33,11 +33,11 @@ const NUMPAD_POS = {
 };
 
 const CALLOUT_MAP = {
-  'intro': 'Access system settings with the admin passcode',
-  'login-modal-open': 'Enter the 6-digit admin passcode',
-  'settings-open': 'Settings unlocked \u2713',
-  'browse-settings': 'Adjust network, audio, and device preferences',
-  'outro': 'Default passcode: 12345',
+  'intro': 'Access system settings with the admin passcode.',
+  'login-modal-open': 'Enter the 6-digit admin passcode.',
+  'settings-open': 'Settings are now unlocked.',
+  'browse-settings': 'Adjust network, audio, and device preferences.',
+  'outro': 'The default admin passcode is 12345.',
 };
 
 export default function Ch11_Settings({ started, uiRef }) {

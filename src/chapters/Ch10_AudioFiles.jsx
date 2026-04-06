@@ -27,13 +27,13 @@ const STEPS = [
 ];
 
 const CALLOUT_MAP = {
-  'intro': 'The file manager holds all your recordings',
-  'file-list-open': 'All saved recordings appear here',
-  'track2-selected': 'Track 2 selected',
-  'playing-track2': 'Playing Track 2',
-  'long-press-track': 'Long press to access delete option',
-  'track-removed': 'Track deleted',
-  'outro': 'Organize recordings directly from the controller',
+  'intro': 'The file manager holds all your recordings.',
+  'file-list-open': 'All saved recordings appear here.',
+  'track2-selected': 'Track 2 is now selected.',
+  'playing-track2': 'Track 2 is now playing.',
+  'long-press-track': 'Long press a track to bring up the delete option.',
+  'track-removed': 'The track has been deleted.',
+  'outro': 'Organize recordings directly from the controller.',
 };
 
 export default function Ch10_AudioFiles({ started, uiRef }) {

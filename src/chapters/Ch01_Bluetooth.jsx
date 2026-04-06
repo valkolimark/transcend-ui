@@ -20,12 +20,12 @@ const STEPS = [
 ];
 
 const CALLOUT_MAP = {
-  'intro': 'Open the Quick Settings menu',
-  'panel-open': 'Tap Bluetooth to begin pairing',
-  'bt-modal-open': 'Your device will appear in Bluetooth settings',
-  'bt-paired': 'Bluetooth connected \u2713',
-  'panel-view-paired': 'Both inputs now active in Stereo Mode',
-  'outro': 'Bluetooth connected \u2014 ready to use',
+  'intro': 'Open the Quick Settings menu.',
+  'panel-open': 'Tap Bluetooth to begin pairing.',
+  'bt-modal-open': 'Your device will appear in Bluetooth settings.',
+  'bt-paired': "You're connected \u2014 the Bluetooth button turns solid blue.",
+  'panel-view-paired': 'Both inputs are now active and running in Stereo Mode.',
+  'outro': 'Bluetooth is connected and ready to use.',
 };
 
 export default function Ch01_Bluetooth({ started, uiRef }) {

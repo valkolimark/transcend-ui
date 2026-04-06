@@ -20,10 +20,10 @@ const STEPS = [
 ];
 
 const CALLOUT_MAP = {
-  'intro': 'Access the full online user guide instantly',
-  'help-modal-open': 'Scan with your phone to open the user guide',
-  'hold-qr': 'Links to manuals, videos, and support resources',
-  'outro': 'Help is always one tap away \u2014 no manual required',
+  'intro': 'Access the full online user guide instantly.',
+  'help-modal-open': 'Scan with your phone to open the user guide.',
+  'hold-qr': 'The QR code links to manuals, how-to videos, and support resources.',
+  'outro': 'Help is always one tap away \u2014 no manual required.',
 };
 
 export default function Ch12_HelpMenu({ started, uiRef }) {

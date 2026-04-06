@@ -26,13 +26,13 @@ const STEPS = [
 ];
 
 const CALLOUT_MAP = {
-  'intro': 'Select a track to begin playback',
-  'playback-mode': 'Playback mode \u2014 use the scrubber to seek',
-  'scrub-right': 'Scrub forward through the track',
-  'playing': 'Playing \u2014 progress bar moves in real time',
-  'next-track': 'Skip to next track',
-  'volume-slider-appears': 'Adjust playback volume separately from acoustics',
-  'outro': 'Full transport controls on every screen',
+  'intro': 'Select a track to begin playback.',
+  'playback-mode': 'Playback mode \u2014 use the scrubber to seek.',
+  'scrub-right': 'Scrub forward through the track.',
+  'playing': 'Playback is running \u2014 the progress bar updates in real time.',
+  'next-track': 'Tap to skip to the next track.',
+  'volume-slider-appears': 'Adjust playback volume separately from acoustics.',
+  'outro': 'Full transport controls on every screen.',
 };
 
 export default function Ch05_Playback({ started, uiRef }) {

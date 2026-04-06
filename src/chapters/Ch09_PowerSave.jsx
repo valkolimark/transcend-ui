@@ -23,12 +23,12 @@ const STEPS = [
 ];
 
 const CALLOUT_MAP = {
-  'intro': 'Put Transcend into standby to save power',
-  'confirm-modal': 'Confirm to turn off screen and disable audio',
-  'standby-screen': 'Screen off \u2014 system in standby',
-  'cursor-to-wakeup': 'Tap Wake Up to resume',
-  'home-restored': 'System restored \u2713',
-  'outro': 'Standby saves energy without losing your settings',
+  'intro': 'Put Transcend into standby to save power.',
+  'confirm-modal': 'Confirm to turn off the screen and disable audio output.',
+  'standby-screen': 'The screen is off and the system is now in standby.',
+  'cursor-to-wakeup': 'Tap Wake Up to resume.',
+  'home-restored': 'The system has been fully restored.',
+  'outro': 'Standby saves energy without losing your settings.',
 };
 
 export default function Ch09_PowerSave({ started, uiRef }) {

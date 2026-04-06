@@ -1,9 +1,10 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
+import { useNarration } from './useNarration';
 
 /**
- * TTS-gated animation sequencer.
+ * TTS-gated animation sequencer using pre-generated Edge TTS audio.
  *
- * Steps with callout text wait for speechSynthesis.onend before advancing.
+ * Steps with callout text wait for audio playback to finish before advancing.
  * Steps with NO callout text use their duration (ms) as a setTimeout.
  *
  * @param {Array<{id: string, duration: number}>} steps
@@ -23,6 +24,8 @@ export function useAnimationSequence(steps, { started = false, getCalloutText } 
   const mountedRef = useRef(true);
   const totalDuration = steps.reduce((sum, s) => sum + s.duration, 0);
 
+  const { speak, cancel: cancelAudio } = useNarration();
+
   const clearTimers = useCallback(() => {
     if (timerRef.current) {
       clearTimeout(timerRef.current);
@@ -32,9 +35,9 @@ export function useAnimationSequence(steps, { started = false, getCalloutText } 
       clearInterval(intervalRef.current);
       intervalRef.current = null;
     }
-    window.speechSynthesis?.cancel();
+    cancelAudio();
     advancingRef.current = false;
-  }, []);
+  }, [cancelAudio]);
 
   // Cleanup on unmount
   useEffect(() => {
@@ -45,26 +48,6 @@ export function useAnimationSequence(steps, { started = false, getCalloutText } 
     };
   }, [clearTimers]);
 
-  // Speak text and call onDone when finished
-  const speakAndAdvance = useCallback((text, onDone) => {
-    if (!text || text.trim() === '') {
-      onDone();
-      return;
-    }
-    window.speechSynthesis?.cancel();
-    const utterance = new SpeechSynthesisUtterance(text);
-    utterance.rate = 0.95;
-    utterance.pitch = 1.0;
-    utterance.volume = 1.0;
-    utterance.onend = () => {
-      if (mountedRef.current) onDone();
-    };
-    utterance.onerror = () => {
-      if (mountedRef.current) onDone();
-    };
-    window.speechSynthesis?.speak(utterance);
-  }, []);
-
   // Advance to the next step
   const advanceStep = useCallback((currentIdx) => {
     if (!mountedRef.current) return;
@@ -72,7 +55,6 @@ export function useAnimationSequence(steps, { started = false, getCalloutText } 
 
     const nextIdx = currentIdx + 1;
     if (nextIdx >= steps.length) {
-      // Sequence finished
       setFinished(true);
       setPlaying(false);
       setLoopProgress(1);
@@ -92,8 +74,8 @@ export function useAnimationSequence(steps, { started = false, getCalloutText } 
     const calloutText = getCalloutText ? getCalloutText(step.id) : null;
 
     if (calloutText && calloutText.trim() !== '') {
-      // TTS-gated: wait for speech to finish
-      speakAndAdvance(calloutText, () => {
+      // Audio-gated: wait for narration to finish
+      speak(calloutText, () => {
         if (mountedRef.current) advanceStep(idx);
       });
     } else {
@@ -102,7 +84,7 @@ export function useAnimationSequence(steps, { started = false, getCalloutText } 
         if (mountedRef.current) advanceStep(idx);
       }, step.duration);
     }
-  }, [steps, getCalloutText, speakAndAdvance, advanceStep]);
+  }, [steps, getCalloutText, speak, advanceStep]);
 
   // When stepIndex changes and we're playing, run the step
   useEffect(() => {
@@ -128,7 +110,6 @@ export function useAnimationSequence(steps, { started = false, getCalloutText } 
         }
       }, 50);
     } else {
-      // Reset
       clearTimers();
       setStepIndex(0);
       setPlaying(false);
