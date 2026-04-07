@@ -52,7 +52,11 @@ Versioning follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
   REC btn 88px | center 152px: 3 controls with 24px gap | right 50px: volume);
   `justify-content: space-between` on outer bar distributes sections;
   all CSS uses `tbar-*` class prefix; all old `t-*` classes removed;
-  icons sized proportionally: menu 34px, REC 30px, controls 36px, volume 36px
+  icons sized proportionally; all tbar icons reduced to 25px for correct scale
+- Transport bar volume icon swapped from `audio_on.png` (had baked-in border box)
+  to `sound_on_btn.png` (transparent background, no border)
+- Removed blue border highlight from volume icon in preview transport states
+- Removed border-left from volume cell in playback transport state
 - Right sidebar rewritten to Figma-derived layout: 55px width (was ~46px),
   2px solid #3A78FF border-left replaces separate separator element;
   volume slider with 9px track, 26px dual-circle knob (gray outer / blue inner),
@@ -64,6 +68,7 @@ Versioning follows [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 - Preset info tooltip now boundary-aware: flips below button when top-row presets
   (Studio A, Studio B, Recital Hall) are active to stay within device screen bounds;
   horizontal clamping prevents overflow on left/right edges
+- Restored sidebar mute button container to 36px after accidental reduction
 - End-of-chapter bug where intro callout would flash again due to loop restart
 
 ---
